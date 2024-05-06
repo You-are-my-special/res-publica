@@ -364,6 +364,9 @@ importers:
       drizzle-orm:
         specifier: ^0.30.10
         version: 0.30.10(@planetscale/database@1.18.0)(@types/react@18.3.1)(mysql2@3.9.7)(react@18.3.1)
+      edgedb:
+        specifier: ^1.5.5
+        version: 1.5.5
       zod:
         specifier: ^3.23.6
         version: 3.23.6
@@ -510,7 +513,7 @@ importers:
         version: 7.34.1(eslint@9.2.0)
       eslint-plugin-react-hooks:
         specifier: beta
-        version: 5.1.0-beta-5d29478716-20240506(eslint@9.2.0)
+        version: 5.1.0-beta-b498834eab-20240506(eslint@9.2.0)
       typescript-eslint:
         specifier: ^7.8.0
         version: 7.8.0(eslint@9.2.0)(typescript@5.4.5)
@@ -4230,6 +4233,11 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
+  edgedb@1.5.5:
+    resolution: {integrity: sha512-+li8Edf5enAeL+HlyfuLd2viUlqO2Q7/2xcqq0lsxnVIx/4sB8ZZFhS9Hy2ogQpOeGI1X5hpq1Cl/DL0bUEoag==}
+    engines: {node: '>= 18.0.0'}
+    hasBin: true
+
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
@@ -4413,8 +4421,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
-  eslint-plugin-react-hooks@5.1.0-beta-5d29478716-20240506:
-    resolution: {integrity: sha512-jYN31L6aJgJ2wAgtZ9BECKNqLtDDRoAK9U/JNSPbdTyYjWLjJ/+WjVwXcvU6lEgiyUivF3eSSyc/wjJqJSKv9w==}
+  eslint-plugin-react-hooks@5.1.0-beta-b498834eab-20240506:
+    resolution: {integrity: sha512-Bdsh3voahlCgadGzbcsKc6H/rcTza5xo/HyXDe0xdW3eyXqauXODjNZkKo16RVXYXnMVTE/XFnPST+c3H7sYcA==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -5371,6 +5379,10 @@ packages:
 
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
+
+  isexe@3.1.1:
+    resolution: {integrity: sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==}
+    engines: {node: '>=16'}
 
   isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
@@ -7983,6 +7995,11 @@ packages:
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
+    hasBin: true
+
+  which@4.0.0:
+    resolution: {integrity: sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==}
+    engines: {node: ^16.13.0 || >=18.0.0}
     hasBin: true
 
   wide-align@1.1.5:
@@ -12288,6 +12305,15 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
+  edgedb@1.5.5:
+    dependencies:
+      debug: 4.3.4
+      env-paths: 3.0.0
+      semver: 7.6.0
+      which: 4.0.0
+    transitivePeerDependencies:
+      - supports-color
+
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.4.715: {}
@@ -12614,7 +12640,7 @@ snapshots:
       object.entries: 1.1.8
       object.fromentries: 2.0.8
 
-  eslint-plugin-react-hooks@5.1.0-beta-5d29478716-20240506(eslint@9.2.0):
+  eslint-plugin-react-hooks@5.1.0-beta-b498834eab-20240506(eslint@9.2.0):
     dependencies:
       eslint: 9.2.0
 
@@ -13770,6 +13796,8 @@ snapshots:
   isbinaryfile@4.0.10: {}
 
   isexe@2.0.0: {}
+
+  isexe@3.1.1: {}
 
   isobject@3.0.1: {}
 
@@ -16659,6 +16687,10 @@ snapshots:
   which@2.0.2:
     dependencies:
       isexe: 2.0.0
+
+  which@4.0.0:
+    dependencies:
+      isexe: 3.1.1
 
   wide-align@1.1.5:
     dependencies:
