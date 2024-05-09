@@ -19,6 +19,7 @@
     "push": "pnpm with-env drizzle-kit push:mysql --config src/config.ts",
     "studio": "pnpm with-env drizzle-kit studio --config src/config.ts",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "prebuild": "npx @edgedb/generate edgeql-js",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "@acme/eslint-config": "workspace:*",
     "@acme/prettier-config": "workspace:*",
     "@acme/tsconfig": "workspace:*",
+    "@edgedb/generate": "^0.5.3",
     "dotenv-cli": "^7.4.1",
     "drizzle-kit": "^0.20.18",
     "eslint": "^9.2.0",

@@ -1,13 +1,14 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { desc, eq, schema } from "@acme/db";
+import { db, dbQueryBuilder } from "@acme/db";
 import { CreatePostSchema } from "@acme/validators";
 
+import schema from "../../../db/dbschema/edgeql-js/modules/schema";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const postRouter = {
-  all: publicProcedure.query(({ ctx }) => {
+  all: dbQueryBuilder.query(({ ctx }) => {
     // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
     return ctx.db.query.post.findMany({
       orderBy: desc(schema.post.id),
@@ -35,6 +36,6 @@ export const postRouter = {
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.db.delete(schema.post).where(eq(schema.post.id, input));
+    return ctx.db.delete(schema.Blog).where(eq(schema.post.id, input));
   }),
 } satisfies TRPCRouterRecord;

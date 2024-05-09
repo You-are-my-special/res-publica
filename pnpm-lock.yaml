@@ -383,6 +383,9 @@ importers:
       '@acme/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
+      '@edgedb/generate':
+        specifier: ^0.5.3
+        version: 0.5.3(edgedb@1.5.5)
       dotenv-cli:
         specifier: ^7.4.1
         version: 7.4.1
@@ -516,7 +519,7 @@ importers:
         version: 7.34.1(eslint@9.2.0)
       eslint-plugin-react-hooks:
         specifier: beta
-        version: 5.1.0-beta-6946ebe620-20240508(eslint@9.2.0)
+        version: 5.1.0-beta-04b058868c-20240508(eslint@9.2.0)
       typescript-eslint:
         specifier: ^7.8.0
         version: 7.8.0(eslint@9.2.0)(typescript@5.4.5)
@@ -1460,6 +1463,13 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
+  '@edgedb/generate@0.5.3':
+    resolution: {integrity: sha512-cOcCPmnmtCSD1ZwwmVZ/iIkwvtQk0loHrQIAMmFOUyfxN+nm3kff7MnmF44igPDc7D7aIwgpRo95qZqvIG+xgA==}
+    engines: {node: '>= 18.0.0'}
+    hasBin: true
+    peerDependencies:
+      edgedb: ^1.5.0
+
   '@egjs/hammerjs@2.0.17':
     resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
     engines: {node: '>=0.8.0'}
@@ -2058,6 +2068,9 @@ packages:
     peerDependenciesMeta:
       '@vue/compiler-sfc':
         optional: true
+
+  '@iarna/toml@2.2.5':
+    resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
 
   '@ioredis/commands@1.2.0':
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
@@ -4429,8 +4442,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
-  eslint-plugin-react-hooks@5.1.0-beta-6946ebe620-20240508:
-    resolution: {integrity: sha512-KWZPlxg1i6f9LrbnVpdinWK6dlia2r9jP0Bw8kXuRU7MNbSfoNF19tNeDuGPzoaIFmwcf4V0dUKKeh/yMTYQLQ==}
+  eslint-plugin-react-hooks@5.1.0-beta-04b058868c-20240508:
+    resolution: {integrity: sha512-5SjQe94ffH/jLSXhjE076pGNfM0O5oDVYFvisPfGuC/Lez2E/mpEzKEMESK//yuQGNtSsPgA/7WyQu+qO7bYSA==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -9191,6 +9204,11 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
+  '@edgedb/generate@0.5.3(edgedb@1.5.5)':
+    dependencies:
+      '@iarna/toml': 2.2.5
+      edgedb: 1.5.5
+
   '@egjs/hammerjs@2.0.17':
     dependencies:
       '@types/hammerjs': 2.0.45
@@ -9838,6 +9856,8 @@ snapshots:
       semver: 7.6.0
     transitivePeerDependencies:
       - supports-color
+
+  '@iarna/toml@2.2.5': {}
 
   '@ioredis/commands@1.2.0': {}
 
@@ -12657,7 +12677,7 @@ snapshots:
       object.entries: 1.1.8
       object.fromentries: 2.0.8
 
-  eslint-plugin-react-hooks@5.1.0-beta-6946ebe620-20240508(eslint@9.2.0):
+  eslint-plugin-react-hooks@5.1.0-beta-04b058868c-20240508(eslint@9.2.0):
     dependencies:
       eslint: 9.2.0
 

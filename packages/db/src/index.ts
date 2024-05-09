@@ -1,5 +1,7 @@
 import { createClient, Duration, IsolationLevel } from "edgedb";
 
+import e from "../dbschema/edgeql-js";
+
 const baseClient = createClient({
   host: "localhost",
   port: 5656,
@@ -30,3 +32,5 @@ export const db = baseClient
     deferrable: false,
     readonly: false,
   });
+
+export const dbQueryBuilder = e;
