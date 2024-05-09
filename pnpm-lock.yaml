@@ -315,6 +315,9 @@ importers:
       '@auth/drizzle-adapter':
         specifier: ^1.0.1
         version: 1.0.1
+      '@auth/edgedb-adapter':
+        specifier: ^1.0.0
+        version: 1.0.0(edgedb@1.5.5)
       '@t3-oss/env-nextjs':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.4.5)(zod@3.23.6)
@@ -513,7 +516,7 @@ importers:
         version: 7.34.1(eslint@9.2.0)
       eslint-plugin-react-hooks:
         specifier: beta
-        version: 5.1.0-beta-b498834eab-20240506(eslint@9.2.0)
+        version: 5.1.0-beta-6946ebe620-20240508(eslint@9.2.0)
       typescript-eslint:
         specifier: ^7.8.0
         version: 7.8.0(eslint@9.2.0)(typescript@5.4.5)
@@ -618,6 +621,11 @@ packages:
 
   '@auth/drizzle-adapter@1.0.1':
     resolution: {integrity: sha512-E4np2F48p930q+YeQ5ipZPv/L+9gmQcB7g6NQQyux2wtanRNOXNW4TG8wMjSRfTzccNq161YZ8Fm5le/5snkGQ==}
+
+  '@auth/edgedb-adapter@1.0.0':
+    resolution: {integrity: sha512-e9dpsNLqn4hq7zzAXblikJh+GISvOnrsF82P/zIeCqDJ4siCFi/cs8w0TuCqJ8fF8QarVVTHzVoe/paFJxBqTA==}
+    peerDependencies:
+      edgedb: ^1.0.1
 
   '@babel/code-frame@7.10.4':
     resolution: {integrity: sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==}
@@ -4421,8 +4429,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
-  eslint-plugin-react-hooks@5.1.0-beta-b498834eab-20240506:
-    resolution: {integrity: sha512-Bdsh3voahlCgadGzbcsKc6H/rcTza5xo/HyXDe0xdW3eyXqauXODjNZkKo16RVXYXnMVTE/XFnPST+c3H7sYcA==}
+  eslint-plugin-react-hooks@5.1.0-beta-6946ebe620-20240508:
+    resolution: {integrity: sha512-KWZPlxg1i6f9LrbnVpdinWK6dlia2r9jP0Bw8kXuRU7MNbSfoNF19tNeDuGPzoaIFmwcf4V0dUKKeh/yMTYQLQ==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -8161,6 +8169,15 @@ snapshots:
   '@auth/drizzle-adapter@1.0.1':
     dependencies:
       '@auth/core': 0.30.0
+    transitivePeerDependencies:
+      - '@simplewebauthn/browser'
+      - '@simplewebauthn/server'
+      - nodemailer
+
+  '@auth/edgedb-adapter@1.0.0(edgedb@1.5.5)':
+    dependencies:
+      '@auth/core': 0.30.0
+      edgedb: 1.5.5
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
@@ -12640,7 +12657,7 @@ snapshots:
       object.entries: 1.1.8
       object.fromentries: 2.0.8
 
-  eslint-plugin-react-hooks@5.1.0-beta-b498834eab-20240506(eslint@9.2.0):
+  eslint-plugin-react-hooks@5.1.0-beta-6946ebe620-20240508(eslint@9.2.0):
     dependencies:
       eslint: 9.2.0
 
