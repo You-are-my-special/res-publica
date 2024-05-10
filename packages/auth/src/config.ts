@@ -2,7 +2,7 @@ import type { DefaultSession, NextAuthConfig } from "next-auth";
 import { EdgeDBAdapter } from "@auth/edgedb-adapter";
 import Discord from "next-auth/providers/discord";
 
-import { db } from "@acme/db";
+import { edgeClient } from "@acme/db/edge";
 
 declare module "next-auth" {
   interface Session {
@@ -13,7 +13,7 @@ declare module "next-auth" {
 }
 
 export const authConfig = {
-  adapter: EdgeDBAdapter(db),
+  adapter: EdgeDBAdapter(edgeClient),
   providers: [Discord],
   callbacks: {
     session: (opts) => {
