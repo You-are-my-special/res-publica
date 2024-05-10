@@ -1,7 +1,16 @@
 import React from "react";
 
-const MainPage = () => {
-  return <div></div>;
+import { api } from "~/trpc/server";
+
+const MainPage = async () => {
+  const repos = await api.issue.all();
+  return (
+    <div>
+      {repos.data.map((repo) => (
+        <div>{repo.name}</div>
+      ))}
+    </div>
+  );
 };
 
 export default MainPage;

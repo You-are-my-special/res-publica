@@ -3,7 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts"
+    },
+    "./edge": {
+      "import": "./src/edge.ts",
+      "require": "./src/edge.ts"
+    }
+  },
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
