@@ -1,41 +1,50 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { db, dbQueryBuilder } from "@acme/db";
+import { dbQueryBuilder } from "@acme/db";
 import { CreatePostSchema } from "@acme/validators";
 
-import schema from "../../../db/dbschema/edgeql-js/modules/schema";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const postRouter = {
-  all: dbQueryBuilder.query(({ ctx }) => {
-    // return ctx.db.select().from(schema.post).orderBy(desc(schema.post.id));
-    return ctx.db.query.post.findMany({
-      orderBy: desc(schema.post.id),
-      limit: 10,
-    });
+  all: publicProcedure.query(({ ctx }) => {
+    return dbQueryBuilder
+      .select(dbQueryBuilder.BlogPost, () => ({
+        id: true,
+        title: true,
+        content: true,
+      }))
+      .run(ctx.db);
   }),
 
   byId: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      // return ctx.db
-      //   .select()
-      //   .from(schema.post)
-      //   .where(eq(schema.post.id, input.id));
-
-      return ctx.db.query.post.findFirst({
-        where: eq(schema.post.id, input.id),
-      });
+      return dbQueryBuilder
+        .select(dbQueryBuilder.BlogPost, (post) => ({
+          id: true,
+          title: true,
+          content: true,
+          filter_single: dbQueryBuilder.op(
+            post.id,
+            "=",
+            dbQueryBuilder.uuid(input.id.toString()),
+          ),
+        }))
+        .run(ctx.db);
     }),
 
   create: protectedProcedure
     .input(CreatePostSchema)
     .mutation(({ ctx, input }) => {
-      return ctx.db.insert(schema.post).values(input);
+      return dbQueryBuilder.insert(dbQueryBuilder.BlogPost, input).run(ctx.db);
     }),
 
-  delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.db.delete(schema.Blog).where(eq(schema.post.id, input));
+  delete: protectedProcedure.input(z.string()).mutation(({ ctx, input }) => {
+    return dbQueryBuilder
+      .delete(dbQueryBuilder.BlogPost, () => ({
+        filter_single: { id: input },
+      }))
+      .run(ctx.db);
   }),
 } satisfies TRPCRouterRecord;
