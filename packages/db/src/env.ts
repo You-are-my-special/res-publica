@@ -3,7 +3,8 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    GITHUB_TOKEN: z.string().min(1),
+    EDGEDB_INSTANCE: z.string().min(1),
+    EDGEDB_SECRET_KEY: z.string().min(1),
   },
   client: {},
   experimental__runtimeEnv: {},

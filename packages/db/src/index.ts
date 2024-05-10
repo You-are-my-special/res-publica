@@ -1,8 +1,12 @@
 import { createClient, Duration, IsolationLevel } from "edgedb";
 
 import e from "../dbschema/edgeql-js";
+import { env } from "./env";
 
-const baseClient = createClient();
+const baseClient = createClient({
+  instanceName: env.EDGEDB_INSTANCE,
+  secretKey: env.EDGEDB_SECRET_KEY,
+});
 
 export const db = baseClient
   .withConfig({
