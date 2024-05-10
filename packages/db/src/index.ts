@@ -34,3 +34,4 @@ export const db = baseClient
   });
 
 export const dbQueryBuilder = e;
+export * from "../dbschema/edgeql-js";

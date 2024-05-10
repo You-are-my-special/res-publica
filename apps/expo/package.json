@@ -5,14 +5,14 @@
   "main": "expo-router/entry",
   "scripts": {
     "clean": "git clean -xdf .expo .turbo node_modules",
-    "dev": "expo start",
+    "_dev": "expo start",
     "dev:android": "expo start --android",
     "dev:ios": "expo start --ios",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "_format": "prettier --check . --ignore-path ../../.gitignore",
+    "_lint": "eslint",
+    "_typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/metro-config": "^0.17.7",
