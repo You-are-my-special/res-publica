@@ -1,14 +1,18 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { Octokit } from "@octokit/rest";
+import { z } from "zod";
 
-import { env } from "../env";
 import { publicProcedure } from "../trpc";
+import { octo } from "./octo";
 
 export const issueRouter = {
   all: publicProcedure.query(({ ctx }) => {
-    const gh = new Octokit({
-      auth: env.GITHUB_TOKEN,
-    });
-    return gh.repos.listForUser({ username: "andrewdoro" });
+    return octo.repos.listForUser({ username: "andrewdoro" });
   }),
+  byRepo: publicProcedure
+    .input(z.object({ repo: z.string(), owner: z.string() }))
+    .query(async ({ input }) => {
+      const owner = await octo.users.getByUsername({ username: input.owner });
+      const issues = await octo.issues.listForRepo(input);
+      return { issues: issues.data, owner: owner.data };
+    }),
 } satisfies TRPCRouterRecord;

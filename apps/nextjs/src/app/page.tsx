@@ -1,17 +1,15 @@
 import React from "react";
 
 import { api } from "~/trpc/server";
+import IssueTable from "./_components/issue-table";
 
 const MainPage = async () => {
-  const repos = await api.issue.all();
-  const posts = await api.post.all();
-  return (
-    <div>
-      {repos.data.map((repo) => (
-        <div>{repo.name}</div>
-      ))}
-    </div>
-  );
+  const { issues, owner } = await api.issue.byRepo({
+    owner: "steven-tey",
+    repo: "novel",
+  });
+
+  return <IssueTable owner={owner} issues={issues} />;
 };
 
 export default MainPage;

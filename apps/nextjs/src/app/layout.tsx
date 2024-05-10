@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import { Tranquiluxe } from "uvcanvas";
 
 import { cn } from "@acme/ui";
-import { ThemeProvider, ThemeToggle } from "@acme/ui/theme";
+import { ThemeProvider } from "@acme/ui/theme";
 import { Toaster } from "@acme/ui/toast";
 
 import { TRPCReactProvider } from "~/trpc/react";
@@ -11,6 +12,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import "~/app/globals.css";
 
 import { env } from "~/env";
+import Navbar from "./_components/navbar";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -51,11 +53,17 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TRPCReactProvider>{props.children}</TRPCReactProvider>
-          <div className="absolute bottom-4 right-4">
-            <ThemeToggle />
-          </div>
+          <TRPCReactProvider>
+            <main className="mx-auto max-w-6xl">
+              <Navbar />
+              {props.children}
+            </main>
+          </TRPCReactProvider>
+
           <Toaster />
+          <div className="fixed left-0 top-0 z-[-1] h-full w-full brightness-150 grayscale dark:brightness-50">
+            <Tranquiluxe />
+          </div>
         </ThemeProvider>
       </body>
     </html>
