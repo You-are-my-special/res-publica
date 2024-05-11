@@ -7,7 +7,16 @@ import { cn } from "@acme/ui";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
-const Tooltip = TooltipPrimitive.Root;
+const Tooltip = ({
+  children,
+  ...rest
+}: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>) => {
+  return (
+    <TooltipProvider>
+      <TooltipPrimitive.Root {...rest}>{children}</TooltipPrimitive.Root>
+    </TooltipProvider>
+  );
+};
 
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
