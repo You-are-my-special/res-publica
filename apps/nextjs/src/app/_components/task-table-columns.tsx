@@ -3,6 +3,7 @@
 import * as React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import { Badge } from "@acme/ui/badge";
 import { Checkbox } from "@acme/ui/checkbox";
 import { DataTableColumnHeader } from "@acme/ui/data-table/data-table-column-header";
 
@@ -38,11 +39,20 @@ export function getColumns(): ColumnDef<Issue>[] {
     {
       accessorKey: "title",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Task" />
+        <DataTableColumnHeader column={column} title="Title" />
       ),
-      cell: ({ row }) => <div className="w-20">{row.getValue("title")}</div>,
-      enableSorting: false,
-      enableHiding: false,
+      cell: ({ row }) => {
+        const label = row.original.labels[0];
+        const text = typeof label === "string" ? label : label?.name;
+        return (
+          <div className="flex space-x-2">
+            {label && <Badge variant="outline">{text}</Badge>}
+            <span className="max-w-[31.25rem] truncate font-medium">
+              {row.getValue("title")}
+            </span>
+          </div>
+        );
+      },
     },
     // {
     //   accessorKey: "title",
@@ -121,7 +131,7 @@ export function getColumns(): ColumnDef<Issue>[] {
     //   },
     // },
     {
-      accessorKey: "createdAt",
+      accessorKey: "created_at",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Created At" />
       ),

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { api } from "~/trpc/server";
 import { type GetTasksSchema } from "./validations";
 
 export async function getTasks(input: GetTasksSchema) {
@@ -113,8 +114,12 @@ export async function getTasks(input: GetTasksSchema) {
     //   };
     // });
 
+    const { issues } = await api.issue.byRepo({
+      owner: "steven-tey",
+      repo: "novel",
+    });
     // const pageCount = Math.ceil(total / per_page);
-    return { data: [], pageCount: 5 };
+    return { data: issues, pageCount: 5 };
   } catch (err) {
     return { data: [], pageCount: 0 };
   }
