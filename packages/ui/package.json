@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./*": "./src/*.tsx"
+    "./*": "./src/*.tsx",
+    "./filters": "./src/data-table/types.ts",
+    "./config": "./src/data-table/config.ts"
   },
   "license": "MIT",
   "scripts": {
