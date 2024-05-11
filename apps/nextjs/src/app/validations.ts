@@ -13,3 +13,4 @@ export const searchParamsSchema = z.object({
 });
 
 export const getTasksSchema = searchParamsSchema;
+export type GetTasksSchema = z.infer<typeof getTasksSchema>;

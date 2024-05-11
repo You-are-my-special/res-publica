@@ -1,5 +1,4 @@
 import type { Column, ColumnBaseConfig, ColumnDataType } from "drizzle-orm";
-import { type DataTableConfig } from "@/config/data-table";
 import {
   eq,
   ilike,
@@ -9,6 +8,8 @@ import {
   not,
   notLike,
 } from "drizzle-orm";
+
+import { DataTableConfig } from "@acme/ui/config";
 
 export function filterColumn({
   column,

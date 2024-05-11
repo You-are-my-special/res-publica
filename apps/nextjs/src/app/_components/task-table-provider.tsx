@@ -2,10 +2,9 @@
 
 import * as React from "react";
 
+import { DataTableConfig, dataTableConfig } from "@acme/ui/config";
 import { ToggleGroup, ToggleGroupItem } from "@acme/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@acme/ui/tooltip";
-
-import { DataTableConfig, dataTableConfig } from "~/config/data-table";
 
 type FeatureFlagValue = DataTableConfig["featureFlags"][number]["value"];
 

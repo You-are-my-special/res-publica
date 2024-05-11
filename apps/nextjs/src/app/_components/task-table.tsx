@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { DataTableAdvancedToolbar } from "@acme/ui/data-table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@acme/ui/data-table/data-table";
 import { DataTableToolbar } from "@acme/ui/data-table/data-table-toolbar";
 import { DataTableFilterField } from "@acme/ui/filters";
@@ -87,15 +88,15 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
         ) : null
       }
     >
-      {/* {featureFlags.includes("advancedFilter") ? (
+      {featureFlags.includes("advancedFilter") ? (
         <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
           <TasksTableToolbarActions table={table} />
         </DataTableAdvancedToolbar>
-      ) : ( */}
-      <DataTableToolbar table={table} filterFields={filterFields}>
-        <TasksTableToolbarActions table={table} />
-      </DataTableToolbar>
-      {/* )} */}
+      ) : (
+        <DataTableToolbar table={table} filterFields={filterFields}>
+          <TasksTableToolbarActions table={table} />
+        </DataTableToolbar>
+      )}
     </DataTable>
   );
 }
