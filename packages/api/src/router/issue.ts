@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { dbQueryBuilder } from "@acme/db";
+import { db, dbQueryBuilder } from "@acme/db";
 
 import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
@@ -15,11 +15,6 @@ export const issueRouter = {
     .query(async ({ input }) => {
       const owner = await octo.users.getByUsername({ username: input.owner });
       const issues = await octo.issues.listForRepo(input);
-      const repo = await octo.repos.get({
-        owner: input.owner,
-        repo: input.repo,
-      });
-      console.log("repo", repo.data);
       return { issues: issues.data, owner: owner.data };
     }),
   repoInDb: publicProcedure
@@ -32,8 +27,12 @@ export const issueRouter = {
         repo: input.repo,
       });
 
-      await dbQueryBuilder.insert(dbQueryBuilder.GitHubRepo, repo.data);
+      await dbQueryBuilder.insert(dbQueryBuilder.GitHubRepo, {
+        ...repo.data,
+        issues: issues.data,
+      });
 
+      // dbQueryBuilder.insert(dbQueryBuilder.Issue, issues.data);
       // Save the data inside the db
       // await edgeClient.
       // saveData({ issues: issues.data, owner: owner.data });
