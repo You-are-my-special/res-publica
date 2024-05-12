@@ -1,6 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+import { createRepoQuery } from "../queries";
 import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
 
@@ -13,6 +14,7 @@ export const issueRouter = {
     .query(async ({ input }) => {
       const owner = await octo.users.getByUsername({ username: input.owner });
       const issues = await octo.issues.listForRepo(input);
+
       return { issues: issues.data, owner: owner.data };
     }),
 } satisfies TRPCRouterRecord;

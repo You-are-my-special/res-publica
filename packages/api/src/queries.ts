@@ -31,47 +31,45 @@ const queryParams = {
     updatedAt: e.datetime,
     pushedAt: e.datetime,
   }),
-  issues: e.array(
-    e.tuple({
-      url: e.str,
-      html_url: e.str,
-      repository_url: e.str,
-      number: e.int64,
-      title: e.str,
-      labels: e.array(
-        e.tuple({
-          name: e.str,
-          color: e.str,
-          description: e.str,
-          default: e.bool,
-        }),
-      ),
-      state: e.str,
-      asignee: e.str,
-      asignees: e.array(e.str),
-      created_at: e.datetime,
-      updated_at: e.datetime,
-      closed_at: e.datetime,
-      body: e.str,
-      user: e.tuple({
-        login: e.str,
-        html_url: e.str,
-        avatar_url: e.str,
-        name: e.str,
-      }),
-      reactions: e.tuple({
+  issues: e.optional(
+    e.array(
+      e.tuple({
         url: e.str,
-        total_count: e.int64,
-        plusOne: e.int64,
-        minusOne: e.int64,
-        laugh: e.int64,
-        hooray: e.int64,
-        confused: e.int64,
-        heart: e.int64,
-        rocket: e.int64,
-        eyes: e.int64,
+        html_url: e.str,
+        repository_url: e.str,
+        number: e.int64,
+        title: e.str,
+        labels: e.array(
+          e.tuple({
+            name: e.str,
+            color: e.str,
+            description: e.str,
+            default: e.bool,
+          }),
+        ),
+        state: e.str,
+        created_at: e.datetime,
+        updated_at: e.datetime,
+        body: e.str,
+        user: e.tuple({
+          login: e.str,
+          html_url: e.str,
+          avatar_url: e.str,
+          name: e.str,
+        }),
+        reactions: e.tuple({
+          total_count: e.int64,
+          plusOne: e.int64,
+          minusOne: e.int64,
+          laugh: e.int64,
+          hooray: e.int64,
+          confused: e.int64,
+          heart: e.int64,
+          rocket: e.int64,
+          eyes: e.int64,
+        }),
       }),
-    }),
+    ),
   ),
 };
 
@@ -125,13 +123,23 @@ export const createRepoQuery = async (
       number: issue.number,
       title: issue.title,
       state: issue.state,
-      created_at: issue.created_at,
-      updated_at: issue.updated_at,
-      closed_at: issue.closed_at,
+      created_at: new Date(issue.created_at),
+      updated_at: new Date(issue.updated_at),
       body: issue.body,
-      user: issue.user,
+      user: {
+        login: issue.user?.login,
+        html_url: issue.user?.html_url,
+        avatar_url: issue.user?.avatar_url,
+        name: issue.user?.name || "",
+      },
       reactions: {
-        ...issue.reactions,
+        laugh: issue.reactions?.laugh,
+        total_count: issue.reactions?.total_count || 0,
+        confused: issue.reactions?.confused,
+        heart: issue.reactions?.heart,
+        hooray: issue.reactions?.hooray,
+        eyes: issue.reactions?.eyes,
+        rocket: issue.reactions?.rocket,
         plusOne: (issue.reactions && issue.reactions["+1"]) || 0,
         minusOne: (issue.reactions && issue.reactions["-1"]) || 0,
       },
@@ -141,35 +149,36 @@ export const createRepoQuery = async (
   const query = e.params(queryParams, (params) => {
     const issues = e.for(e.array_unpack(params.issues), (issue) => {
       const labels = e.for(e.array_unpack(issue.labels), (label) => {
-        return e.insert(e.Label, label).unlessConflict((label) => ({
-          on: label.name,
-          else: label,
-        }));
+        return e.insert(e.Label, label);
+        // .unlessConflict((label) => ({
+        //   on: label.name,
+        //   else: label,
+        // }));
       });
 
-      return e
-        .insert(e.Issue, {
-          url: issue.url,
-          html_url: issue.html_url,
-          repository_url: issue.repository_url,
-          number: issue.number,
-          title: issue.title,
-          labels: labels,
-          state: issue.state,
-          created_at: issue.created_at,
-          updated_at: issue.updated_at,
-          closed_at: issue.closed_at,
-          body: issue.body,
-          user: e.insert(e.GitHubUser, issue.user).unlessConflict((user) => ({
-            on: user.html_url,
-            else: user,
-          })),
-          reactions: e.insert(e.Reaction, issue.reactions),
-        })
-        .unlessConflict((issue) => ({
-          on: issue.title,
-          else: issue,
-        }));
+      return e.insert(e.Issue, {
+        url: issue.url,
+        html_url: issue.html_url,
+        repository_url: issue.repository_url,
+        number: issue.number,
+        title: issue.title,
+        labels: labels,
+        state: issue.state,
+        created_at: issue.created_at,
+        updated_at: issue.updated_at,
+        // closed_at: issue.closed_at,
+        body: issue.body,
+        user: e.insert(e.GitHubUser, issue.user),
+        // .unlessConflict((user) => ({
+        //   on: user.html_url,
+        //   else: user,
+        // })),
+        reactions: e.insert(e.Reaction, issue.reactions),
+      });
+      // .unlessConflict((issue) => ({
+      //   on: issue.title,
+      //   else: issue,
+      // }));
     });
     return e.insert(e.GitHubRepo, {
       url: params.repo.url,

@@ -66,7 +66,8 @@ module default {
 
   type Issue {
     property url -> str;
-    property repositoryUrl -> str;
+    property html_url -> str;
+    property repository_url -> str;
     property number -> int64;
     property title -> str;
     link user -> GitHubUser;
@@ -74,7 +75,6 @@ module default {
     property state -> str;
     property locked -> bool;
     property assignee -> str;
-    multi link assignees -> GitHubUser;
     property milestone -> str;
     property comments -> int64;
     property created_at -> datetime;
