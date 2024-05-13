@@ -104,7 +104,7 @@ export const createRepoQuery = async (
     issues: issues.map((issue) => ({
       url: issue.url,
       html_url: issue.html_url,
-      labels: issue.labels.map((label: any) =>
+      labels: issue.labels.map((label) =>
         typeof label === "string"
           ? {
               name: label,
@@ -113,10 +113,10 @@ export const createRepoQuery = async (
               default: false,
             }
           : {
-              name: label.name,
-              description: label.description,
-              color: label.color,
-              default: label.default,
+              name: label.name ?? "",
+              description: label.description ?? "",
+              color: label.color ?? "",
+              default: label.default ?? false,
             },
       ),
       repository_url: issue.repository_url,
@@ -125,23 +125,23 @@ export const createRepoQuery = async (
       state: issue.state,
       created_at: new Date(issue.created_at),
       updated_at: new Date(issue.updated_at),
-      body: issue.body,
+      body: issue.body ?? "",
       user: {
-        login: issue.user?.login,
-        html_url: issue.user?.html_url,
-        avatar_url: issue.user?.avatar_url,
-        name: issue.user?.name || "",
+        login: issue.user?.login ?? "",
+        html_url: issue.user?.html_url ?? "",
+        avatar_url: issue.user?.avatar_url ?? "",
+        name: issue.user?.name ?? "",
       },
       reactions: {
-        laugh: issue.reactions?.laugh,
-        total_count: issue.reactions?.total_count || 0,
-        confused: issue.reactions?.confused,
-        heart: issue.reactions?.heart,
-        hooray: issue.reactions?.hooray,
-        eyes: issue.reactions?.eyes,
-        rocket: issue.reactions?.rocket,
-        plusOne: (issue.reactions && issue.reactions["+1"]) || 0,
-        minusOne: (issue.reactions && issue.reactions["-1"]) || 0,
+        laugh: issue.reactions?.laugh ?? 0,
+        total_count: issue.reactions?.total_count ?? 0,
+        confused: issue.reactions?.confused ?? 0,
+        heart: issue.reactions?.heart ?? 0,
+        hooray: issue.reactions?.hooray ?? 0,
+        eyes: issue.reactions?.eyes ?? 0,
+        rocket: issue.reactions?.rocket ?? 0,
+        plusOne: issue.reactions?.["+1"] ?? 0,
+        minusOne: issue.reactions?.["-1"] ?? 0,
       },
     })),
   };
@@ -205,5 +205,5 @@ export const createRepoQuery = async (
     });
   });
 
-  await query.run(edgeClient, mappedData as any);
+  await query.run(edgeClient, mappedData);
 };
