@@ -1,7 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createRepoQuery } from "../queries";
 import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
 

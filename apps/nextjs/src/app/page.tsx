@@ -20,7 +20,6 @@ export default async function IndexPage({ searchParams }: IndexPageProps) {
   const search = searchParamsSchema.parse(searchParams);
 
   const tasksPromise = getTasks(search);
-
   return (
     <div className="gap-2">
       {/**

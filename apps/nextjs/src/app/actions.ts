@@ -1,8 +1,11 @@
 import "server-only";
 
+import { client, db } from "@acme/db";
+
 import { api } from "~/trpc/server";
 import { type GetTasksSchema } from "./validations";
 
+//THIS would be moved to the api later
 export async function getTasks(input: GetTasksSchema) {
   const { page, per_page, sort, title, status, priority, operator, from, to } =
     input;
@@ -10,6 +13,7 @@ export async function getTasks(input: GetTasksSchema) {
   try {
     // Offset to paginate the results
     const offset = (page - 1) * per_page;
+
     // Column and order to sort by
     // Spliting the sort string by "." to get the column and order
     // Example: "title.desc" => ["title", "desc"]
@@ -114,17 +118,32 @@ export async function getTasks(input: GetTasksSchema) {
     //   };
     // });
 
-    const { issues } = await api.issue.byRepo({
-      owner: "steven-tey",
-      repo: "novel",
+    const issues = db.select(db.Issue, (issue) => {
+      const repo = issue["<issues[is GitHubRepo]"];
+      return {
+        id: true,
+        title: true,
+        labels: true,
+        created_at: true,
+        repo: db.select(repo, () => ({
+          id: true,
+          name: true,
+          owner: true,
+        })),
+      };
     });
+    // const { issues } = await api.issue.byRepo({
+    //   owner: "steven-tey",
+    //   repo: "novel",
+    // });
     // const pageCount = Math.ceil(total / per_page);
-    return { data: issues, pageCount: 5 };
+    const result = await issues.run(client);
+    return { data: result, pageCount: 5 };
   } catch (err) {
     return { data: [], pageCount: 0 };
   }
 }
-
+export type Issue = Awaited<ReturnType<typeof getTasks>>["data"][number];
 // export async function getTaskCountByStatus() {
 //   noStore();
 //   try {
