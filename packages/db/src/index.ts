@@ -8,7 +8,7 @@ const baseClient = createClient({
   secretKey: env.EDGEDB_SECRET_KEY,
 });
 
-export const db = baseClient
+export const client = baseClient
   .withConfig({
     // 10 seconds
     session_idle_transaction_timeout: Duration.from({ seconds: 10 }),
@@ -31,5 +31,4 @@ export const db = baseClient
     readonly: false,
   });
 
-export const dbQueryBuilder = e;
-export * from "../dbschema/edgeql-js";
+export const db = e;

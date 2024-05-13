@@ -9,9 +9,8 @@ import { DataTableFilterField } from "@acme/ui/filters";
 
 import { useDataTable } from "~/hooks/use-data-table";
 import { getTasks } from "../actions";
-import { getPriorityIcon, getStatusIcon } from "../utils";
 import { Issue } from "./issue-table";
-import { getColumns } from "./task-table-columns";
+import { columns, getColumns } from "./task-table-columns";
 import { TasksTableFloatingBar } from "./task-table-floating-bar";
 import { useTasksTable } from "./task-table-provider";
 import { TasksTableToolbarActions } from "./task-table-toolbar-actions";
@@ -27,7 +26,6 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
   const { data, pageCount } = React.use(tasksPromise);
 
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo(() => getColumns(), []);
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -67,10 +65,10 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
     //   })),
     // },
   ];
-
+  console.log(data);
   const { table } = useDataTable({
     data,
-    columns,
+    columns: columns,
     pageCount,
     // optional props
     filterFields,

@@ -138,7 +138,9 @@ module default {
     property updatedAt -> datetime;
     property pushedAt -> datetime;
     property description -> str;
-    multi link issues -> Issue;
+    multi link issues -> Issue {
+      constraint exclusive;
+    };
   }
 }
  

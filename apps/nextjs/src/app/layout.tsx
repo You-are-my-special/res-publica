@@ -62,7 +62,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
 
           <Toaster />
           <div className="fixed left-0 top-0 z-[-1] h-full w-full brightness-150 grayscale dark:brightness-50">
-            <Tranquiluxe />
+            {/* <Tranquiluxe /> */}
           </div>
         </ThemeProvider>
       </body>
