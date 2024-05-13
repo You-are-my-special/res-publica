@@ -10,6 +10,11 @@ export async function getTasks(input: GetTasksSchema) {
   const { page, per_page, sort, title, status, priority, operator, from, to } =
     input;
 
+  const [column, order] = (sort?.split(".").filter(Boolean) ?? [
+    "createdAt",
+    "desc",
+  ]) as [keyof any | undefined, "asc" | "desc" | undefined];
+  //here we [keyof Task | undefined, "asc" | "des
   try {
     // Offset to paginate the results
     const offset = (page - 1) * per_page;
@@ -130,6 +135,11 @@ export async function getTasks(input: GetTasksSchema) {
           name: true,
           owner: true,
         })),
+        order_by: {
+          expression: issue.created_at,
+          direction: order === "asc" ? "ASC" : "DESC",
+          empty: "EMPTY FIRST",
+        },
       };
     });
     // const { issues } = await api.issue.byRepo({
