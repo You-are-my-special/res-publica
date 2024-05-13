@@ -140,6 +140,8 @@ export async function getTasks(input: GetTasksSchema) {
           direction: order === "asc" ? "ASC" : "DESC",
           empty: "EMPTY FIRST",
         },
+        limit: per_page,
+        offset,
       };
     });
     // const { issues } = await api.issue.byRepo({
