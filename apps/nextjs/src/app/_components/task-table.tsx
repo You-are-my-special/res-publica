@@ -8,9 +8,8 @@ import { DataTableToolbar } from "@acme/ui/data-table/data-table-toolbar";
 import { DataTableFilterField } from "@acme/ui/filters";
 
 import { useDataTable } from "~/hooks/use-data-table";
-import { getTasks } from "../actions";
-import { Issue } from "./issue-table";
-import { columns, getColumns } from "./task-table-columns";
+import { getTasks, Issue } from "../actions";
+import { columns } from "./task-table-columns";
 import { TasksTableFloatingBar } from "./task-table-floating-bar";
 import { useTasksTable } from "./task-table-provider";
 import { TasksTableToolbarActions } from "./task-table-toolbar-actions";

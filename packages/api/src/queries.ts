@@ -6,14 +6,12 @@ import { edgeClient } from "@acme/db/edge";
 type RepoData = Endpoints["GET /repos/{owner}/{repo}"]["response"]["data"];
 type IssueData =
   Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"];
-
 const queryParams = {
   repo: e.tuple({
+    githubId: e.int64,
     url: e.str,
     name: e.str,
     fullName: e.str,
-    owner: e.str,
-    ownerUrl: e.str,
     description: e.str,
     issueCommentUrl: e.str,
     issuesUrl: e.str,
@@ -71,6 +69,11 @@ const queryParams = {
       }),
     ),
   ),
+  owner: e.tuple({
+    name: e.str,
+    avatar_url: e.str,
+    html_url: e.str,
+  }),
 };
 
 export const createRepoQuery = async (
@@ -79,11 +82,10 @@ export const createRepoQuery = async (
 ) => {
   const mappedData = {
     repo: {
+      githubId: repoData.id,
       url: repoData.html_url,
       name: repoData.name,
       fullName: repoData.full_name,
-      owner: repoData.owner.login,
-      ownerUrl: repoData.owner.html_url,
       description: repoData.description ?? "",
       issueCommentUrl: repoData.issue_comment_url,
       issuesUrl: repoData.issues_url,
@@ -144,65 +146,66 @@ export const createRepoQuery = async (
         minusOne: issue.reactions?.["-1"] ?? 0,
       },
     })),
+    owner: {
+      name: repoData.owner.login,
+      avatar_url: repoData.owner.avatar_url,
+      html_url: repoData.owner.html_url,
+    },
   };
 
   const query = e.params(queryParams, (params) => {
     const issues = e.for(e.array_unpack(params.issues), (issue) => {
       const labels = e.for(e.array_unpack(issue.labels), (label) => {
-        return e.insert(e.Label, label);
-        // .unlessConflict((label) => ({
-        //   on: label.name,
-        //   else: label,
-        // }));
+        return e.insert(e.Label, label).unlessConflict();
       });
 
-      return e.insert(e.Issue, {
-        url: issue.url,
-        html_url: issue.html_url,
-        repository_url: issue.repository_url,
-        number: issue.number,
-        title: issue.title,
-        labels: labels,
-        state: issue.state,
-        created_at: issue.created_at,
-        updated_at: issue.updated_at,
-        // closed_at: issue.closed_at,
-        body: issue.body,
-        user: e.insert(e.GitHubUser, issue.user),
-        // .unlessConflict((user) => ({
-        //   on: user.html_url,
-        //   else: user,
-        // })),
-        reactions: e.insert(e.Reaction, issue.reactions),
-      });
-      // .unlessConflict((issue) => ({
-      //   on: issue.title,
-      //   else: issue,
-      // }));
+      return e
+        .insert(e.Issue, {
+          url: issue.url,
+          html_url: issue.html_url,
+          repository_url: issue.repository_url,
+          number: issue.number,
+          title: issue.title,
+          labels: labels,
+          state: issue.state,
+          created_at: issue.created_at,
+          updated_at: issue.updated_at,
+          // closed_at: issue.closed_at,
+          body: issue.body,
+          user: e.insert(e.GitHubUser, issue.user),
+          // .unlessConflict((user) => ({
+          //   on: user.html_url,
+          //   else: user,
+          // })),
+          reactions: e.insert(e.Reaction, issue.reactions),
+        })
+        .unlessConflict();
     });
-    return e.insert(e.GitHubRepo, {
-      url: params.repo.url,
-      name: params.repo.name,
-      fullName: params.repo.fullName,
-      owner: params.repo.owner,
-      ownerUrl: params.repo.ownerUrl,
-      description: params.repo.description,
-      issueCommentUrl: params.repo.issueCommentUrl,
-      issuesUrl: params.repo.issuesUrl,
-      homepage: params.repo.homepage,
-      topics: params.repo.topics,
-      visibility: params.repo.visibility,
-      openIssuesCount: params.repo.openIssuesCount,
-      forksCount: params.repo.forksCount,
-      hasIssues: params.repo.hasIssues,
-      stargazersCount: params.repo.stargazersCount,
-      watchersCount: params.repo.watchersCount,
-      language: params.repo.language,
-      createdAt: params.repo.createdAt,
-      updatedAt: params.repo.updatedAt,
-      pushedAt: params.repo.pushedAt,
-      issues,
-    });
+    return e
+      .insert(e.GitHubRepo, {
+        githubId: repoData.id,
+        url: params.repo.url,
+        name: params.repo.name,
+        fullName: params.repo.fullName,
+        description: params.repo.description,
+        issueCommentUrl: params.repo.issueCommentUrl,
+        issuesUrl: params.repo.issuesUrl,
+        homepage: params.repo.homepage,
+        topics: params.repo.topics,
+        visibility: params.repo.visibility,
+        openIssuesCount: params.repo.openIssuesCount,
+        forksCount: params.repo.forksCount,
+        hasIssues: params.repo.hasIssues,
+        stargazersCount: params.repo.stargazersCount,
+        watchersCount: params.repo.watchersCount,
+        language: params.repo.language,
+        createdAt: params.repo.createdAt,
+        updatedAt: params.repo.updatedAt,
+        pushedAt: params.repo.pushedAt,
+        owner: e.insert(e.Owner, params.owner),
+        issues,
+      })
+      .unlessConflict();
   });
 
   await query.run(edgeClient, mappedData);

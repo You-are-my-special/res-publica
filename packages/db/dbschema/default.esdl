@@ -65,7 +65,7 @@ module default {
   }
 
   type Issue {
-    property url -> str;
+      property url -> str;
     property html_url -> str;
     property repository_url -> str;
     property number -> int64;
@@ -116,12 +116,22 @@ module default {
     property eyes -> int64;
   }
 
+
+  type Owner {
+    name -> str;
+    property avatar_url -> str;
+    html_url -> str;
+
+  }
+
   type GitHubRepo {
+    githubId -> int64 {
+      constraint exclusive;
+    }
     property url -> str;
     property name -> str;
     property fullName -> str;
-    property owner -> str;
-    property ownerUrl -> str;
+    required link owner -> Owner;
     property issueCommentUrl -> str;
     property issuesUrl -> str;
     property homepage -> str;

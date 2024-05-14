@@ -133,8 +133,14 @@ export async function getTasks(input: GetTasksSchema) {
         repo: db.select(repo, () => ({
           id: true,
           name: true,
-          owner: true,
+          stargazersCount: true,
+          owner: {
+            name: true,
+            avatar_url: true,
+            html_url: true,
+          },
         })),
+        filter: title ? db.op(issue.title, "ilike", title) : null,
         order_by: {
           expression: issue.created_at,
           direction: order === "asc" ? "ASC" : "DESC",
