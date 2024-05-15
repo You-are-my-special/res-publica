@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
+import { StarIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { Badge } from "@acme/ui/badge";
@@ -12,40 +14,62 @@ import { formatDate } from "~/lib/utils";
 
 const columnHelper = createColumnHelper<Issue>();
 export const columns = [
-  columnHelper.display({
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-0.5"
-      />
+  columnHelper.accessor("repo.stargazersCount", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Stars" />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-0.5"
-      />
+    cell: ({ cell }) => (
+      <div className="flex items-center gap-1">
+        <StarIcon className="h-4 w-4 text-[#e3b341]" />
+        <span className="ml-1">{cell.getValue()}</span>
+      </div>
     ),
-    enableSorting: false,
-    enableHiding: false,
   }),
+  // columnHelper.display({
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //       className="translate-y-0.5"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //       className="translate-y-0.5"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // }),
   columnHelper.accessor("repo.name", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Repo" />
     ),
     cell: ({ row }) => {
       const repo = row.original.repo;
-      console.log(row);
       return (
-        <div>
-          {repo?.name}/{repo?.owner}
+        <div className="flex items-center gap-2">
+          <Image
+            src={repo.owner.avatar_url}
+            alt={repo.owner.html_url}
+            width={24}
+            height={24}
+            className="h-8 w-8 flex-shrink-0 rounded-md"
+          />
+          <div className="flex flex-col">
+            <p className="text-lg font-semibold leading-none text-foreground">
+              {repo.name}
+            </p>
+            <p className="text-muted-foreground">{repo?.owner.name}</p>
+          </div>
         </div>
       );
     },
@@ -59,7 +83,7 @@ export const columns = [
       const text = typeof label === "string" ? label : label?.name;
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{text}</Badge>}
+          {/* {label && <Badge variant="outline">{text}</Badge>} */}
           <span className="max-w-[31.25rem] truncate font-medium">
             {row.getValue("title")}
           </span>

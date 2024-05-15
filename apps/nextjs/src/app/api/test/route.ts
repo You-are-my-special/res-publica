@@ -1,9 +1,11 @@
 import { api } from "~/trpc/server";
 
-export const GET = async () => {
+export const POST = async (request: Request) => {
+  const { repo, owner } = await request.json();
+  console.log(repo, owner);
   await api.repo.createNewEntry({
-    repo: "node",
-    owner: "nodejs",
+    repo: repo,
+    owner: owner,
   });
   return Response.json({ message: "success" });
 };

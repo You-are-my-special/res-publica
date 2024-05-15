@@ -64,7 +64,16 @@ module default {
       constraint exclusive on ((.identifier, .token))
   }
 
+  type Topic {
+    name: str {
+      constraint exclusive;
+    };
+  }
+
   type Issue {
+    githubId -> int64 {
+      constraint exclusive;
+    }
     property url -> str;
     property html_url -> str;
     property repository_url -> str;
@@ -90,6 +99,9 @@ module default {
   }  
   
   type GitHubUser {
+    githubId -> int64 {
+      constraint exclusive;
+    }
     property login -> str;
     property avatar_url -> str;
     property html_url -> str;
@@ -116,16 +128,33 @@ module default {
     property eyes -> int64;
   }
 
+
+  type Owner {
+    githubId -> int64 {
+      constraint exclusive;
+    }
+    name -> str;
+    property avatar_url -> str;
+    html_url -> str;
+  }
+
+  type Language {
+    name : str {
+      constraint exclusive;
+    };
+  }
+
   type GitHubRepo {
+    githubId -> int64 {
+      constraint exclusive;
+    }
     property url -> str;
     property name -> str;
     property fullName -> str;
-    property owner -> str;
-    property ownerUrl -> str;
+    required link owner -> Owner;
     property issueCommentUrl -> str;
     property issuesUrl -> str;
     property homepage -> str;
-    property topics -> array<str>;
     property visibility -> str;
     property openIssuesCount -> int64;
     property subscribersCount -> int64;
@@ -138,6 +167,10 @@ module default {
     property updatedAt -> datetime;
     property pushedAt -> datetime;
     property description -> str;
+
+    multi languages : Language;
+
+    multi topics : Topic;
     multi link issues -> Issue {
       constraint exclusive;
     };
