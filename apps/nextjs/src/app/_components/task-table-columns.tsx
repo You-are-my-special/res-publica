@@ -55,7 +55,6 @@ export const columns = [
     ),
     cell: ({ row }) => {
       const repo = row.original.repo;
-      console.log(row);
       return (
         <div className="flex items-center gap-2">
           <Image
@@ -66,7 +65,9 @@ export const columns = [
             className="h-8 w-8 flex-shrink-0 rounded-md"
           />
           <div className="flex flex-col">
-            <p className="text-lg leading-none text-foreground">{repo.name}</p>
+            <p className="text-lg font-semibold leading-none text-foreground">
+              {repo.name}
+            </p>
             <p className="text-muted-foreground">{repo?.owner.name}</p>
           </div>
         </div>

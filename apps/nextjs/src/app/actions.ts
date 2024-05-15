@@ -123,6 +123,10 @@ export async function getTasks(input: GetTasksSchema) {
     //   };
     // });
 
+    const baseShape = db.shape(db.Issue, (issue) => ({
+      filter: title ? db.op(issue.title, "ilike", `%${title}%`) : undefined,
+    }));
+
     const issues = db.select(db.Issue, (issue) => {
       const repo = issue["<issues[is GitHubRepo]"];
       return {
@@ -140,7 +144,7 @@ export async function getTasks(input: GetTasksSchema) {
             html_url: true,
           },
         })),
-        filter: title ? db.op(issue.title, "ilike", title) : null,
+        ...baseShape(issue),
         order_by: {
           expression: issue.created_at,
           direction: order === "asc" ? "ASC" : "DESC",
@@ -150,13 +154,19 @@ export async function getTasks(input: GetTasksSchema) {
         offset,
       };
     });
+    const totalQuery = db.select({
+      total: db.count(db.select(db.Issue, baseShape)),
+    });
     // const { issues } = await api.issue.byRepo({
     //   owner: "steven-tey",
     //   repo: "novel",
     // });
-    // const pageCount = Math.ceil(total / per_page);
+
+    const { total } = await totalQuery.run(client);
     const result = await issues.run(client);
-    return { data: result, pageCount: 5 };
+    const pageCount = Math.ceil(total / per_page);
+
+    return { data: result, pageCount };
   } catch (err) {
     return { data: [], pageCount: 0 };
   }

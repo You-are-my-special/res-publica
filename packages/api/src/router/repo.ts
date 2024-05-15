@@ -17,4 +17,11 @@ export const repoRouter = {
 
       return { message: "Data saved successfully" };
     }),
+  getRepoFromGithub: publicProcedure
+    .input(z.object({ repo: z.string(), owner: z.string() }))
+    .query(async ({ input }) => {
+      const repo = await octo.repos.get(input);
+
+      return repo.data;
+    }),
 } satisfies TRPCRouterRecord;
