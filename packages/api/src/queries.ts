@@ -166,7 +166,10 @@ export const createRepoQuery = async (
   };
   const query = e.params(queryParams, (params) => {
     const topics = e.for(e.array_unpack(params.topics), (topic) => {
-      return e.insert(e.Topic, topic).unlessConflict();
+      return e.insert(e.Topic, topic).unlessConflict((topic) => ({
+        on: topic.name,
+        else: topic,
+      }));
     });
     const issues = e.for(e.array_unpack(params.issues), (issue) => {
       const labels = e.for(e.array_unpack(issue.labels), (label) => {
@@ -217,7 +220,10 @@ export const createRepoQuery = async (
         updatedAt: params.repo.updatedAt,
         pushedAt: params.repo.pushedAt,
         topics: topics,
-        owner: e.insert(e.Owner, params.owner).unlessConflict(),
+        owner: e.insert(e.Owner, params.owner).unlessConflict((owner) => ({
+          on: owner.githubId,
+          else: owner,
+        })),
         issues,
       })
       .unlessConflict();

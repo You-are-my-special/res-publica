@@ -24,37 +24,38 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
 
   const { data, pageCount } = React.use(tasksPromise);
 
-  const filterFields: DataTableFilterField<Issue>[] = [
-    {
-      label: "Title",
-      value: "title",
-      placeholder: "Filter titles...",
-    },
-    // {
-    //   label: "Status",
-    //   value: "status",
-    //   options: tasks.status.enumValues.map((status) => ({
-    //     label: status[0]?.toUpperCase() + status.slice(1),
-    //     value: status,
-    //     icon: getStatusIcon(status),
-    //     withCount: true,
-    //   })),
-    // },
-    // {
-    //   label: "Priority",
-    //   value: "priority",
-    //   options: tasks.priority.enumValues.map((priority) => ({
-    //     label: priority[0]?.toUpperCase() + priority.slice(1),
-    //     value: priority,
-    //     icon: getPriorityIcon(priority),
-    //     withCount: true,
-    //   })),
-    // },
-  ];
-  const { data: repo } = api.repo.getRepoFromGithub.useQuery({
-    repo: "novel",
-    owner: "steven-tey",
-  });
+  const { data: topics } = api.repo.topics.useQuery();
+
+  const filterFields = React.useMemo(() => {
+    const fields: DataTableFilterField<Issue>[] = [
+      {
+        label: "Title",
+        value: "title",
+        placeholder: "Filter titles...",
+      },
+      {
+        label: "Topic",
+        value: "topic",
+        options: topics?.map((topic) => ({
+          label: topic.name,
+          value: topic.name,
+          // icon: getStatusIcon(status),
+          withCount: true,
+        })),
+      },
+      // {
+      //   label: "Priority",
+      //   value: "priority",
+      //   options: tasks.priority.enumValues.map((priority) => ({
+      //     label: priority[0]?.toUpperCase() + priority.slice(1),
+      //     value: priority,
+      //     icon: getPriorityIcon(priority),
+      //     withCount: true,
+      //   })),
+      // },
+    ];
+    return fields;
+  }, [topics]);
   const { table } = useDataTable({
     data,
     columns: columns,
