@@ -1,13 +1,13 @@
 import "server-only";
 
-import { client, db } from "@acme/db";
+import { client, db as e } from "@acme/db";
 
 import { api } from "~/trpc/server";
 import { type GetTasksSchema } from "./validations";
 
 //THIS would be moved to the api later
 export async function getTasks(input: GetTasksSchema) {
-  const { page, per_page, sort, title, status, priority, operator, from, to } =
+  const { page, per_page, sort, title, topic, priority, operator, from, to } =
     input;
 
   const [column, order] = (sort?.split(".").filter(Boolean) ?? [
@@ -93,7 +93,7 @@ export async function getTasks(input: GetTasksSchema) {
     //       );
 
     // Transaction is used to ensure both queries are executed in a single transaction
-    // const { data, total } = await db.transaction(async (tx) => {
+    // const { data, total } = await e.transaction(async (tx) => {
     //   const data = await tx
     //     .select()
     //     .from(tasks)
@@ -122,22 +122,30 @@ export async function getTasks(input: GetTasksSchema) {
     //     total,
     //   };
     // });
+    const topics = topic?.split(".") ?? [];
+    const baseShape = e.shape(e.Issue, (issue) => {
+      const repo = issue["<issues[is GitHubRepo]"];
+      const stuff = e.array(topics);
+      return {
+        filter: e.op(repo.topics.name, "in", e.array_unpack(repo)),
+        // filter: title ? e.op(issue.title, "ilike", `%${title}%`) : undefined,
+      };
+    });
 
-    const baseShape = db.shape(db.Issue, (issue) => ({
-      filter: title ? db.op(issue.title, "ilike", `%${title}%`) : undefined,
-    }));
-
-    const issues = db.select(db.Issue, (issue) => {
+    const issues = e.select(e.Issue, (issue) => {
       const repo = issue["<issues[is GitHubRepo]"];
       return {
         id: true,
         title: true,
         labels: true,
         created_at: true,
-        repo: db.select(repo, () => ({
+        repo: e.select(repo, () => ({
           id: true,
           name: true,
           stargazersCount: true,
+          topics: {
+            name: true,
+          },
           owner: {
             name: true,
             avatar_url: true,
@@ -154,8 +162,8 @@ export async function getTasks(input: GetTasksSchema) {
         offset,
       };
     });
-    const totalQuery = db.select({
-      total: db.count(db.select(db.Issue, baseShape)),
+    const totalQuery = e.select({
+      total: e.count(e.select(e.Issue, baseShape)),
     });
     // const { issues } = await api.issue.byRepo({
     //   owner: "steven-tey",
@@ -175,7 +183,7 @@ export type Issue = Awaited<ReturnType<typeof getTasks>>["data"][number];
 // export async function getTaskCountByStatus() {
 //   noStore();
 //   try {
-//     return await db
+//     return await e
 //       .select({
 //         status: tasks.status,
 //         count: count(),
@@ -191,7 +199,7 @@ export type Issue = Awaited<ReturnType<typeof getTasks>>["data"][number];
 // export async function getTaskCountByPriority() {
 //   noStore();
 //   try {
-//     return await db
+//     return await e
 //       .select({
 //         priority: tasks.priority,
 //         count: count(),

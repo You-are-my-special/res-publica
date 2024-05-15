@@ -204,6 +204,8 @@ export function useDataTable<TData, TValue>({
   );
 
   React.useEffect(() => {
+    console.log(pageIndex);
+
     router.push(
       `${pathname}?${createQueryString({
         page: pageIndex + 1,

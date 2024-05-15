@@ -6,7 +6,6 @@ import { StarIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { Badge } from "@acme/ui/badge";
-import { Checkbox } from "@acme/ui/checkbox";
 import { DataTableColumnHeader } from "@acme/ui/data-table/data-table-column-header";
 
 import type { Issue } from "../actions";
@@ -25,6 +24,7 @@ export const columns = [
       </div>
     ),
   }),
+
   // columnHelper.display({
   //   id: "select",
   //   header: ({ table }) => (
@@ -56,7 +56,7 @@ export const columns = [
     cell: ({ row }) => {
       const repo = row.original.repo;
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex w-32 items-center gap-2">
           <Image
             src={repo.owner.avatar_url}
             alt={repo.owner.html_url}
@@ -74,6 +74,7 @@ export const columns = [
       );
     },
   }),
+
   columnHelper.accessor("title", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Title" />
@@ -87,6 +88,28 @@ export const columns = [
           <span className="max-w-[31.25rem] truncate font-medium">
             {row.getValue("title")}
           </span>
+        </div>
+      );
+    },
+  }),
+  columnHelper.accessor("repo.topics", {
+    id: "topic",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Topics" />
+    ),
+    cell: ({ cell }) => {
+      const topics = cell.getValue();
+      return (
+        <div className="flex flex-wrap">
+          {topics.map((topic) => (
+            <Badge
+              key={topic.name}
+              variant="outline"
+              className="text-muted-foreground"
+            >
+              {topic.name}
+            </Badge>
+          ))}
         </div>
       );
     },

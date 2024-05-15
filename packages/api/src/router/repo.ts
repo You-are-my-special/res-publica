@@ -1,6 +1,8 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+import { client, db } from "@acme/db";
+
 import { createRepoQuery } from "../queries";
 import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
@@ -14,7 +16,6 @@ export const repoRouter = {
       const repo = await octo.repos.get(input);
 
       await createRepoQuery(repo.data, issues);
-
       return { message: "Data saved successfully" };
     }),
   getRepoFromGithub: publicProcedure
@@ -24,4 +25,11 @@ export const repoRouter = {
 
       return repo.data;
     }),
+  topics: publicProcedure.query(({ ctx }) => {
+    const topics = db.select(db.Topic, (topic) => ({
+      name: topic.name,
+    }));
+    const data = topics.run(client);
+    return data;
+  }),
 } satisfies TRPCRouterRecord;
