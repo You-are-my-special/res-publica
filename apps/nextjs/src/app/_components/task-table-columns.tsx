@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { StarIcon } from "@radix-ui/react-icons";
+import { ShadowIcon, StarIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { Badge } from "@acme/ui/badge";
@@ -101,7 +101,7 @@ export const columns = [
       const topics = cell.getValue();
       return (
         <div className="flex flex-wrap">
-          {topics.map((topic) => (
+          {topics.slice(0, 1).map((topic) => (
             <Badge
               key={topic.name}
               variant="outline"
@@ -119,6 +119,21 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Reactions" />
     ),
     cell: ({ cell }) => cell.getValue(),
+  }),
+  columnHelper.accessor("gravitas.score", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Gravitas" />
+    ),
+    cell: ({ cell }) => (
+      <div className="full h-8 w-8 overflow-hidden rounded-full border ">
+        <div
+          className="h-full bg-primary blur-sm"
+          style={{
+            width: `${(cell.getValue() ?? 0.01) * 100}%`,
+          }}
+        />
+      </div>
+    ),
   }),
   columnHelper.accessor("created_at", {
     header: ({ column }) => (

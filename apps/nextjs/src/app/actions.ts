@@ -1,6 +1,6 @@
 import "server-only";
 
-import { client, db as e } from "@acme/db";
+import { client, e } from "@acme/db";
 
 import { type GetTasksSchema } from "./validations";
 
@@ -117,11 +117,12 @@ export async function getTasks(input: GetTasksSchema) {
       }
 
       const repo = issue["<issues[is GitHubRepo]"];
-      const col =
-        column === "reactions_total_count"
-          ? issue.reactions.total_count
-          : issue[column];
-      const expression = col ?? issue.created_at;
+
+      const columns = {
+        reactions_total_count: issue.reactions.total_count,
+        gravitas_score: issue.gravitas.score,
+      };
+      const expression = columns[column] ?? issue.created_at;
 
       return {
         id: true,
@@ -131,6 +132,10 @@ export async function getTasks(input: GetTasksSchema) {
           total_count: true,
         },
         created_at: true,
+        gravitas_scores: true,
+        gravitas: {
+          score: true,
+        },
         repo: e.select(repo, () => ({
           id: true,
           name: true,
