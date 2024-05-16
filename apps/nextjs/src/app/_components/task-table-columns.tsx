@@ -114,6 +114,12 @@ export const columns = [
       );
     },
   }),
+  columnHelper.accessor("reactions.total_count", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Reactions" />
+    ),
+    cell: ({ cell }) => cell.getValue(),
+  }),
   columnHelper.accessor("created_at", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created At" />

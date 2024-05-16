@@ -33,16 +33,15 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
         value: "title",
         placeholder: "Filter titles...",
       },
-      {
-        label: "Topic",
-        value: "topic",
-        options: topics?.map((topic) => ({
-          label: topic.name,
-          value: topic.name,
-          // icon: getStatusIcon(status),
-          withCount: true,
-        })),
-      },
+      // {
+      //   label: "Topic",
+      //   value: "topic",
+      //   options: topics?.map((topic) => ({
+      //     label: topic.name,
+      //     value: topic.name,
+      //     withCount: true,
+      //   })),
+      // },
       // {
       //   label: "Priority",
       //   value: "priority",

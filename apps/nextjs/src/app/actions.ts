@@ -2,7 +2,6 @@ import "server-only";
 
 import { client, db as e } from "@acme/db";
 
-import { api } from "~/trpc/server";
 import { type GetTasksSchema } from "./validations";
 
 //THIS would be moved to the api later
@@ -92,52 +91,45 @@ export async function getTasks(input: GetTasksSchema) {
     //           : undefined,
     //       );
 
-    // Transaction is used to ensure both queries are executed in a single transaction
-    // const { data, total } = await e.transaction(async (tx) => {
-    //   const data = await tx
-    //     .select()
-    //     .from(tasks)
-    //     .limit(per_page)
-    //     .offset(offset)
-    //     .where(where)
-    //     .orderBy(
-    //       column && column in tasks
-    //         ? order === "asc"
-    //           ? asc(tasks[column])
-    //           : desc(tasks[column])
-    //         : desc(tasks.id),
-    //     );
-
-    //   const total = await tx
-    //     .select({
-    //       count: count(),
-    //     })
-    //     .from(tasks)
-    //     .where(where)
-    //     .execute()
-    //     .then((res) => res[0]?.count ?? 0);
-
-    //   return {
-    //     data,
-    //     total,
-    //   };
-    // });
     const topics = topic?.split(".") ?? [];
-    const baseShape = e.shape(e.Issue, (issue) => {
-      const repo = issue["<issues[is GitHubRepo]"];
-      const stuff = e.array(topics);
-      return {
-        filter: e.op(repo.topics.name, "in", e.array_unpack(repo)),
-        // filter: title ? e.op(issue.title, "ilike", `%${title}%`) : undefined,
-      };
-    });
+
+    const makeTopicFilter = (topics: string[]) =>
+      e.shape(e.Issue, (issue) => {
+        const repo = issue["<issues[is GitHubRepo]"];
+        const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
+        return {
+          filter: e.op(
+            e.count(e.op(topicsSet, "intersect", repo.topics.name)),
+            ">",
+            0,
+          ),
+        };
+      });
 
     const issues = e.select(e.Issue, (issue) => {
+      const ops = [];
+
+      if (title) ops.push(e.op(issue.title, "ilike", `%${title}%`));
+      if (topics.length > 0) {
+        const topicFilter = makeTopicFilter(topics)(issue).filter;
+
+        ops.push(topicFilter);
+      }
+
       const repo = issue["<issues[is GitHubRepo]"];
+      const col =
+        column === "reactions_total_count"
+          ? issue.reactions.total_count
+          : issue[column];
+      const expression = col ?? issue.created_at;
+
       return {
         id: true,
         title: true,
         labels: true,
+        reactions: {
+          total_count: true,
+        },
         created_at: true,
         repo: e.select(repo, () => ({
           id: true,
@@ -152,9 +144,9 @@ export async function getTasks(input: GetTasksSchema) {
             html_url: true,
           },
         })),
-        ...baseShape(issue),
+        filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
         order_by: {
-          expression: issue.created_at,
+          expression,
           direction: order === "asc" ? "ASC" : "DESC",
           empty: "EMPTY FIRST",
         },
@@ -163,12 +155,21 @@ export async function getTasks(input: GetTasksSchema) {
       };
     });
     const totalQuery = e.select({
-      total: e.count(e.select(e.Issue, baseShape)),
+      total: e.count(
+        e.select(e.Issue, (issue) => {
+          const ops = [];
+          if (title) ops.push(e.op(issue.title, "ilike", `%${title}%`));
+          if (topics.length > 0) {
+            const topicFilter = makeTopicFilter(topics)(issue).filter;
+            ops.push(topicFilter);
+          }
+
+          return {
+            filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
+          };
+        }),
+      ),
     });
-    // const { issues } = await api.issue.byRepo({
-    //   owner: "steven-tey",
-    //   repo: "novel",
-    // });
 
     const { total } = await totalQuery.run(client);
     const result = await issues.run(client);
