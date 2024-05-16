@@ -1,7 +1,8 @@
 import { createClient, Duration, IsolationLevel } from "edgedb";
 
-import e from "../dbschema/edgeql-js";
 import { env } from "./env";
+
+export { default as e } from "../dbschema/edgeql-js";
 
 const baseClient = createClient({
   instanceName: env.EDGEDB_INSTANCE,
@@ -30,5 +31,3 @@ export const client = baseClient
     deferrable: false,
     readonly: false,
   });
-
-export const db = e;

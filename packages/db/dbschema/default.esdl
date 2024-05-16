@@ -69,9 +69,15 @@ module default {
       constraint exclusive;
     };
     index on (.name);
-
   }
 
+
+  type Gravitas {
+    createdAt : datetime {
+      default := datetime_current();
+    };
+    score : float64; 
+  }
 
   type Issue {
     githubId : int64 {
@@ -85,6 +91,12 @@ module default {
     link user : GitHubUser;
     
     multi link labels : Label;
+    multi link gravitas_scores : Gravitas;
+
+    gravitas := (
+      select .gravitas_scores order by .createdAt limit 1
+    );
+
     property state : str;
     property locked : bool;
     property assignee : str;

@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { client, db } from "@acme/db";
+import { client, e } from "@acme/db";
 
 import { createRepoQuery } from "../queries";
 import { publicProcedure } from "../trpc";
@@ -26,7 +26,7 @@ export const repoRouter = {
       return repo.data;
     }),
   topics: publicProcedure.query(({ ctx }) => {
-    const topics = db.select(db.Topic, (topic) => ({
+    const topics = e.select(e.Topic, (topic) => ({
       name: topic.name,
     }));
     const data = topics.run(client);

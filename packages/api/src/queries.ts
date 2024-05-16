@@ -1,6 +1,6 @@
 import { Endpoints } from "@octokit/types";
 
-import { db as e } from "@acme/db";
+import { e } from "@acme/db";
 import { edgeClient } from "@acme/db/edge";
 
 type RepoData = Endpoints["GET /repos/{owner}/{repo}"]["response"]["data"];
