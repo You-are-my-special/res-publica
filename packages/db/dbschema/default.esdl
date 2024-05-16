@@ -1,14 +1,14 @@
 module default {
   type User {
-    property name -> str;
-    required property email -> str {
+    property name : str;
+    required property email : str {
       constraint exclusive;
     }
-    property emailVerified -> datetime;
-    property image -> str;
+    property emailVerified : datetime;
+    property image : str;
     multi link accounts := .<user[is Account];
     multi link sessions := .<user[is Session];
-    property createdAt -> datetime {
+    property createdAt : datetime {
       default := datetime_current();
     };
   }
@@ -68,74 +68,78 @@ module default {
     name: str {
       constraint exclusive;
     };
+    index on (.name);
+
   }
 
+
   type Issue {
-    githubId -> int64 {
+    githubId : int64 {
       constraint exclusive;
     }
-    property url -> str;
-    property html_url -> str;
-    property repository_url -> str;
-    property number -> int64;
-    property title -> str;
-    link user -> GitHubUser;
-    multi link labels -> Label;
-    property state -> str;
-    property locked -> bool;
-    property assignee -> str;
-    property milestone -> str;
-    property comments -> int64;
-    property created_at -> datetime;
-    property updated_at -> datetime;
-    property closed_at -> datetime;
-    property author_association -> str;
-    property active_lock_reason -> str;
-    property body -> str;
-    link reactions -> Reaction;
-    property timeline_url -> str;
-    property performed_via_github_app -> str;
-    property state_reason -> str;
+    property url : str;
+    property html_url : str;
+    property repository_url : str;
+    property number : int64;
+    property title : str;
+    link user : GitHubUser;
+    
+    multi link labels : Label;
+    property state : str;
+    property locked : bool;
+    property assignee : str;
+    property milestone : str;
+    property comments : int64;
+    property created_at : datetime;
+    property updated_at : datetime;
+    property closed_at : datetime;
+    property author_association : str;
+    property active_lock_reason : str;
+    property body : str;
+    link reactions : Reaction;
+    property timeline_url : str;
+    property performed_via_github_app : str;
+    property state_reason : str;
   }  
   
   type GitHubUser {
-    githubId -> int64 {
+    githubId : int64 {
       constraint exclusive;
     }
-    property login -> str;
-    property avatar_url -> str;
-    property html_url -> str;
-    property name -> str;
+    property login : str;
+    property avatar_url : str;
+    property html_url : str;
+    property name : str;
   }
 
   type Label {
-    property name -> str;
-    property color -> str;
-    property default -> bool;
-    property description -> str;
+    property name : str;
+    property color : str;
+    property default : bool;
+    property description : str;
   }
 
   type Reaction {
-    property url -> str;
-    property total_count -> int64;
-    property laugh -> int64;
-    property hooray -> int64;
-    property confused -> int64;
-    property heart -> int64;
-    property rocket -> int64;
-    property plusOne -> int64;
-    property minusOne -> int64;
-    property eyes -> int64;
+    property url : str;
+    property total_count : int64;
+    property laugh : int64;
+    property hooray : int64;
+    property confused : int64;
+    property heart : int64;
+    property rocket : int64;
+    property plusOne : int64;
+    property minusOne : int64;
+    property eyes : int64;
   }
 
 
   type Owner {
-    githubId -> int64 {
+    githubId : int64 {
       constraint exclusive;
     }
-    name -> str;
-    property avatar_url -> str;
-    html_url -> str;
+    name : str;
+    property avatar_url : str;
+    html_url : str;
   }
 
   type Language {
@@ -145,33 +149,33 @@ module default {
   }
 
   type GitHubRepo {
-    githubId -> int64 {
+    githubId : int64 {
       constraint exclusive;
     }
-    property url -> str;
-    property name -> str;
-    property fullName -> str;
-    required link owner -> Owner;
-    property issueCommentUrl -> str;
-    property issuesUrl -> str;
-    property homepage -> str;
-    property visibility -> str;
-    property openIssuesCount -> int64;
-    property subscribersCount -> int64;
-    property forksCount -> int64;
-    property hasIssues -> bool;
-    property stargazersCount -> int64;
-    property watchersCount -> int64;
-    property language -> str;
-    property createdAt -> datetime;
-    property updatedAt -> datetime;
-    property pushedAt -> datetime;
-    property description -> str;
+    property url : str;
+    property name : str;
+    property fullName : str;
+    required link owner : Owner;
+    property issueCommentUrl : str;
+    property issuesUrl : str;
+    property homepage : str;
+    property visibility : str;
+    property openIssuesCount : int64;
+    property subscribersCount : int64;
+    property forksCount : int64;
+    property hasIssues : bool;
+    property stargazersCount : int64;
+    property watchersCount : int64;
+    property language : str;
+    property createdAt : datetime;
+    property updatedAt : datetime;
+    property pushedAt : datetime;
+    property description : str;
 
     multi languages : Language;
 
     multi topics : Topic;
-    multi link issues -> Issue {
+    multi link issues : Issue {
       constraint exclusive;
     };
   }
