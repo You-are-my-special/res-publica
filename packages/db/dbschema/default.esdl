@@ -93,6 +93,8 @@ module default {
     multi link labels : Label;
     multi link gravitas_scores : Gravitas;
 
+    required repo: Repo;
+
     gravitas := (
       select .gravitas_scores order by .createdAt limit 1
     );
@@ -160,7 +162,7 @@ module default {
     };
   }
 
-  type GitHubRepo {
+  type Repo {
     githubId : int64 {
       constraint exclusive;
     }
@@ -187,9 +189,7 @@ module default {
     multi languages : Language;
 
     multi topics : Topic;
-    multi link issues : Issue {
-      constraint exclusive;
-    };
+    multi issues := (.<repo[is Issue])
   }
 }
  

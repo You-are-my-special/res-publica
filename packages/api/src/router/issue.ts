@@ -2,14 +2,12 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { client, e } from "@acme/db";
+import { getTasksSchema } from "@acme/validators";
 
 import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
 
 export const issueRouter = {
-  all: publicProcedure.query(({ ctx }) => {
-    return octo.repos.listForUser({ username: "andrewdoro" });
-  }),
   byRepo: publicProcedure
     .input(z.object({ repo: z.string(), owner: z.string() }))
     .query(async ({ input }) => {
@@ -49,5 +47,103 @@ export const issueRouter = {
     }));
 
     return query.run(client, { issues: issuesWithScores });
+  }),
+  all: publicProcedure.input(getTasksSchema).query(async ({ ctx, input }) => {
+    const { page, per_page, sort, title, topic, priority, operator, from, to } =
+      input;
+
+    const [column, order] = (sort?.split(".").filter(Boolean) ?? [
+      "createdAt",
+      "desc",
+    ]) as [keyof any | undefined, "asc" | "desc" | undefined];
+
+    const offset = (page - 1) * per_page;
+
+    const topics = topic?.split(".") ?? [];
+    const makeTopicFilter = (topics: string[]) =>
+      e.shape(e.Issue, (issue) => {
+        const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
+        return {
+          filter: e.op(
+            e.count(e.op(topicsSet, "intersect", issue.repo.topics.name)),
+            ">",
+            0,
+          ),
+        };
+      });
+
+    const issues = e.select(e.Issue, (issue) => {
+      const ops = [];
+
+      if (title) ops.push(e.op(issue.title, "ilike", `%${title}%`));
+      if (topics.length > 0) {
+        const topicFilter = makeTopicFilter(topics)(issue).filter;
+        ops.push(topicFilter);
+      }
+
+      const columns = {
+        reactions_total_count: issue.reactions.total_count,
+        gravitas_score: issue.gravitas.score,
+      };
+      const expression =
+        columns[column as keyof typeof columns] ?? issue.created_at;
+
+      return {
+        id: true,
+        title: true,
+        labels: true,
+        reactions: {
+          total_count: true,
+        },
+        created_at: true,
+        gravitas_scores: true,
+        gravitas: {
+          score: true,
+        },
+        repo: {
+          id: true,
+          name: true,
+          stargazersCount: true,
+          topics: {
+            name: true,
+          },
+          owner: {
+            name: true,
+            avatar_url: true,
+            html_url: true,
+          },
+        },
+        filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
+        order_by: {
+          expression,
+          direction: order === "asc" ? "ASC" : "DESC",
+          empty: "EMPTY FIRST",
+        },
+        limit: per_page,
+        offset,
+      };
+    });
+    const totalQuery = e.select({
+      total: e.count(
+        e.select(e.Issue, (issue) => {
+          const ops = [];
+          if (title) ops.push(e.op(issue.title, "ilike", `%${title}%`));
+          if (topics.length > 0) {
+            const topicFilter = makeTopicFilter(topics)(issue).filter;
+            ops.push(topicFilter);
+          }
+
+          return {
+            filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
+          };
+        }),
+      ),
+    });
+
+    const { total } = await totalQuery.run(client);
+    const result = await issues.run(client);
+    const pageCount = Math.ceil(total / per_page);
+
+    return { data: result, pageCount };
   }),
 } satisfies TRPCRouterRecord;

@@ -11,7 +11,6 @@ import { useDataTable } from "~/hooks/use-data-table";
 import { api } from "~/trpc/react";
 import { getTasks, Issue } from "../actions";
 import { columns } from "./task-table-columns";
-import { useTasksTable } from "./task-table-provider";
 import { TasksTableToolbarActions } from "./task-table-toolbar-actions";
 
 interface TasksTableProps {
@@ -19,9 +18,6 @@ interface TasksTableProps {
 }
 
 export function TasksTable({ tasksPromise }: TasksTableProps) {
-  // Feature flags for showcasing some additional features. Feel free to remove them.
-  const { featureFlags } = useTasksTable();
-
   const { data, pageCount } = React.use(tasksPromise);
 
   const { data: topics } = api.repo.topics.useQuery();
@@ -68,15 +64,9 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
 
   return (
     <DataTable table={table}>
-      {/* {featureFlags.includes("advancedFilter") ? (
-        <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
-        </DataTableAdvancedToolbar>
-      ) : ( */}
       <DataTableToolbar table={table} filterFields={filterFields}>
         <TasksTableToolbarActions table={table} />
       </DataTableToolbar>
-      {/* )} */}
     </DataTable>
   );
 }

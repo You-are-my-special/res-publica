@@ -3,7 +3,8 @@ import { z } from "zod";
 
 import { client, e } from "@acme/db";
 
-import { createRepoQuery } from "../queries";
+import { mapData } from "../scrape/map";
+import { createRepoQuery } from "../scrape/query";
 import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
 
@@ -14,8 +15,9 @@ export const repoRouter = {
       const issues = await octo.paginate(octo.rest.issues.listForRepo, input);
 
       const repo = await octo.repos.get(input);
+      const data = mapData(repo.data, issues);
 
-      await createRepoQuery(repo.data, issues);
+      await createRepoQuery(data);
       return { message: "Data saved successfully" };
     }),
   getRepoFromGithub: publicProcedure

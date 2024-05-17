@@ -143,26 +143,6 @@ export const columns = [
   }),
 
   // {
-  //   accessorKey: "title",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Title" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const label = tasks.label.enumValues.find(
-  //       (label) => label === row.original.label,
-  //     );
-
-  //     return (
-  //       <div className="flex space-x-2">
-  //         {label && <Badge variant="outline">{label}</Badge>}
-  //         <span className="max-w-[31.25rem] truncate font-medium">
-  //           {row.getValue("title")}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  // },
-  // {
   //   accessorKey: "status",
   //   header: ({ column }) => (
   //     <DataTableColumnHeader column={column} title="Status" />

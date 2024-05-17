@@ -1,4 +1,4 @@
-CREATE MIGRATION m1crmmsfzhs2tk4gnneye4lksz5psubbyrknb363yfzqiktpgioebq
+CREATE MIGRATION m1b6kqrtg5yz57mkc5avf46paqe5zqezyl7xlcrpzkczwh2unl2mga
     ONTO initial
 {
   CREATE FUTURE nonrecursive_access_policies;
@@ -42,9 +42,18 @@ CREATE MIGRATION m1crmmsfzhs2tk4gnneye4lksz5psubbyrknb363yfzqiktpgioebq
   };
   CREATE TYPE default::GitHubUser {
       CREATE PROPERTY avatar_url: std::str;
+      CREATE PROPERTY githubId: std::int64 {
+          CREATE CONSTRAINT std::exclusive;
+      };
       CREATE PROPERTY html_url: std::str;
       CREATE PROPERTY login: std::str;
       CREATE PROPERTY name: std::str;
+  };
+  CREATE TYPE default::Gravitas {
+      CREATE PROPERTY createdAt: std::datetime {
+          SET default := (std::datetime_current());
+      };
+      CREATE PROPERTY score: std::float64;
   };
   CREATE TYPE default::Label {
       CREATE PROPERTY color: std::str;
@@ -66,6 +75,13 @@ CREATE MIGRATION m1crmmsfzhs2tk4gnneye4lksz5psubbyrknb363yfzqiktpgioebq
   };
   CREATE TYPE default::Issue {
       CREATE LINK user: default::GitHubUser;
+      CREATE MULTI LINK gravitas_scores: default::Gravitas;
+      CREATE LINK gravitas := (SELECT
+          .gravitas_scores ORDER BY
+              .createdAt ASC
+      LIMIT
+          1
+      );
       CREATE MULTI LINK labels: default::Label;
       CREATE LINK reactions: default::Reaction;
       CREATE PROPERTY active_lock_reason: std::str;
@@ -75,6 +91,9 @@ CREATE MIGRATION m1crmmsfzhs2tk4gnneye4lksz5psubbyrknb363yfzqiktpgioebq
       CREATE PROPERTY closed_at: std::datetime;
       CREATE PROPERTY comments: std::int64;
       CREATE PROPERTY created_at: std::datetime;
+      CREATE PROPERTY githubId: std::int64 {
+          CREATE CONSTRAINT std::exclusive;
+      };
       CREATE PROPERTY html_url: std::str;
       CREATE PROPERTY locked: std::bool;
       CREATE PROPERTY milestone: std::str;
@@ -88,16 +107,29 @@ CREATE MIGRATION m1crmmsfzhs2tk4gnneye4lksz5psubbyrknb363yfzqiktpgioebq
       CREATE PROPERTY updated_at: std::datetime;
       CREATE PROPERTY url: std::str;
   };
+  CREATE TYPE default::Language {
+      CREATE PROPERTY name: std::str {
+          CREATE CONSTRAINT std::exclusive;
+      };
+  };
   CREATE TYPE default::Owner {
       CREATE PROPERTY avatar_url: std::str;
+      CREATE PROPERTY githubId: std::int64 {
+          CREATE CONSTRAINT std::exclusive;
+      };
       CREATE PROPERTY html_url: std::str;
       CREATE PROPERTY name: std::str;
   };
-  CREATE TYPE default::GitHubRepo {
-      CREATE MULTI LINK issues: default::Issue {
+  CREATE TYPE default::Topic {
+      CREATE PROPERTY name: std::str {
           CREATE CONSTRAINT std::exclusive;
       };
+      CREATE INDEX ON (.name);
+  };
+  CREATE TYPE default::Repo {
+      CREATE MULTI LINK languages: default::Language;
       CREATE REQUIRED LINK owner: default::Owner;
+      CREATE MULTI LINK topics: default::Topic;
       CREATE PROPERTY createdAt: std::datetime;
       CREATE PROPERTY description: std::str;
       CREATE PROPERTY forksCount: std::int64;
@@ -115,11 +147,16 @@ CREATE MIGRATION m1crmmsfzhs2tk4gnneye4lksz5psubbyrknb363yfzqiktpgioebq
       CREATE PROPERTY pushedAt: std::datetime;
       CREATE PROPERTY stargazersCount: std::int64;
       CREATE PROPERTY subscribersCount: std::int64;
-      CREATE PROPERTY topics: array<std::str>;
       CREATE PROPERTY updatedAt: std::datetime;
       CREATE PROPERTY url: std::str;
       CREATE PROPERTY visibility: std::str;
       CREATE PROPERTY watchersCount: std::int64;
+  };
+  ALTER TYPE default::Issue {
+      CREATE REQUIRED LINK repo: default::Repo;
+  };
+  ALTER TYPE default::Repo {
+      CREATE MULTI LINK issues := (.<repo[IS default::Issue]);
   };
   CREATE TYPE default::Session {
       CREATE REQUIRED LINK user: default::User {

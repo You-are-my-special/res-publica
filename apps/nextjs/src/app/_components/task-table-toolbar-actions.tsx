@@ -17,7 +17,7 @@ export function TasksTableToolbarActions({
 }: TasksTableToolbarActionsProps) {
   return (
     <div className="flex items-center gap-2">
-      <Button
+      {/* <Button
         variant="outline"
         size="sm"
         onClick={() =>
@@ -29,7 +29,7 @@ export function TasksTableToolbarActions({
       >
         <DownloadIcon className="mr-2 size-4" aria-hidden="true" />
         Export
-      </Button>
+      </Button> */}
       {/**
        * Other actions can be added here.
        * For example, import, view, etc.

@@ -113,7 +113,6 @@ export function useDataTable<TData, TValue>({
   defaultPerPage = 10,
   defaultSort,
   filterFields = [],
-  enableAdvancedFilter = false,
 }: UseDataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -258,9 +257,6 @@ export function useDataTable<TData, TValue>({
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    // Opt out when advanced filter is enabled, because it contains additional params
-    if (enableAdvancedFilter) return;
-
     // Prevent resetting the page on initial render
     if (!mounted) {
       setMounted(true);
