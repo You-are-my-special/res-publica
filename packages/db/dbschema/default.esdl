@@ -91,7 +91,9 @@ module default {
     link user : GitHubUser;
     
     multi link labels : Label;
-    multi link gravitas_scores : Gravitas;
+    multi link gravitas_scores : Gravitas {
+      on target delete allow;
+    };
 
     required repo: Repo;
 
@@ -131,6 +133,10 @@ module default {
     property color : str;
     property default : bool;
     property description : str;
+    repoId : int64;
+  
+    constraint exclusive on ((.name, .repoId));
+
   }
 
   type Reaction {

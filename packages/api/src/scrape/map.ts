@@ -1,5 +1,7 @@
 import type { Endpoints } from "@octokit/types";
 
+import { Label } from "@acme/db/interfaces";
+
 type RepoData = Endpoints["GET /repos/{owner}/{repo}"]["response"]["data"];
 type IssueData =
   Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"];
@@ -34,21 +36,24 @@ export const mapData = (repoData: RepoData, issues: IssueData) => {
 
       url: issue.url,
       html_url: issue.html_url,
-      labels: issue.labels.map((label) =>
-        typeof label === "string"
-          ? {
-              name: label,
-              color: "",
-              description: "",
-              default: false,
-            }
-          : {
-              name: label.name ?? "",
-              description: label.description ?? "",
-              color: label.color ?? "",
-              default: label.default ?? false,
-            },
-      ),
+      labels: issue.labels
+        .filter((label) => label !== typeof "string")
+        .map((label) => {
+          const cast = label as {
+            id: number;
+            name: string;
+            description: string;
+            color: string;
+            default: boolean;
+          };
+          return {
+            repoId: Number(repoData.id),
+            name: cast.name ?? "",
+            description: cast.description ?? "",
+            color: cast.color ?? "",
+            default: cast.default ?? false,
+          };
+        }),
       repository_url: issue.repository_url,
       number: issue.number,
       title: issue.title,

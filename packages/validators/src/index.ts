@@ -6,10 +6,8 @@ export const searchParamsSchema = z.object({
   sort: z.string().optional(),
   title: z.string().optional(),
   topic: z.string().optional(),
-  priority: z.string().optional(),
   from: z.string().optional(),
   to: z.string().optional(),
-  operator: z.enum(["and", "or"]).optional(),
 });
 
 export const getTasksSchema = searchParamsSchema;

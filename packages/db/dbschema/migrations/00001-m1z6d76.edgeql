@@ -1,4 +1,4 @@
-CREATE MIGRATION m1b6kqrtg5yz57mkc5avf46paqe5zqezyl7xlcrpzkczwh2unl2mga
+CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
     ONTO initial
 {
   CREATE FUTURE nonrecursive_access_policies;
@@ -56,10 +56,12 @@ CREATE MIGRATION m1b6kqrtg5yz57mkc5avf46paqe5zqezyl7xlcrpzkczwh2unl2mga
       CREATE PROPERTY score: std::float64;
   };
   CREATE TYPE default::Label {
+      CREATE PROPERTY name: std::str;
+      CREATE PROPERTY repoId: std::int64;
+      CREATE CONSTRAINT std::exclusive ON ((.name, .repoId));
       CREATE PROPERTY color: std::str;
       CREATE PROPERTY default: std::bool;
       CREATE PROPERTY description: std::str;
-      CREATE PROPERTY name: std::str;
   };
   CREATE TYPE default::Reaction {
       CREATE PROPERTY confused: std::int64;

@@ -17,7 +17,19 @@ export const issueRouter = {
       return { issues: issues.data, owner: owner.data };
     }),
   generateGravitas: publicProcedure.query(async () => {
-    const issues = await e.select(e.Issue).run(client);
+    const issues = await e
+      .select(e.Issue, () => ({
+        id: true,
+        reactions: { total_count: true },
+        comments: true,
+        repo: {
+          stargazersCount: true,
+        },
+      }))
+      .run(client);
+
+    //Gravitas algo
+
     const query = e.params(
       {
         issues: e.array(
@@ -41,16 +53,17 @@ export const issueRouter = {
       },
     );
 
-    const issuesWithScores = issues.map((issue) => ({
-      id: issue.id,
-      score: Math.random(),
-    }));
-
+    const issuesWithScores = issues.map((issue) => {
+      const score =
+        (issue?.reactions?.total_count ?? 0) * 0.5 +
+        (issue.comments ?? 0) * 0.3 +
+        Math.log(issue.repo.stargazersCount ?? 0 + 1) * 0.2;
+      return { id: issue.id, score: score };
+    });
     return query.run(client, { issues: issuesWithScores });
   }),
   all: publicProcedure.input(getTasksSchema).query(async ({ ctx, input }) => {
-    const { page, per_page, sort, title, topic, priority, operator, from, to } =
-      input;
+    const { page, per_page, sort, title, topic, from, to } = input;
 
     const [column, order] = (sort?.split(".").filter(Boolean) ?? [
       "createdAt",
@@ -60,6 +73,7 @@ export const issueRouter = {
     const offset = (page - 1) * per_page;
 
     const topics = topic?.split(".") ?? [];
+
     const makeTopicFilter = (topics: string[]) =>
       e.shape(e.Issue, (issue) => {
         const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
@@ -73,7 +87,8 @@ export const issueRouter = {
       });
 
     const issues = e.select(e.Issue, (issue) => {
-      const ops = [];
+      //TODO larges repos are fucking the general view
+      const ops = [e.op(issue.repo.name, "!=", "prisma")] as any;
 
       if (title) ops.push(e.op(issue.title, "ilike", `%${title}%`));
       if (topics.length > 0) {
@@ -91,9 +106,17 @@ export const issueRouter = {
       return {
         id: true,
         title: true,
-        labels: true,
+        labels: {
+          name: true,
+        },
         reactions: {
           total_count: true,
+          heart: true,
+          rocket: true,
+          eyes: true,
+          laugh: true,
+          minusOne: true,
+          plusOne: true,
         },
         created_at: true,
         gravitas_scores: true,

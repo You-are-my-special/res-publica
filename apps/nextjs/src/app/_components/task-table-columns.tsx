@@ -4,51 +4,34 @@ import * as React from "react";
 import Image from "next/image";
 import { ShadowIcon, StarIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
+import { formatRelative } from "date-fns";
 
+import { RouterOutputs } from "@acme/api";
 import { Badge } from "@acme/ui/badge";
 import { DataTableColumnHeader } from "@acme/ui/data-table/data-table-column-header";
 
-import type { Issue } from "../actions";
 import { formatDate } from "~/lib/utils";
+import GravitasScore from "./gravitas";
+import TopReactions from "./top-reactions";
+
+type Issue = RouterOutputs["issue"]["all"]["data"][0];
 
 const columnHelper = createColumnHelper<Issue>();
 export const columns = [
   columnHelper.accessor("repo.stargazersCount", {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Stars" />
+      <div className="pl-2">
+        <DataTableColumnHeader column={column} title="Stars" />
+      </div>
     ),
     cell: ({ cell }) => (
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 pl-2">
         <StarIcon className="h-4 w-4 text-[#e3b341]" />
         <span className="ml-1">{cell.getValue()}</span>
       </div>
     ),
   }),
 
-  // columnHelper.display({
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //       className="translate-y-0.5"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //       className="translate-y-0.5"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // }),
   columnHelper.accessor("repo.name", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Repo" />
@@ -80,14 +63,27 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Title" />
     ),
     cell: ({ row }) => {
-      const label = row.original.labels[0];
-      const text = typeof label === "string" ? label : label?.name;
+      const labels = row.original.labels;
+      const relativeTime = formatRelative(row.original.created_at, new Date());
       return (
-        <div className="flex space-x-2">
-          {/* {label && <Badge variant="outline">{text}</Badge>} */}
-          <span className="max-w-[31.25rem] truncate font-medium">
+        <div className="flex flex-col gap-1">
+          <span className="text-md max-w-[31.25rem] truncate font-medium">
             {row.getValue("title")}
           </span>
+          <div className="flex items-center gap-1">
+            <p className="text-xs text-muted-foreground">
+              opened {relativeTime}
+            </p>
+            {labels.slice(0, 3).map((label) => (
+              <Badge
+                key={label.name}
+                variant="outline"
+                className="text-muted-foreground"
+              >
+                {label.name}
+              </Badge>
+            ))}
+          </div>
         </div>
       );
     },
@@ -118,29 +114,23 @@ export const columns = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Reactions" />
     ),
-    cell: ({ cell }) => cell.getValue(),
+    cell: ({ cell, row }) => {
+      const reactions = row.original.reactions;
+      return <TopReactions reactions={reactions} />;
+    },
   }),
   columnHelper.accessor("gravitas.score", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Gravitas" />
     ),
-    cell: ({ cell }) => (
-      <div className="full h-8 w-8 overflow-hidden rounded-full border ">
-        <div
-          className="h-full bg-primary blur-sm"
-          style={{
-            width: `${(cell.getValue() ?? 0.01) * 100}%`,
-          }}
-        />
-      </div>
-    ),
+    cell: ({ cell }) => <GravitasScore score={cell.getValue() ?? 0} />,
   }),
-  columnHelper.accessor("created_at", {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Created At" />
-    ),
-    cell: ({ cell }) => formatDate(cell.getValue()!),
-  }),
+  // columnHelper.accessor("created_at", {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Created At" />
+  //   ),
+  //   cell: ({ cell }) => formatDate(cell.getValue()!),
+  // }),
 
   // {
   //   accessorKey: "status",

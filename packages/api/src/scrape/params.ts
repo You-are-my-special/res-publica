@@ -38,6 +38,7 @@ export const queryParams = {
         title: e.str,
         labels: e.array(
           e.tuple({
+            repoId: e.int64,
             name: e.str,
             color: e.str,
             description: e.str,

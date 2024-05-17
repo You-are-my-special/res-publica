@@ -42,41 +42,50 @@ export const createRepoQuery = async (data: QueryData) => {
     return repo;
   });
   const query = e.params(queryParams, (params) => {
-    return e.for(e.array_unpack(params.issues), (issue) => {
-      const labels = e.for(e.array_unpack(issue.labels), (label) => {
-        return e.insert(e.Label, label).unlessConflict();
-      });
-
-      return e
-        .insert(e.Issue, {
+    const labels = e.for(
+      e.op("distinct", e.array_unpack(e.array_unpack(params.issues).labels)),
+      (label) => {
+        return e.insert(e.Label, label).unlessConflict((label) => ({
+          on: e.tuple([label.name, label.repoId]),
+          else: label,
+        }));
+      },
+    );
+    return e.with(
+      [labels],
+      e.for(e.array_unpack(params.issues), (issue) => {
+        return e.insert(e.Issue, {
           githubId: issue.githubId,
           url: issue.url,
           html_url: issue.html_url,
           repository_url: issue.repository_url,
           number: issue.number,
           title: issue.title,
-          labels: labels,
+          labels: e.assert_distinct(
+            e.select(labels, (label) => ({
+              filter: e.op(label.name, "in", e.array_unpack(issue.labels).name),
+            })),
+          ),
           state: issue.state,
           created_at: issue.created_at,
           updated_at: issue.updated_at,
-          repo: e.assert_single(
-            e.select(e.Repo, (repo) => ({
-              filter_single: {
-                githubId: repo.githubId,
-              },
-            })),
-          ),
+          repo: e.select(e.Repo, (repo) => ({
+            filter_single: {
+              githubId: params.repo.githubId,
+            },
+          })),
           // closed_at: issue.closed_at,
           body: issue.body,
+
           // user: e.insert(e.GitHubUser, issue.user).unlessConflict(),
           // .unlessConflict((user) => ({
           //   on: user.html_url,
           //   else: user,
           // })),
           reactions: e.insert(e.Reaction, issue.reactions),
-        })
-        .unlessConflict();
-    });
+        });
+      }),
+    );
   });
   await client.transaction(async (tx) => {
     await repoQuery.run(tx, data);
