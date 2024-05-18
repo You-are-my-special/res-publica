@@ -128,12 +128,11 @@ export namespace $default {
     "repo": Repo;
   }
   export interface Label extends std.$Object {
+    "name"?: string | null;
+    "repoId"?: number | null;
     "color"?: string | null;
     "default"?: boolean | null;
     "description"?: string | null;
-    "name"?: string | null;
-    "repoId"?: number | null;
-    "issue": Issue[];
   }
   export interface Language extends std.$Object {
     "name"?: string | null;
