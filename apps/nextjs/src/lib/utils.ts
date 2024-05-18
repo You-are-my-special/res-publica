@@ -8,16 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function generateId({ length = 8, prefix = "" } = {}) {
-  return `${prefix}${customAlphabet(
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-    length,
-  )()}`;
+  return `${prefix}${customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", length)()}`;
 }
 
-export function formatDate(
-  date: Date | string | number,
-  opts: Intl.DateTimeFormatOptions = {},
-) {
+export function formatDate(date: Date | string | number, opts: Intl.DateTimeFormatOptions = {}) {
   return new Intl.DateTimeFormat("en-US", {
     month: opts.month ?? "long",
     day: opts.day ?? "numeric",
@@ -38,10 +32,7 @@ export function composeEventHandlers<E>(
   return function handleEvent(event: E) {
     originalEventHandler?.(event);
 
-    if (
-      checkForDefaultPrevented === false ||
-      !(event as unknown as Event).defaultPrevented
-    ) {
+    if (checkForDefaultPrevented === false || !(event as unknown as Event).defaultPrevented) {
       return ourEventHandler?.(event);
     }
   };

@@ -44,9 +44,7 @@ const seed = async () => {
   }));
 
   const existingRepos = await existingReposQuery.run(client);
-  const filteredRepos = repos.filter(
-    (r) => !existingRepos.some((er) => er.name === r.repo),
-  );
+  const filteredRepos = repos.filter((r) => !existingRepos.some((er) => er.name === r.repo));
 
   for (const input of filteredRepos) {
     console.log(`Scraping ${input.owner}/${input.repo}`);

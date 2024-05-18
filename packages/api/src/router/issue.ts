@@ -8,14 +8,12 @@ import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
 
 export const issueRouter = {
-  byRepo: publicProcedure
-    .input(z.object({ repo: z.string(), owner: z.string() }))
-    .query(async ({ input }) => {
-      const owner = await octo.users.getByUsername({ username: input.owner });
-      const issues = await octo.issues.listForRepo(input);
+  byRepo: publicProcedure.input(z.object({ repo: z.string(), owner: z.string() })).query(async ({ input }) => {
+    const owner = await octo.users.getByUsername({ username: input.owner });
+    const issues = await octo.issues.listForRepo(input);
 
-      return { issues: issues.data, owner: owner.data };
-    }),
+    return { issues: issues.data, owner: owner.data };
+  }),
   generateGravitas: publicProcedure.query(async () => {
     const issues = await e
       .select(e.Issue, () => ({
@@ -73,10 +71,10 @@ export const issueRouter = {
   all: publicProcedure.input(getTasksSchema).query(async ({ ctx, input }) => {
     const { page, per_page, sort, title, topic, from, to } = input;
 
-    const [column, order] = (sort?.split(".").filter(Boolean) ?? [
-      "createdAt",
-      "desc",
-    ]) as [keyof any | undefined, "asc" | "desc" | undefined];
+    const [column, order] = (sort?.split(".").filter(Boolean) ?? ["createdAt", "desc"]) as [
+      keyof any | undefined,
+      "asc" | "desc" | undefined,
+    ];
 
     const offset = (page - 1) * per_page;
 
@@ -86,11 +84,7 @@ export const issueRouter = {
       e.shape(e.Issue, (issue) => {
         const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
         return {
-          filter: e.op(
-            e.count(e.op(topicsSet, "intersect", issue.repo.topics.name)),
-            ">",
-            0,
-          ),
+          filter: e.op(e.count(e.op(topicsSet, "intersect", issue.repo.topics.name)), ">", 0),
         };
       });
     const issues = e.select(e.Issue, (issue) => {
@@ -106,8 +100,7 @@ export const issueRouter = {
         reactions_total_count: issue.reactions.total_count,
         gravitas_score: issue.gravitas.score,
       };
-      const expression =
-        columns[column as keyof typeof columns] ?? issue.created_at;
+      const expression = columns[column as keyof typeof columns] ?? issue.created_at;
 
       return {
         id: true,

@@ -27,11 +27,7 @@ export function exportTableToCSV<TData>(
     onlySelected?: boolean;
   } = {},
 ): void {
-  const {
-    filename = "table",
-    excludeColumns = [],
-    onlySelected = false,
-  } = opts;
+  const { filename = "table", excludeColumns = [], onlySelected = false } = opts;
 
   // Retrieve headers (column names)
   const headers = table
@@ -42,17 +38,12 @@ export function exportTableToCSV<TData>(
   // Build CSV content
   const csvContent = [
     headers.join(","),
-    ...(onlySelected
-      ? table.getFilteredSelectedRowModel().rows
-      : table.getRowModel().rows
-    ).map((row) =>
+    ...(onlySelected ? table.getFilteredSelectedRowModel().rows : table.getRowModel().rows).map((row) =>
       headers
         .map((header) => {
           const cellValue = row.getValue(header);
           // Handle values that might contain commas or newlines
-          return typeof cellValue === "string"
-            ? `"${cellValue.replace(/"/g, '""')}"`
-            : cellValue;
+          return typeof cellValue === "string" ? `"${cellValue.replace(/"/g, '""')}"` : cellValue;
         })
         .join(","),
     ),

@@ -1,13 +1,6 @@
 import { cn } from "..";
 import { Skeleton } from "../skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 
 interface DataTableSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -83,10 +76,7 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
   } = props;
 
   return (
-    <div
-      className={cn("w-full space-y-2.5 overflow-auto", className)}
-      {...skeletonProps}
-    >
+    <div className={cn("w-full space-y-2.5 overflow-auto", className)} {...skeletonProps}>
       <div className="flex w-full items-center justify-between space-x-2 overflow-auto p-1">
         <div className="flex flex-1 items-center space-x-2">
           {searchableColumnCount > 0
@@ -100,9 +90,7 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
               ))
             : null}
         </div>
-        {showViewOptions ? (
-          <Skeleton className="ml-auto hidden h-7 w-[4.5rem] lg:flex" />
-        ) : null}
+        {showViewOptions ? <Skeleton className="ml-auto hidden h-7 w-[4.5rem] lg:flex" /> : null}
       </div>
       <div className="rounded-md border">
         <Table>

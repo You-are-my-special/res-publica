@@ -1,5 +1,6 @@
 using extension pg_trgm;
 
+
 module default {
 
   type User {
@@ -199,6 +200,8 @@ module default {
 
     multi topics : Topic;
     multi issues := (.<repo[is Issue])
+
+   
   }
 }
  

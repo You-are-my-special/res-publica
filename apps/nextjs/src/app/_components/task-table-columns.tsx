@@ -34,9 +34,7 @@ export const columns = [
   }),
 
   columnHelper.accessor("repo.name", {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Repo" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Repo" />,
     cell: ({ row }) => {
       const repo = row.original.repo;
       return (
@@ -49,9 +47,7 @@ export const columns = [
             className="h-8 w-8 flex-shrink-0 rounded-md"
           />
           <div className="flex flex-col">
-            <p className="text-lg font-semibold leading-none text-foreground">
-              {repo.name}
-            </p>
+            <p className="text-lg font-semibold leading-none text-foreground">{repo.name}</p>
             <p className="text-muted-foreground">{repo?.owner.name}</p>
           </div>
         </div>
@@ -60,26 +56,18 @@ export const columns = [
   }),
 
   columnHelper.accessor("title", {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
     cell: ({ row }) => <IssueColumnTitle row={row} />,
   }),
   columnHelper.accessor("repo.topics", {
     id: "topic",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Topics" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Topics" />,
     cell: ({ cell }) => {
       const topics = cell.getValue();
       return (
         <div className="flex flex-wrap">
           {topics.slice(0, 1).map((topic) => (
-            <Badge
-              key={topic.name}
-              variant="outline"
-              className="text-muted-foreground"
-            >
+            <Badge key={topic.name} variant="outline" className="text-muted-foreground">
               {topic.name}
             </Badge>
           ))}
@@ -88,18 +76,14 @@ export const columns = [
     },
   }),
   columnHelper.accessor("reactions.total_count", {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Reactions" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Reactions" />,
     cell: ({ cell, row }) => {
       const reactions = row.original.reactions;
       return <TopReactions reactions={reactions} />;
     },
   }),
   columnHelper.accessor("gravitas.score", {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Gravitas" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Gravitas" />,
     cell: ({ cell }) => <GravitasScore score={cell.getValue() ?? 0} />,
   }),
   // columnHelper.accessor("created_at", {

@@ -1,12 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import {
-  BookAIcon,
-  BookMarked,
-  CircleAlert,
-  CircleDot,
-  Github,
-} from "lucide-react";
+import { BookAIcon, BookMarked, CircleAlert, CircleDot, Github } from "lucide-react";
 
 import { Button } from "@acme/ui/button";
 import { ThemeToggle } from "@acme/ui/theme";

@@ -12,9 +12,7 @@ interface TasksTableToolbarActionsProps {
   table: Table<Issue>;
 }
 
-export function TasksTableToolbarActions({
-  table,
-}: TasksTableToolbarActionsProps) {
+export function TasksTableToolbarActions({ table }: TasksTableToolbarActionsProps) {
   return (
     <div className="flex items-center gap-2">
       {/* <Button

@@ -1,18 +1,9 @@
 import React, { useEffect } from "react";
-import {
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, useTransform } from "framer-motion";
 
 const GravitasScore = ({ score }: { score: number }) => {
   const value = useMotionValue(score);
-  const color = useTransform(
-    value,
-    [0, 10, 30, 100, 1000],
-    ["#2c3e50", "#3498db", "#27ae60", "#d35400", "#8e44ad"],
-  );
+  const color = useTransform(value, [0, 10, 30, 100, 1000], ["#2c3e50", "#3498db", "#27ae60", "#d35400", "#8e44ad"]);
 
   const gradient = useMotionTemplate`linear-gradient(75deg, hsl(var(--background)) 0%, ${color} 100%)`;
 

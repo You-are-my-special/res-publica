@@ -153,46 +153,36 @@ export function useDataTable<TData, TValue>({
 
   // Initial column filters
   const initialColumnFilters: ColumnFiltersState = React.useMemo(() => {
-    return Array.from(searchParams.entries()).reduce<ColumnFiltersState>(
-      (filters, [key, value]) => {
-        const filterableColumn = filterableColumns.find(
-          (column) => column.value === key,
-        );
-        const searchableColumn = searchableColumns.find(
-          (column) => column.value === key,
-        );
+    return Array.from(searchParams.entries()).reduce<ColumnFiltersState>((filters, [key, value]) => {
+      const filterableColumn = filterableColumns.find((column) => column.value === key);
+      const searchableColumn = searchableColumns.find((column) => column.value === key);
 
-        if (filterableColumn) {
-          filters.push({
-            id: key,
-            value: value.split("."),
-          });
-        } else if (searchableColumn) {
-          filters.push({
-            id: key,
-            value: [value],
-          });
-        }
+      if (filterableColumn) {
+        filters.push({
+          id: key,
+          value: value.split("."),
+        });
+      } else if (searchableColumn) {
+        filters.push({
+          id: key,
+          value: [value],
+        });
+      }
 
-        return filters;
-      },
-      [],
-    );
+      return filters;
+    }, []);
   }, [filterableColumns, searchableColumns, searchParams]);
 
   // Table states
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] =
-    React.useState<ColumnFiltersState>(initialColumnFilters);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(initialColumnFilters);
 
   // Handle server-side pagination
-  const [{ pageIndex, pageSize }, setPagination] =
-    React.useState<PaginationState>({
-      pageIndex: page - 1,
-      pageSize: perPage,
-    });
+  const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
+    pageIndex: page - 1,
+    pageSize: perPage,
+  });
 
   const pagination = React.useMemo(
     () => ({
@@ -214,8 +204,6 @@ export function useDataTable<TData, TValue>({
         scroll: false,
       },
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIndex, pageSize]);
 
   // Handle server-side sorting
@@ -230,12 +218,9 @@ export function useDataTable<TData, TValue>({
     router.push(
       `${pathname}?${createQueryString({
         page,
-        sort: sorting[0]?.id
-          ? `${sorting[0]?.id}.${sorting[0]?.desc ? "desc" : "asc"}`
-          : null,
+        sort: sorting[0]?.id ? `${sorting[0]?.id}.${sorting[0]?.desc ? "desc" : "asc"}` : null,
       })}`,
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sorting]);
 
   // Handle server-side filtering
@@ -288,9 +273,7 @@ export function useDataTable<TData, TValue>({
     for (const key of searchParams.keys()) {
       if (
         (searchableColumns.find((column) => column.value === key) &&
-          !debouncedSearchableColumnFilters.find(
-            (column) => column.id === key,
-          )) ||
+          !debouncedSearchableColumnFilters.find((column) => column.id === key)) ||
         (filterableColumns.find((column) => column.value === key) &&
           !filterableColumnFilters.find((column) => column.id === key))
       ) {
@@ -302,14 +285,7 @@ export function useDataTable<TData, TValue>({
     router.push(`${pathname}?${createQueryString(newParamsObject)}`);
 
     table.setPageIndex(0);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(debouncedSearchableColumnFilters),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(filterableColumnFilters),
-  ]);
+  }, [JSON.stringify(debouncedSearchableColumnFilters), JSON.stringify(filterableColumnFilters)]);
 
   const table = useReactTable({
     data,

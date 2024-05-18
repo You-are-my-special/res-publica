@@ -1,10 +1,5 @@
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CaretSortIcon,
-  EyeNoneIcon,
-} from "@radix-ui/react-icons";
-import { type Column } from "@tanstack/react-table";
+import { ArrowDownIcon, ArrowUpIcon, CaretSortIcon, EyeNoneIcon } from "@radix-ui/react-icons";
+import type { Column } from "@tanstack/react-table";
 
 import { cn } from "..";
 import { Button } from "../button";
@@ -16,8 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "../dropdown-menu";
 
-interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: string;
 }
@@ -60,40 +54,20 @@ export function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuContent align="start">
           {column.getCanSort() && (
             <>
-              <DropdownMenuItem
-                aria-label="Sort ascending"
-                onClick={() => column.toggleSorting(false)}
-              >
-                <ArrowUpIcon
-                  className="mr-2 size-3.5 text-muted-foreground/70"
-                  aria-hidden="true"
-                />
+              <DropdownMenuItem aria-label="Sort ascending" onClick={() => column.toggleSorting(false)}>
+                <ArrowUpIcon className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
                 Asc
               </DropdownMenuItem>
-              <DropdownMenuItem
-                aria-label="Sort descending"
-                onClick={() => column.toggleSorting(true)}
-              >
-                <ArrowDownIcon
-                  className="mr-2 size-3.5 text-muted-foreground/70"
-                  aria-hidden="true"
-                />
+              <DropdownMenuItem aria-label="Sort descending" onClick={() => column.toggleSorting(true)}>
+                <ArrowDownIcon className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
                 Desc
               </DropdownMenuItem>
             </>
           )}
-          {column.getCanSort() && column.getCanHide() && (
-            <DropdownMenuSeparator />
-          )}
+          {column.getCanSort() && column.getCanHide() && <DropdownMenuSeparator />}
           {column.getCanHide() && (
-            <DropdownMenuItem
-              aria-label="Hide column"
-              onClick={() => column.toggleVisibility(false)}
-            >
-              <EyeNoneIcon
-                className="mr-2 size-3.5 text-muted-foreground/70"
-                aria-hidden="true"
-              />
+            <DropdownMenuItem aria-label="Hide column" onClick={() => column.toggleVisibility(false)}>
+              <EyeNoneIcon className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
               Hide
             </DropdownMenuItem>
           )}

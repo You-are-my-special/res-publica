@@ -42,15 +42,12 @@ export const createRepoQuery = async (data: QueryData) => {
     return repo;
   });
   const query = e.params(queryParams, (params) => {
-    const labels = e.for(
-      e.op("distinct", e.array_unpack(e.array_unpack(params.issues).labels)),
-      (label) => {
-        return e.insert(e.Label, label).unlessConflict((label) => ({
-          on: e.tuple([label.name, label.repoId]),
-          else: label,
-        }));
-      },
-    );
+    const labels = e.for(e.op("distinct", e.array_unpack(e.array_unpack(params.issues).labels)), (label) => {
+      return e.insert(e.Label, label).unlessConflict((label) => ({
+        on: e.tuple([label.name, label.repoId]),
+        else: label,
+      }));
+    });
     return e.with(
       [labels],
       e.for(e.array_unpack(params.issues), (issue) => {

@@ -15,9 +15,7 @@ const IssuePage = async ({ params: { id } }: IssuePageProps) => {
     <div>
       <p>{issue.title}</p>
 
-      <Markdown className="prose dark:prose-invert max-w-none">
-        {issue.body}
-      </Markdown>
+      <Markdown className="prose dark:prose-invert max-w-none">{issue.body}</Markdown>
     </div>
   );
 };

@@ -41,13 +41,7 @@ const TopReactions = ({ reactions }: TopReactionsProps) => {
       {reactions?.total_count}
       <div className="mb-1 flex items-center">
         {topReactions.map(([reaction], index) => (
-          <span
-            key={reaction}
-            className={cn(
-              " z-10 h-4 w-4 rounded-full",
-              index === 1 && " z-[2] opacity-25",
-            )}
-          >
+          <span key={reaction} className={cn(" z-10 h-4 w-4 rounded-full", index === 1 && " z-[2] opacity-25")}>
             {emojis[reaction as keyof typeof emojis]}
           </span>
         ))}
