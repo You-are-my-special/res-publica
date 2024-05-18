@@ -158,6 +158,8 @@ export function useDataTable<TData, TValue>({
   // Table states
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+
+  //TODO update this to sync with url, might result in a loop
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(initialColumnFilters);
 
   // Handle server-side pagination
