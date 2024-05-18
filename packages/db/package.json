@@ -25,7 +25,7 @@
     "push": "pnpm with-env drizzle-kit push:mysql --config src/config.ts",
     "studio": "pnpm with-env drizzle-kit studio --config src/config.ts",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "prebuild": "npx @edgedb/generate edgeql-js & npx @edgedb/generate interfaces",
+    "build": "npx @edgedb/generate edgeql-js & npx @edgedb/generate interfaces",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
