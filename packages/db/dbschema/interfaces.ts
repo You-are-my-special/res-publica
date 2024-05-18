@@ -101,7 +101,6 @@ export namespace $default {
   }
   export interface Issue extends std.$Object {
     "user"?: GitHubUser | null;
-    "gravitas_scores": Gravitas[];
     "gravitas"?: Gravitas | null;
     "labels": Label[];
     "reactions"?: Reaction | null;
@@ -126,6 +125,7 @@ export namespace $default {
     "updated_at"?: Date | null;
     "url"?: string | null;
     "repo": Repo;
+    "gravitas_scores": Gravitas[];
   }
   export interface Label extends std.$Object {
     "name"?: string | null;
@@ -234,6 +234,15 @@ export type {
   User,
   VerificationToken
 };
+export namespace ext {
+  export namespace pg_trgm {
+    export interface Config extends cfg.ExtensionConfig {
+      "similarity_threshold": number;
+      "word_similarity_threshold": number;
+      "strict_word_similarity_threshold": number;
+    }
+  }
+}
 export namespace fts {
   export type ElasticLanguage = "ara" | "bul" | "cat" | "ces" | "ckb" | "dan" | "deu" | "ell" | "eng" | "eus" | "fas" | "fin" | "fra" | "gle" | "glg" | "hin" | "hun" | "hye" | "ind" | "ita" | "lav" | "nld" | "nor" | "por" | "ron" | "rus" | "spa" | "swe" | "tha" | "tur" | "zho" | "edb_Brazilian" | "edb_ChineseJapaneseKorean";
   export type Language = "ara" | "hye" | "eus" | "cat" | "dan" | "nld" | "eng" | "fin" | "fra" | "deu" | "ell" | "hin" | "hun" | "ind" | "gle" | "ita" | "nor" | "por" | "ron" | "rus" | "spa" | "swe" | "tur";
@@ -508,6 +517,11 @@ export interface types {
     "Topic": $default.Topic;
     "User": $default.User;
     "VerificationToken": $default.VerificationToken;
+  };
+  "ext": {
+    "pg_trgm": {
+      "Config": ext.pg_trgm.Config;
+    };
   };
   "fts": {
     "ElasticLanguage": fts.ElasticLanguage;
