@@ -1,14 +1,14 @@
-import React from "react";
-import Link from "next/link";
-import { Row } from "@tanstack/react-table";
+import type { Row } from "@tanstack/react-table";
 import { formatRelative } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import { Github } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
 import { Badge } from "@acme/ui/badge";
 import { Button } from "@acme/ui/button";
 
-import { Issue } from "./task-table-columns";
+import type { Issue } from "./task-table-columns";
 
 interface IssueColumnTitleProps {
   row: Row<Issue>;
@@ -19,7 +19,7 @@ const IssueColumnTitle = ({ row }: IssueColumnTitleProps) => {
   return (
     <Link href={`/issue/${row.original.id}`}>
       <div className="group relative flex">
-        <div className="absolute -left-1 top-0 z-0 size-full rounded-lg bg-background/50 opacity-0 group-hover:opacity-100" />
+        <div className="absolute -left-1 top-0 z-0 size-full rounded-lg bg-accent opacity-0 group-hover:opacity-100" />
 
         <div className="relative flex flex-col gap-1">
           <span className="text-md max-w-[31.25rem] truncate font-medium">{row.getValue("title")}</span>
