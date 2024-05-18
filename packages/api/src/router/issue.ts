@@ -93,12 +93,10 @@ export const issueRouter = {
           ),
         };
       });
-
     const issues = e.select(e.Issue, (issue) => {
       //TODO larges repos are fucking the general view
       const ops = [e.op(issue.repo.name, "!=", "prisma")] as any;
-
-      if (title) ops.push(e.op(issue.title, "ilike", `%${title}%`));
+      if (title) ops.push(e.ext.pg_trgm.word_similar(title, issue.title));
       if (topics.length > 0) {
         const topicFilter = makeTopicFilter(topics)(issue).filter;
         ops.push(topicFilter);
