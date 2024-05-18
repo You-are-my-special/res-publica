@@ -5,11 +5,11 @@ import * as React from "react";
 import { DataTableAdvancedToolbar } from "@acme/ui/data-table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@acme/ui/data-table/data-table";
 import { DataTableToolbar } from "@acme/ui/data-table/data-table-toolbar";
-import { DataTableFilterField } from "@acme/ui/filters";
+import type { DataTableFilterField } from "@acme/ui/filters";
 
 import { useDataTable } from "~/hooks/use-data-table";
 import { api } from "~/trpc/react";
-import { getTasks, Issue } from "../actions";
+import type { Issue, getTasks } from "../actions";
 import { columns } from "./task-table-columns";
 import { TasksTableToolbarActions } from "./task-table-toolbar-actions";
 
@@ -38,16 +38,6 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
           withCount: true,
         })),
       },
-      // {
-      //   label: "Priority",
-      //   value: "priority",
-      //   options: tasks.priority.enumValues.map((priority) => ({
-      //     label: priority[0]?.toUpperCase() + priority.slice(1),
-      //     value: priority,
-      //     icon: getPriorityIcon(priority),
-      //     withCount: true,
-      //   })),
-      // },
     ];
     return fields;
   }, [topics]);

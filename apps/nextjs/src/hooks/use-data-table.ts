@@ -7,8 +7,6 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/react-table";
-import * as React from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   getCoreRowModel,
   getFacetedRowModel,
@@ -18,9 +16,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { DataTableFilterField } from "node_modules/@acme/ui/src/data-table/types";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { DataTableFilterField } from "node_modules/@acme/ui/src/data-table/types";
+import { useQueryStates } from "nuqs";
+import * as React from "react";
 import { z } from "zod";
-
+import { issuesParamsCache, issuesParsers } from "~/app/params";
 import { useDebounce } from "./useDebounce";
 
 interface UseDataTableProps<TData, TValue> {
@@ -114,15 +115,14 @@ export function useDataTable<TData, TValue>({
   defaultSort,
   filterFields = [],
 }: UseDataTableProps<TData, TValue>) {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   // Search params
-  const search = schema.parse(Object.fromEntries(searchParams));
-  const page = search.page;
-  const perPage = search.per_page ?? defaultPerPage;
-  const sort = search.sort ?? defaultSort;
+
+  const [{ page, per_page: perPage, sort }, setParams] = useQueryStates(issuesParsers, {
+    scroll: false,
+    shallow: false,
+  });
   const [column, order] = sort?.split(".") ?? [];
 
   // Memoize computation of searchableColumns and filterableColumns
@@ -132,24 +132,6 @@ export function useDataTable<TData, TValue>({
       filterableColumns: filterFields.filter((field) => field.options),
     };
   }, [filterFields]);
-
-  // Create query string
-  const createQueryString = React.useCallback(
-    (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
-
-      for (const [key, value] of Object.entries(params)) {
-        if (value === null) {
-          newSearchParams.delete(key);
-        } else {
-          newSearchParams.set(key, String(value));
-        }
-      }
-
-      return newSearchParams.toString();
-    },
-    [searchParams],
-  );
 
   // Initial column filters
   const initialColumnFilters: ColumnFiltersState = React.useMemo(() => {
@@ -194,16 +176,7 @@ export function useDataTable<TData, TValue>({
 
   React.useEffect(() => {
     console.log(pageIndex);
-
-    router.push(
-      `${pathname}?${createQueryString({
-        page: pageIndex + 1,
-        per_page: pageSize,
-      })}`,
-      {
-        scroll: false,
-      },
-    );
+    setParams({ page: pageIndex + 1, per_page: pageSize });
   }, [pageIndex, pageSize]);
 
   // Handle server-side sorting
@@ -215,12 +188,7 @@ export function useDataTable<TData, TValue>({
   ]);
 
   React.useEffect(() => {
-    router.push(
-      `${pathname}?${createQueryString({
-        page,
-        sort: sorting[0]?.id ? `${sorting[0]?.id}.${sorting[0]?.desc ? "desc" : "asc"}` : null,
-      })}`,
-    );
+    setParams({ sort: sorting[0]?.id ? `${sorting[0]?.id}.${sorting[0]?.desc ? "desc" : "asc"}` : null });
   }, [sorting]);
 
   // Handle server-side filtering
@@ -282,7 +250,7 @@ export function useDataTable<TData, TValue>({
     }
 
     // After cumulating all the changes, push new params
-    router.push(`${pathname}?${createQueryString(newParamsObject)}`);
+    setParams(newParamsObject);
 
     table.setPageIndex(0);
   }, [JSON.stringify(debouncedSearchableColumnFilters), JSON.stringify(filterableColumnFilters)]);

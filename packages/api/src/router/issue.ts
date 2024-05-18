@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { client, e } from "@acme/db";
-import { getTasksSchema } from "@acme/validators";
+import { getIssuesSchema } from "@acme/validators";
 
 import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
@@ -68,7 +68,7 @@ export const issueRouter = {
     }));
     return query.run(client);
   }),
-  all: publicProcedure.input(getTasksSchema).query(async ({ ctx, input }) => {
+  all: publicProcedure.input(getIssuesSchema).query(async ({ ctx, input }) => {
     const { page, per_page, sort, title, topic, from, to } = input;
 
     const [column, order] = (sort?.split(".").filter(Boolean) ?? ["createdAt", "desc"]) as [

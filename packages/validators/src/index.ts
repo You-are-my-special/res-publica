@@ -10,5 +10,5 @@ export const searchParamsSchema = z.object({
   to: z.string().optional(),
 });
 
-export const getTasksSchema = searchParamsSchema;
-export type GetTasksSchema = z.infer<typeof getTasksSchema>;
+export const getIssuesSchema = searchParamsSchema;
+export type GetIssuesSchema = z.infer<typeof getIssuesSchema>;
