@@ -62,6 +62,14 @@ export const issueRouter = {
     });
     return query.run(client, { issues: issuesWithScores });
   }),
+  byId: publicProcedure.input(z.string()).query(async ({ input }) => {
+    const query = e.select(e.Issue, (issue) => ({
+      title: true,
+      body: true,
+      filter_single: { id: input },
+    }));
+    return query.run(client);
+  }),
   all: publicProcedure.input(getTasksSchema).query(async ({ ctx, input }) => {
     const { page, per_page, sort, title, topic, from, to } = input;
 
@@ -109,6 +117,7 @@ export const issueRouter = {
         labels: {
           name: true,
         },
+        html_url: true,
         reactions: {
           total_count: true,
           heart: true,

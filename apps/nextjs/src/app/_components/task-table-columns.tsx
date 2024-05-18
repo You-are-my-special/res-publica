@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ShadowIcon, StarIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
 import { formatRelative } from "date-fns";
@@ -10,11 +11,11 @@ import { RouterOutputs } from "@acme/api";
 import { Badge } from "@acme/ui/badge";
 import { DataTableColumnHeader } from "@acme/ui/data-table/data-table-column-header";
 
-import { formatDate } from "~/lib/utils";
 import GravitasScore from "./gravitas";
+import IssueColumnTitle from "./issue-column-title";
 import TopReactions from "./top-reactions";
 
-type Issue = RouterOutputs["issue"]["all"]["data"][0];
+export type Issue = RouterOutputs["issue"]["all"]["data"][0];
 
 const columnHelper = createColumnHelper<Issue>();
 export const columns = [
@@ -62,31 +63,7 @@ export const columns = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Title" />
     ),
-    cell: ({ row }) => {
-      const labels = row.original.labels;
-      const relativeTime = formatRelative(row.original.created_at, new Date());
-      return (
-        <div className="flex flex-col gap-1">
-          <span className="text-md max-w-[31.25rem] truncate font-medium">
-            {row.getValue("title")}
-          </span>
-          <div className="flex items-center gap-1">
-            <p className="text-xs text-muted-foreground">
-              opened {relativeTime}
-            </p>
-            {labels.slice(0, 3).map((label) => (
-              <Badge
-                key={label.name}
-                variant="outline"
-                className="text-muted-foreground"
-              >
-                {label.name}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      );
-    },
+    cell: ({ row }) => <IssueColumnTitle row={row} />,
   }),
   columnHelper.accessor("repo.topics", {
     id: "topic",
