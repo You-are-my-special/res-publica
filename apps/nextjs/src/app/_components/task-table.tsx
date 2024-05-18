@@ -2,19 +2,18 @@
 
 import * as React from "react";
 
-import { DataTableAdvancedToolbar } from "@acme/ui/data-table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@acme/ui/data-table/data-table";
 import { DataTableToolbar } from "@acme/ui/data-table/data-table-toolbar";
 import type { DataTableFilterField } from "@acme/ui/filters";
 
 import { useDataTable } from "~/hooks/use-data-table";
 import { api } from "~/trpc/react";
-import type { Issue, getTasks } from "../actions";
-import { columns } from "./task-table-columns";
+import type { api as serverType } from "~/trpc/server";
+import { type Issue, columns } from "./task-table-columns";
 import { TasksTableToolbarActions } from "./task-table-toolbar-actions";
 
 interface TasksTableProps {
-  tasksPromise: ReturnType<typeof getTasks>;
+  tasksPromise: ReturnType<typeof serverType.issue.all>;
 }
 
 export function TasksTable({ tasksPromise }: TasksTableProps) {

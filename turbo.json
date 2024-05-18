@@ -13,7 +13,8 @@
         "!.next/cache/**",
         "next-env.d.ts",
         ".output/**",
-        ".vercel/output/**"
+        ".vercel/output/**",
+        "dbschema/**"
       ]
     },
     "dev": {
