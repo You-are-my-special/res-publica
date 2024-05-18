@@ -10,8 +10,8 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "biome format .",
+    "lint": "biome lint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -20,12 +20,8 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
     "@acme/tsconfig": "workspace:*",
-    "eslint": "^9.2.0",
-    "prettier": "^3.2.5",
+    "@biomejs/biome": "^1.7.1",
     "typescript": "^5.4.5"
-  },
-  "prettier": "@acme/prettier-config"
+  }
 }

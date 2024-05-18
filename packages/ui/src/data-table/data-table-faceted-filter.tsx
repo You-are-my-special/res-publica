@@ -15,7 +15,7 @@ import {
 } from "../command";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { Separator } from "../separator";
-import { Option } from "./types";
+import type { Option } from "./types";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -39,29 +39,19 @@ export function DataTableFacetedFilter<TData, TValue>({
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
-              <Badge
-                variant="secondary"
-                className="rounded-sm px-1 font-normal lg:hidden"
-              >
+              <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
                 {selectedValues.size}
               </Badge>
               <div className="hidden space-x-1 lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge
-                    variant="secondary"
-                    className="rounded-sm px-1 font-normal"
-                  >
+                  <Badge variant="secondary" className="rounded-sm px-1 font-normal">
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
                   options
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
-                      <Badge
-                        variant="secondary"
-                        key={option.value}
-                        className="rounded-sm px-1 font-normal"
-                      >
+                      <Badge variant="secondary" key={option.value} className="rounded-sm px-1 font-normal">
                         {option.label}
                       </Badge>
                     ))
@@ -90,34 +80,24 @@ export function DataTableFacetedFilter<TData, TValue>({
                         selectedValues.add(option.value);
                       }
                       const filterValues = Array.from(selectedValues);
-                      column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined,
-                      );
+                      column?.setFilterValue(filterValues.length ? filterValues : undefined);
                     }}
                   >
                     <div
                       className={cn(
                         "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
-                        isSelected
-                          ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible",
+                        isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
                       )}
                     >
                       <CheckIcon className="size-4" aria-hidden="true" />
                     </div>
-                    {option.icon && (
-                      <option.icon
-                        className="mr-2 size-4 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                    )}
+                    {option.icon && <option.icon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />}
                     <span>{option.label}</span>
-                    {option.withCount &&
-                      column?.getFacetedUniqueValues()?.get(option.value) && (
-                        <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
-                          {column?.getFacetedUniqueValues().get(option.value)}
-                        </span>
-                      )}
+                    {option.withCount && column?.getFacetedUniqueValues()?.get(option.value) && (
+                      <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
+                        {column?.getFacetedUniqueValues().get(option.value)}
+                      </span>
+                    )}
                   </CommandItem>
                 );
               })}

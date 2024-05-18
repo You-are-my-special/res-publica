@@ -10,7 +10,7 @@ export interface IndexPageProps {
   searchParams: Record<string, string>;
 }
 
-export default async function IndexPage({ searchParams }: IndexPageProps) {
+export default function IndexPage({ searchParams }: IndexPageProps) {
   const search = searchParamsSchema.parse(searchParams);
 
   const tasksPromise = api.issue.all(search);

@@ -14,8 +14,8 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf .turbo node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "biome format ./src",
+    "lint": "biome lint ./src",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
@@ -23,11 +23,7 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
     "@acme/tsconfig": "workspace:*",
-    "eslint": "^9.2.0",
-    "prettier": "^3.2.5"
-  },
-  "prettier": "@acme/prettier-config"
+    "@biomejs/biome": "^1.7.1"
+  }
 }

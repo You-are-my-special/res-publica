@@ -9,22 +9,19 @@ import { publicProcedure } from "../trpc";
 import { octo } from "./octo";
 
 export const repoRouter = {
-  createNewEntry: publicProcedure
-    .input(z.object({ repo: z.string(), owner: z.string() }))
-    .query(async ({ input }) => {
-      const issues = await octo.paginate(octo.rest.issues.listForRepo, input);
+  createNewEntry: publicProcedure.input(z.object({ repo: z.string(), owner: z.string() })).query(async ({ input }) => {
+    const issues = await octo.paginate(octo.rest.issues.listForRepo, input);
 
-      const repo = await octo.repos.get(input);
-      const data = mapData(repo.data, issues);
+    const repo = await octo.repos.get(input);
+    const data = mapData(repo.data, issues);
 
-      await createRepoQuery(data);
-      return { message: "Data saved successfully" };
-    }),
+    await createRepoQuery(data);
+    return { message: "Data saved successfully" };
+  }),
   getRepoFromGithub: publicProcedure
     .input(z.object({ repo: z.string(), owner: z.string() }))
     .query(async ({ input }) => {
       const repo = await octo.repos.get(input);
-
       return repo.data;
     }),
   topics: publicProcedure.query(({ ctx }) => {

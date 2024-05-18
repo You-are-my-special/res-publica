@@ -1,16 +1,9 @@
 import type { Table as TanstackTable } from "@tanstack/react-table";
-import * as React from "react";
+import type * as React from "react";
 import { flexRender } from "@tanstack/react-table";
 
 import { cn } from "..";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 import { DataTablePagination } from "./data-table-pagination";
 
 interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
@@ -29,21 +22,9 @@ interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   floatingBar?: React.ReactNode | null;
 }
 
-export function DataTable<TData>({
-  table,
-  floatingBar = null,
-  children,
-  className,
-  ...props
-}: DataTableProps<TData>) {
+export function DataTable<TData>({ table, floatingBar = null, children, className, ...props }: DataTableProps<TData>) {
   return (
-    <div
-      className={cn(
-        "w-full space-y-2.5 overflow-auto bg-background",
-        className,
-      )}
-      {...props}
-    >
+    <div className={cn("w-full space-y-2.5 overflow-auto bg-background", className)} {...props}>
       {children}
       <div className="rounded-md border">
         <Table>
@@ -53,12 +34,7 @@ export function DataTable<TData>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -68,26 +44,15 @@ export function DataTable<TData>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={table.getAllColumns().length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

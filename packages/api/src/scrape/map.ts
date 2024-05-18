@@ -3,8 +3,7 @@ import type { Endpoints } from "@octokit/types";
 import { Label } from "@acme/db/interfaces";
 
 type RepoData = Endpoints["GET /repos/{owner}/{repo}"]["response"]["data"];
-type IssueData =
-  Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"];
+type IssueData = Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"];
 
 export const mapData = (repoData: RepoData, issues: IssueData) => {
   const mappedData = {

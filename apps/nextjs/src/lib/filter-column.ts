@@ -1,13 +1,5 @@
 import type { Column, ColumnBaseConfig, ColumnDataType } from "drizzle-orm";
-import {
-  eq,
-  ilike,
-  inArray,
-  isNotNull,
-  isNull,
-  not,
-  notLike,
-} from "drizzle-orm";
+import { eq, ilike, inArray, isNotNull, isNull, not, notLike } from "drizzle-orm";
 
 import { DataTableConfig } from "@acme/ui/config";
 
@@ -20,8 +12,7 @@ export function filterColumn({
   value: string;
   isSelectable?: boolean;
 }) {
-  const [filterValue, filterOperator] = (value?.split("~").filter(Boolean) ??
-    []) as [
+  const [filterValue, filterOperator] = (value?.split("~").filter(Boolean) ?? []) as [
     string,
     DataTableConfig["comparisonOperators"][number]["value"] | undefined,
   ];
@@ -33,9 +24,7 @@ export function filterColumn({
       case "eq":
         return inArray(column, filterValue?.split(".").filter(Boolean) ?? []);
       case "notEq":
-        return not(
-          inArray(column, filterValue?.split(".").filter(Boolean) ?? []),
-        );
+        return not(inArray(column, filterValue?.split(".").filter(Boolean) ?? []));
       case "isNull":
         return isNull(column);
       case "isNotNull":

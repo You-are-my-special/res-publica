@@ -15,11 +15,7 @@ import { env } from "~/env";
 import Navbar from "./_components/navbar";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    env.VERCEL_ENV === "production"
-      ? "https://turbo.t3.gg"
-      : "http://localhost:3000",
-  ),
+  metadataBase: new URL(env.VERCEL_ENV === "production" ? "https://turbo.t3.gg" : "http://localhost:3000"),
   title: "Create T3 Turbo",
   description: "Simple monorepo with shared backend for web & mobile apps",
   openGraph: {
