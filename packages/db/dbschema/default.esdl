@@ -81,6 +81,7 @@ module default {
       default := datetime_current();
     };
     score : float64; 
+    index on (.createdAt);
   }
 
   type Issue {
@@ -124,7 +125,7 @@ module default {
     deferred index ext::ai::index(embedding_model := 'text-embedding-3-small')
       on (.body);
 
-
+    index ext::pg_trgm::gin on (.title);
   }  
   
   type GitHubUser {
@@ -159,6 +160,8 @@ module default {
     property plusOne : int64;
     property minusOne : int64;
     property eyes : int64;
+
+    index on(.total_count);
   }
 
 

@@ -167,6 +167,7 @@ export const issueRouter = {
     const [result, { total }] = await Promise.all([issues.run(client), totalQuery.run(client)]);
     const pageCount = Math.ceil(total / per_page);
 
+    console.log(issues.toEdgeQL());
     return { data: result, pageCount };
   }),
 } satisfies TRPCRouterRecord;
