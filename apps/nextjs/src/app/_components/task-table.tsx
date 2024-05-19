@@ -44,7 +44,6 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
     data,
     columns: columns,
     pageCount,
-    // optional props
     filterFields,
     enableAdvancedFilter: false,
     defaultPerPage: 10,

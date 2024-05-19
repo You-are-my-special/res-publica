@@ -1,6 +1,6 @@
-import type { DefaultSession, NextAuthConfig } from "next-auth";
 import { EdgeDBAdapter } from "@auth/edgedb-adapter";
-import Discord from "next-auth/providers/discord";
+import type { DefaultSession, NextAuthConfig } from "next-auth";
+import Githhub from "next-auth/providers/github";
 
 import { edgeClient } from "@acme/db/edge";
 
@@ -14,7 +14,7 @@ declare module "next-auth" {
 
 export const authConfig = {
   adapter: EdgeDBAdapter(edgeClient),
-  providers: [Discord],
+  providers: [Githhub],
   callbacks: {
     session: (opts) => {
       if (!("user" in opts)) throw "unreachable with session strategy";

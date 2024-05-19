@@ -18,6 +18,12 @@ export const repoRouter = {
     await createRepoQuery(data);
     return { message: "Data saved successfully" };
   }),
+  all: publicProcedure.query(async () => {
+    const query = e.select(e.Repo, (repo) => ({
+      name: true,
+    }));
+    return query.run(client);
+  }),
   getRepoFromGithub: publicProcedure
     .input(z.object({ repo: z.string(), owner: z.string() }))
     .query(async ({ input }) => {
