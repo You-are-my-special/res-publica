@@ -6,18 +6,13 @@ import Image from "next/image";
 import * as React from "react";
 
 import type { RouterOutputs } from "@acme/api";
-import { Badge } from "@acme/ui/badge";
 import { DataTableColumnHeader } from "@acme/ui/data-table/data-table-column-header";
 
-import GravitasScore from "./gravitas";
-import IssueColumnTitle from "./issue-column-title";
-import TopReactions from "./top-reactions";
+export type Repo = RouterOutputs["repo"]["all"]["data"][0];
 
-export type Issue = RouterOutputs["issue"]["all"]["data"][0];
-
-const columnHelper = createColumnHelper<Issue>();
+const columnHelper = createColumnHelper<Repo>();
 export const columns = [
-  columnHelper.accessor("repo.stargazersCount", {
+  columnHelper.accessor("stargazersCount", {
     header: ({ column }) => (
       <div className="pl-2">
         <DataTableColumnHeader column={column} title="Stars" />
@@ -30,60 +25,67 @@ export const columns = [
       </div>
     ),
   }),
+  // columnHelper.accessor("name", {
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+  //   cell: ({ row }) => <RepoColumnTitle row={row} />,
+  // }),
 
-  columnHelper.accessor("repo.name", {
+  columnHelper.accessor("name", {
     header: ({ column }) => <DataTableColumnHeader column={column} title="Repo" />,
     cell: ({ row }) => {
-      const repo = row.original.repo;
+      const owner = row.original.owner;
       return (
         <div className="flex w-32 items-center gap-2">
           <Image
-            src={repo.owner.avatar_url || ""}
-            alt={repo.owner.html_url || ""}
+            src={owner.avatar_url || ""}
+            alt={owner.html_url || ""}
             width={24}
             height={24}
             className="h-8 w-8 flex-shrink-0 rounded-md"
           />
           <div className="flex flex-col">
-            <p className="text-lg font-semibold leading-none text-foreground">{repo.name}</p>
-            <p className="text-muted-foreground">{repo?.owner.name}</p>
+            <p className="text-lg font-semibold leading-none text-foreground">{row.original.name}</p>
+            <p className="text-muted-foreground">{owner.name}</p>
           </div>
         </div>
       );
     },
   }),
-
-  columnHelper.accessor("title", {
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
-    cell: ({ row }) => <IssueColumnTitle row={row} />,
+  columnHelper.accessor("openIssuesCount", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Open Issues" />,
+    cell: ({ cell }) => (
+      <div className="flex items-center gap-1 pl-2">
+        <span className="ml-1">{cell.getValue()}</span>
+      </div>
+    ),
   }),
-  columnHelper.accessor("repo.topics", {
-    id: "topic",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Topics" />,
-    cell: ({ cell }) => {
-      const topics = cell.getValue();
-      return (
-        <div className="flex flex-wrap">
-          {topics.slice(0, 1).map((topic) => (
-            <Badge key={topic.name} variant="outline" className="text-muted-foreground">
-              {topic.name}
-            </Badge>
-          ))}
-        </div>
-      );
-    },
-  }),
-  columnHelper.accessor("reactions.total_count", {
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Reactions" />,
-    cell: ({ cell, row }) => {
-      const reactions = row.original.reactions;
-      return <TopReactions reactions={reactions} />;
-    },
-  }),
-  columnHelper.accessor("gravitas.score", {
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Gravitas" />,
-    cell: ({ cell }) => <GravitasScore score={cell.getValue() ?? 0} />,
-  }),
+  // columnHelper.accessor("topics", {
+  //   id: "topic",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Topics" />,
+  //   cell: ({ cell }) => {
+  //     const topics = cell.getValue();
+  //     return (
+  //       <div className="flex flex-wrap">
+  //         {topics.slice(0, 1).map((topic) => (
+  //           <Badge key={topic.name} variant="outline" className="text-muted-foreground">
+  //             {topic.name}
+  //           </Badge>
+  //         ))}
+  //       </div>
+  //     );
+  //   },
+  // }),
+  // columnHelper.accessor("reactions.total_count", {
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Reactions" />,
+  //   cell: ({ cell, row }) => {
+  //     const reactions = row.original.reactions;
+  //     return <TopReactions reactions={{id:'', ...reactions}} />;
+  //   },
+  // }),
+  // columnHelper.accessor("gravitas.score", {
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Gravitas" />,
+  //   cell: ({ cell }) => <GravitasScore score={cell.getValue() ?? 0} />,
+  // }),
   // columnHelper.accessor("created_at", {
   //   header: ({ column }) => (
   //     <DataTableColumnHeader column={column} title="Created At" />

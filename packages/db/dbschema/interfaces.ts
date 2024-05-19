@@ -235,11 +235,81 @@ export type {
   VerificationToken
 };
 export namespace ext {
+  export namespace ai {
+    export interface Model extends std.$Object {}
+    export interface TextGenerationModel extends Model {}
+    export interface AnthropicClaude3HaikuModel extends TextGenerationModel {}
+    export interface AnthropicClaude3OpusModel extends TextGenerationModel {}
+    export interface AnthropicClaude3SonnetModel extends TextGenerationModel {}
+    export interface ProviderConfig extends cfg.ConfigObject {
+      "name": string;
+      "display_name": string;
+      "api_url": string;
+      "client_id"?: string | null;
+      "secret": string;
+      "api_style": ProviderAPIStyle;
+    }
+    export interface AnthropicProviderConfig extends ProviderConfig {
+      "name": string;
+      "display_name": string;
+      "api_url": string;
+      "api_style": ProviderAPIStyle;
+    }
+    export type ChatParticipantRole = "System" | "User" | "Assistant" | "Tool";
+    export interface ChatPrompt extends std.$Object {
+      "name": string;
+      "messages": ChatPromptMessage[];
+    }
+    export interface ChatPromptMessage extends std.$Object {
+      "participant_role": ChatParticipantRole;
+      "participant_name"?: string | null;
+      "content": string;
+    }
+    export interface Config extends cfg.ExtensionConfig {
+      "indexer_naptime": edgedb.Duration;
+      "providers": ProviderConfig[];
+    }
+    export interface CustomProviderConfig extends ProviderConfig {
+      "display_name": string;
+      "api_style": ProviderAPIStyle;
+    }
+    export type DistanceFunction = "Cosine" | "InnerProduct" | "L2";
+    export interface EmbeddingModel extends Model {}
+    export type IndexType = "HNSW";
+    export interface MistralEmbedModel extends EmbeddingModel {}
+    export interface MistralLargeModel extends TextGenerationModel {}
+    export interface MistralMediumModel extends TextGenerationModel {}
+    export interface MistralProviderConfig extends ProviderConfig {
+      "name": string;
+      "display_name": string;
+      "api_url": string;
+      "api_style": ProviderAPIStyle;
+    }
+    export interface MistralSmallModel extends TextGenerationModel {}
+    export interface OpenAIGPT_3_5_TurboModel extends TextGenerationModel {}
+    export interface OpenAIGPT_4_TurboModel extends TextGenerationModel {}
+    export interface OpenAIProviderConfig extends ProviderConfig {
+      "name": string;
+      "display_name": string;
+      "api_url": string;
+      "api_style": ProviderAPIStyle;
+    }
+    export interface OpenAITextEmbedding3LargeModel extends EmbeddingModel {}
+    export interface OpenAITextEmbedding3SmallModel extends EmbeddingModel {}
+    export interface OpenAITextEmbeddingAda002Model extends EmbeddingModel {}
+    export type ProviderAPIStyle = "OpenAI" | "Anthropic";
+  }
   export namespace pg_trgm {
     export interface Config extends cfg.ExtensionConfig {
       "similarity_threshold": number;
       "word_similarity_threshold": number;
       "strict_word_similarity_threshold": number;
+    }
+  }
+  export namespace pgvector {
+    export interface Config extends cfg.ExtensionConfig {
+      "probes": number;
+      "ef_search": number;
     }
   }
 }
@@ -519,8 +589,40 @@ export interface types {
     "VerificationToken": $default.VerificationToken;
   };
   "ext": {
+    "ai": {
+      "Model": ext.ai.Model;
+      "TextGenerationModel": ext.ai.TextGenerationModel;
+      "AnthropicClaude3HaikuModel": ext.ai.AnthropicClaude3HaikuModel;
+      "AnthropicClaude3OpusModel": ext.ai.AnthropicClaude3OpusModel;
+      "AnthropicClaude3SonnetModel": ext.ai.AnthropicClaude3SonnetModel;
+      "ProviderConfig": ext.ai.ProviderConfig;
+      "AnthropicProviderConfig": ext.ai.AnthropicProviderConfig;
+      "ChatParticipantRole": ext.ai.ChatParticipantRole;
+      "ChatPrompt": ext.ai.ChatPrompt;
+      "ChatPromptMessage": ext.ai.ChatPromptMessage;
+      "Config": ext.ai.Config;
+      "CustomProviderConfig": ext.ai.CustomProviderConfig;
+      "DistanceFunction": ext.ai.DistanceFunction;
+      "EmbeddingModel": ext.ai.EmbeddingModel;
+      "IndexType": ext.ai.IndexType;
+      "MistralEmbedModel": ext.ai.MistralEmbedModel;
+      "MistralLargeModel": ext.ai.MistralLargeModel;
+      "MistralMediumModel": ext.ai.MistralMediumModel;
+      "MistralProviderConfig": ext.ai.MistralProviderConfig;
+      "MistralSmallModel": ext.ai.MistralSmallModel;
+      "OpenAIGPT_3_5_TurboModel": ext.ai.OpenAIGPT_3_5_TurboModel;
+      "OpenAIGPT_4_TurboModel": ext.ai.OpenAIGPT_4_TurboModel;
+      "OpenAIProviderConfig": ext.ai.OpenAIProviderConfig;
+      "OpenAITextEmbedding3LargeModel": ext.ai.OpenAITextEmbedding3LargeModel;
+      "OpenAITextEmbedding3SmallModel": ext.ai.OpenAITextEmbedding3SmallModel;
+      "OpenAITextEmbeddingAda002Model": ext.ai.OpenAITextEmbeddingAda002Model;
+      "ProviderAPIStyle": ext.ai.ProviderAPIStyle;
+    };
     "pg_trgm": {
       "Config": ext.pg_trgm.Config;
+    };
+    "pgvector": {
+      "Config": ext.pgvector.Config;
     };
   };
   "fts": {

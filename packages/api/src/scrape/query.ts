@@ -16,6 +16,7 @@ export const createRepoQuery = async (data: QueryData) => {
       .insert(e.Repo, {
         githubId: params.repo.githubId,
         url: params.repo.url,
+        // base64Readme: params.repo.base64Readme,
         name: params.repo.name,
         fullName: params.repo.fullName,
         description: params.repo.description,
