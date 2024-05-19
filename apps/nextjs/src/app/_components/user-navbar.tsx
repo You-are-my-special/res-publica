@@ -18,6 +18,7 @@ import { ThemeToggle } from "@acme/ui/theme";
 
 const UserNavbar = async () => {
   const session = await auth();
+
   if (!session)
     return (
       <div className="flex gap-2">
