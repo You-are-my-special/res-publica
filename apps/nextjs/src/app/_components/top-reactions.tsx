@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { Reaction } from "@acme/db/interfaces";
+import type { Reaction } from "@acme/db/interfaces";
 import { cn } from "@acme/ui";
 
 interface TopReactionsProps {
@@ -25,9 +25,9 @@ const TopReactions = ({ reactions }: TopReactionsProps) => {
     const { total_count, url, id, ...rest } = reactions;
 
     return Object.entries(rest)
-      .sort((a, b) => b[1] - a[1])
+      .sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0))
       .slice(0, 2)
-      .filter(([_, count]) => count > 0);
+      .filter(([_, count]) => count && count > 0);
   }, [reactions]);
 
   if (!reactions?.total_count)

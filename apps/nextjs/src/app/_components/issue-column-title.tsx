@@ -1,6 +1,5 @@
 import type { Row } from "@tanstack/react-table";
 import { formatRelative } from "date-fns";
-import { AnimatePresence, motion } from "framer-motion";
 import { Github } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -15,7 +14,7 @@ interface IssueColumnTitleProps {
 }
 const IssueColumnTitle = ({ row }: IssueColumnTitleProps) => {
   const labels = row.original.labels;
-  const relativeTime = formatRelative(row.original.created_at, new Date());
+  const relativeTime = formatRelative(row.original.created_at || new Date(), new Date());
   return (
     <Link href={`/issue/${row.original.id}`}>
       <div className="group relative flex">

@@ -1,15 +1,14 @@
 import type { Endpoints } from "@octokit/types";
 
-import { Label } from "@acme/db/interfaces";
-
 type RepoData = Endpoints["GET /repos/{owner}/{repo}"]["response"]["data"];
 type IssueData = Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"];
 
-export const mapData = (repoData: RepoData, issues: IssueData) => {
+export const mapData = (repoData: RepoData, issues: IssueData, base64Readme?: string) => {
   const mappedData = {
     topics: repoData.topics?.map((val) => ({ name: val })) ?? [],
 
     repo: {
+      // base64Readme: base64Readme ?? "",
       githubId: repoData.id,
       url: repoData.html_url,
       name: repoData.name,
@@ -36,7 +35,7 @@ export const mapData = (repoData: RepoData, issues: IssueData) => {
       url: issue.url,
       html_url: issue.html_url,
       labels: issue.labels
-        .filter((label) => label !== typeof "string")
+        .filter((label) => typeof label !== "string")
         .map((label) => {
           const cast = label as {
             id: number;
