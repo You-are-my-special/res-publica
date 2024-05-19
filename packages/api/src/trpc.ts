@@ -6,7 +6,7 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import { initTRPC, TRPCError } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -26,12 +26,9 @@ import type { Session } from "@acme/auth";
  */
 export const createTRPCContext = (opts: {
   headers: Headers;
-  session: Session | null;
+  session: () => Promise<Session | null> | Session | null;
 }) => {
   const session = opts.session;
-  const source = opts.headers.get("x-trpc-source") ?? "unknown";
-
-  console.log(">>> tRPC Request from", source, "by", session?.user);
 
   return {
     session,
@@ -91,14 +88,19 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session?.user) {
+export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+  const session = await ctx.session();
+  if (!session?.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  // const source = opts.headers.get("x-trpc-source") ?? "unknown";
+
+  console.log(">>> tRPC Request from", "", "by", session?.user);
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
+      session: { ...session, user: session.user },
     },
   });
 });
