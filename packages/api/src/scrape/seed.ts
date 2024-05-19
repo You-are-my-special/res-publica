@@ -34,6 +34,7 @@ const repos: { owner: string; repo: string }[] = [
   { owner: "nodejs", repo: "node" },
   { owner: "prisma", repo: "prisma" },
   { owner: "drizzle-team", repo: "drizzle-orm" },
+  { owner: "TanStack", repo: "query" },
 ];
 
 const seed = async () => {

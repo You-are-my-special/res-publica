@@ -89,7 +89,7 @@ export const issueRouter = {
       });
     const issues = e.select(e.Issue, (issue) => {
       //TODO larges repos are fucking the general view
-      const ops = [e.op(issue.repo.name, "!=", "prisma")] as any;
+      const ops = [] as any;
       if (title) ops.push(e.ext.pg_trgm.word_similar(title, issue.title));
       if (topics.length > 0) {
         const topicFilter = makeTopicFilter(topics)(issue).filter;
@@ -97,6 +97,7 @@ export const issueRouter = {
       }
 
       const columns = {
+        repo_stargazersCount: issue.repo.stargazersCount,
         reactions_total_count: issue.reactions.total_count,
         gravitas_score: issue.gravitas.score,
       };
@@ -150,7 +151,7 @@ export const issueRouter = {
       total: e.count(
         e.select(e.Issue, (issue) => {
           const ops = [];
-          if (title) ops.push(e.op(issue.title, "ilike", `%${title}%`));
+          if (title) ops.push(e.ext.pg_trgm.word_similar(title, issue.title));
           if (topics.length > 0) {
             const topicFilter = makeTopicFilter(topics)(issue).filter;
             ops.push(topicFilter);
@@ -163,8 +164,7 @@ export const issueRouter = {
       ),
     });
 
-    const { total } = await totalQuery.run(client);
-    const result = await issues.run(client);
+    const [result, { total }] = await Promise.all([issues.run(client), totalQuery.run(client)]);
     const pageCount = Math.ceil(total / per_page);
 
     return { data: result, pageCount };

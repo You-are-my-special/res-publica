@@ -1,5 +1,5 @@
 using extension pg_trgm;
-
+using extension ai;
 
 module default {
 
@@ -120,6 +120,11 @@ module default {
     property timeline_url : str;
     property performed_via_github_app : str;
     property state_reason : str;
+
+    deferred index ext::ai::index(embedding_model := 'text-embedding-3-small')
+      on (.body);
+
+
   }  
   
   type GitHubUser {
@@ -199,9 +204,9 @@ module default {
     multi languages : Language;
 
     multi topics : Topic;
-    multi issues := (.<repo[is Issue])
+    multi issues := (.<repo[is Issue]);
 
-   
+    index on(.stargazersCount);
   }
 }
  

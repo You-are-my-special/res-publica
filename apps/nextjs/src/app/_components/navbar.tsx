@@ -1,13 +1,11 @@
 import { BookMarked, CircleDot, Github } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 
-import { auth } from "@acme/auth";
 import { Button } from "@acme/ui/button";
 import UserNavbar from "./user-navbar";
 
 const Navbar = () => {
-  const user = auth();
   return (
     <div className="flex items-center justify-between py-4">
       <div className="flex items-center gap-2">
@@ -29,7 +27,9 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-      <UserNavbar />
+      <Suspense>
+        <UserNavbar />
+      </Suspense>
     </div>
   );
 };

@@ -22,6 +22,7 @@
     "@acme/auth": "workspace:*",
     "@acme/db": "workspace:*",
     "@acme/validators": "workspace:*",
+    "@edgedb/ai": "0.1.0-alpha.1",
     "@octokit/rest": "^20.1.1",
     "@trpc/server": "11.0.0-rc.364",
     "superjson": "2.2.1",
@@ -29,8 +30,8 @@
   },
   "devDependencies": {
     "@acme/tsconfig": "workspace:*",
-    "@octokit/types": "^13.5.0",
     "@biomejs/biome": "^1.7.1",
+    "@octokit/types": "^13.5.0",
     "typescript": "^5.4.5"
   }
 }
