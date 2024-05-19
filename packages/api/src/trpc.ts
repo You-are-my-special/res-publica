@@ -26,7 +26,7 @@ import type { Session } from "@acme/auth";
  */
 export const createTRPCContext = (opts: {
   headers: Headers;
-  session: () => Promise<Session | null> | Session | null;
+  session: (() => Promise<Session | null>) | Session | null;
 }) => {
   const session = opts.session;
 
@@ -89,7 +89,7 @@ export const publicProcedure = t.procedure;
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
-  const session = await ctx.session();
+  const session = typeof ctx.session === "function" ? await ctx.session() : ctx.session;
   if (!session?.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
