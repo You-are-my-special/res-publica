@@ -123,7 +123,7 @@ module default {
     property state_reason : str;
 
     deferred index ext::ai::index(embedding_model := 'text-embedding-3-small')
-      on (.body);
+      on ((.title ++ ' ' ++ .body)[0:8191]);
 
     index ext::pg_trgm::gin on (.title);
   }  
@@ -212,6 +212,17 @@ module default {
 
     index on(.stargazersCount);
   }
+
+  abstract type OpenAIGPT_4o
+        extending ext::ai::TextGenerationModel
+    {
+        annotation
+            ext::ai::model_name := "gpt-4o";
+        annotation
+            ext::ai::model_provider := "builtin::openai";
+        annotation
+            ext::ai::text_gen_model_context_window := "128000";
+    };
 }
  
 # Disable the application of access policies within access policies

@@ -1,6 +1,9 @@
-CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
+CREATE MIGRATION m16y3fah4icpyuiltjfcmyinznei6oc2xwgo7le35yk3mjqcppiskq
     ONTO initial
 {
+  CREATE EXTENSION pgvector VERSION '0.5';
+  CREATE EXTENSION pg_trgm VERSION '1.6';
+  CREATE EXTENSION ai VERSION '1.0';
   CREATE FUTURE nonrecursive_access_policies;
   CREATE TYPE default::Account {
       CREATE REQUIRED PROPERTY provider: std::str;
@@ -53,6 +56,7 @@ CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
       CREATE PROPERTY createdAt: std::datetime {
           SET default := (std::datetime_current());
       };
+      CREATE INDEX ON (.createdAt);
       CREATE PROPERTY score: std::float64;
   };
   CREATE TYPE default::Label {
@@ -64,6 +68,8 @@ CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
       CREATE PROPERTY description: std::str;
   };
   CREATE TYPE default::Reaction {
+      CREATE PROPERTY total_count: std::int64;
+      CREATE INDEX ON (.total_count);
       CREATE PROPERTY confused: std::int64;
       CREATE PROPERTY eyes: std::int64;
       CREATE PROPERTY heart: std::int64;
@@ -72,24 +78,28 @@ CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
       CREATE PROPERTY minusOne: std::int64;
       CREATE PROPERTY plusOne: std::int64;
       CREATE PROPERTY rocket: std::int64;
-      CREATE PROPERTY total_count: std::int64;
       CREATE PROPERTY url: std::str;
   };
   CREATE TYPE default::Issue {
       CREATE LINK user: default::GitHubUser;
-      CREATE MULTI LINK gravitas_scores: default::Gravitas;
+      CREATE MULTI LINK gravitas_scores: default::Gravitas {
+          ON TARGET DELETE ALLOW;
+      };
       CREATE LINK gravitas := (SELECT
           .gravitas_scores ORDER BY
               .createdAt ASC
       LIMIT
           1
       );
+      CREATE PROPERTY body: std::str;
+      CREATE PROPERTY title: std::str;
+      CREATE DEFERRED INDEX ext::ai::index(embedding_model := 'text-embedding-3-small') ON ((((.title ++ ' ') ++ .body))[0:8191]);
+      CREATE INDEX ext::pg_trgm::gin ON (.title);
       CREATE MULTI LINK labels: default::Label;
       CREATE LINK reactions: default::Reaction;
       CREATE PROPERTY active_lock_reason: std::str;
       CREATE PROPERTY assignee: std::str;
       CREATE PROPERTY author_association: std::str;
-      CREATE PROPERTY body: std::str;
       CREATE PROPERTY closed_at: std::datetime;
       CREATE PROPERTY comments: std::int64;
       CREATE PROPERTY created_at: std::datetime;
@@ -105,7 +115,6 @@ CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
       CREATE PROPERTY state: std::str;
       CREATE PROPERTY state_reason: std::str;
       CREATE PROPERTY timeline_url: std::str;
-      CREATE PROPERTY title: std::str;
       CREATE PROPERTY updated_at: std::datetime;
       CREATE PROPERTY url: std::str;
   };
@@ -131,6 +140,8 @@ CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
   CREATE TYPE default::Repo {
       CREATE MULTI LINK languages: default::Language;
       CREATE REQUIRED LINK owner: default::Owner;
+      CREATE PROPERTY stargazersCount: std::int64;
+      CREATE INDEX ON (.stargazersCount);
       CREATE MULTI LINK topics: default::Topic;
       CREATE PROPERTY createdAt: std::datetime;
       CREATE PROPERTY description: std::str;
@@ -147,7 +158,6 @@ CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
       CREATE PROPERTY name: std::str;
       CREATE PROPERTY openIssuesCount: std::int64;
       CREATE PROPERTY pushedAt: std::datetime;
-      CREATE PROPERTY stargazersCount: std::int64;
       CREATE PROPERTY subscribersCount: std::int64;
       CREATE PROPERTY updatedAt: std::datetime;
       CREATE PROPERTY url: std::str;
@@ -159,6 +169,11 @@ CREATE MIGRATION m1z6d76b2yemwtit4oy7mc4v2q6yfcjlcqgs2auh5tt7bwn6i73r2q
   };
   ALTER TYPE default::Repo {
       CREATE MULTI LINK issues := (.<repo[IS default::Issue]);
+  };
+  CREATE ABSTRACT TYPE default::OpenAIGPT_4o EXTENDING ext::ai::TextGenerationModel {
+      ALTER ANNOTATION ext::ai::model_name := 'gpt-4o';
+      ALTER ANNOTATION ext::ai::model_provider := 'builtin::openai';
+      ALTER ANNOTATION ext::ai::text_gen_model_context_window := '128000';
   };
   CREATE TYPE default::Session {
       CREATE REQUIRED LINK user: default::User {
