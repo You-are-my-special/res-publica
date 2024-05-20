@@ -201,7 +201,7 @@ export function useDataTable<TData, TValue>({
           return searchableColumns.find((column) => column.value === filter.id);
         }),
       ),
-      100,
+      200,
     ),
   ) as ColumnFiltersState;
 
