@@ -88,8 +88,7 @@ export const issueRouter = {
         };
       });
     const issues = e.select(e.Issue, (issue) => {
-      //TODO larges repos are fucking the general view
-      const ops = [] as any;
+      const ops = [];
       if (title) ops.push(e.ext.pg_trgm.word_similar(title, issue.title));
       if (topics.length > 0) {
         const topicFilter = makeTopicFilter(topics)(issue).filter;
@@ -137,7 +136,9 @@ export const issueRouter = {
             html_url: true,
           },
         },
-        filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
+        filter: ops.length
+          ? ops.reduce((merged, op) => (merged ? e.op(merged, "and", op) : (op as any)))
+          : e.bool(true),
         order_by: {
           expression,
           direction: order === "asc" ? "ASC" : "DESC",
@@ -158,12 +159,15 @@ export const issueRouter = {
           }
 
           return {
-            filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
+            filter: ops.length
+              ? ops.reduce((merged, op) => (merged ? e.op(merged, "and", op) : (op as any)))
+              : e.bool(true),
           };
         }),
       ),
     });
 
+    console.log(issues.toEdgeQL());
     const [result, { total }] = await Promise.all([issues.run(client), totalQuery.run(client)]);
     const pageCount = Math.ceil(total / per_page);
 

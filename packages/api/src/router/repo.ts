@@ -49,6 +49,7 @@ export const repoRouter = {
           const topicFilter = makeTopicFilter(topics)(repo).filter;
           ops.push(topicFilter);
         }
+
         return {
           // ...e.Repo["*"],
           url: true,
