@@ -11,11 +11,22 @@ interface RepoPageProps {
 const RepoPage = async ({ params: { id } }: RepoPageProps) => {
   const repo = await api.repo.byId(id);
   if (!repo) return null;
+
   return (
     <div>
-      <p>{repo.name}</p>
+      <div>
+        <h1 className="text-3xl font-semibold mb-7">{repo.name}</h1>
+        <p className="mb-10">Description: {repo.description}</p>
+      </div>
 
-      <Markdown className="prose dark:prose-invert max-w-none">{/* {repo.base64Readme} */}</Markdown>
+      <div>
+        <p>Readme:</p>
+        <div className="relative overflow-hidden h-[100px]">
+          <Markdown className="prose dark:prose-invert max-w-none">
+            {repo.base64Readme && atob(repo.base64Readme)}
+          </Markdown>
+        </div>
+      </div>
     </div>
   );
 };

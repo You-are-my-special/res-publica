@@ -186,7 +186,6 @@ module default {
     }
     property url : str;
     property name : str;
-    # property base64Readme: str;
     property fullName : str;
     required link owner : Owner;
     property issueCommentUrl : str;
