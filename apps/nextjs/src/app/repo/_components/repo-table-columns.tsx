@@ -6,7 +6,10 @@ import Image from "next/image";
 import * as React from "react";
 
 import type { RouterOutputs } from "@acme/api";
+import { Button } from "@acme/ui/button";
 import { DataTableColumnHeader } from "@acme/ui/data-table/data-table-column-header";
+import { Github } from "lucide-react";
+import Link from "next/link";
 
 export type Repo = RouterOutputs["repo"]["all"]["data"][0];
 
@@ -31,11 +34,12 @@ export const columns = [
   // }),
 
   columnHelper.accessor("name", {
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Repo" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Repo" className=" w-[100px]" />,
     cell: ({ row }) => {
       const owner = row.original.owner;
+
       return (
-        <div className="flex w-32 items-center gap-2">
+        <div className="flex w-36 items-center gap-2">
           <Image
             src={owner.avatar_url || ""}
             alt={owner.html_url || ""}
@@ -43,11 +47,43 @@ export const columns = [
             height={24}
             className="h-8 w-8 flex-shrink-0 rounded-md"
           />
-          <div className="flex flex-col">
-            <p className="text-lg font-semibold leading-none text-foreground">{row.original.name}</p>
-            <p className="text-muted-foreground">{owner.name}</p>
+          <div>
+            <div className="flex flex-col">
+              <p className="text-lg font-semibold leading-none text-foreground">{row.original.name}</p>
+              <p className="text-muted-foreground">{owner.name}</p>
+            </div>
           </div>
         </div>
+      );
+    },
+  }),
+  columnHelper.accessor("description", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Repo" />,
+    cell: ({ row }) => {
+      return (
+        <Link href={`/repo/${row.original.id}`}>
+          <div className="group relative flex">
+            <div className="absolute -left-1 top-0 z-0 size-full rounded-lg bg-accent opacity-0 group-hover:opacity-100" />
+
+            <div className="relative  flex h-10 items-center">
+              <p className=" w-[400px] pl-2 text-sm inline-block whitespace-nowrap text-ellipsis overflow-clip font-normal text-muted-foreground">
+                {row.original.description}
+              </p>
+            </div>
+
+            <Button
+              className="absolute right-2 top-1/2 hidden size-8 -translate-y-1/2 rounded-full group-hover:flex"
+              onClick={(e) => {
+                e.preventDefault();
+                if (row.original.url) window.open(row.original.url, "_blank");
+              }}
+              size="icon"
+              variant="outline"
+            >
+              <Github className="size-4" />
+            </Button>
+          </div>
+        </Link>
       );
     },
   }),
@@ -59,94 +95,4 @@ export const columns = [
       </div>
     ),
   }),
-  // columnHelper.accessor("topics", {
-  //   id: "topic",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Topics" />,
-  //   cell: ({ cell }) => {
-  //     const topics = cell.getValue();
-  //     return (
-  //       <div className="flex flex-wrap">
-  //         {topics.slice(0, 1).map((topic) => (
-  //           <Badge key={topic.name} variant="outline" className="text-muted-foreground">
-  //             {topic.name}
-  //           </Badge>
-  //         ))}
-  //       </div>
-  //     );
-  //   },
-  // }),
-  // columnHelper.accessor("reactions.total_count", {
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Reactions" />,
-  //   cell: ({ cell, row }) => {
-  //     const reactions = row.original.reactions;
-  //     return <TopReactions reactions={{id:'', ...reactions}} />;
-  //   },
-  // }),
-  // columnHelper.accessor("gravitas.score", {
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Gravitas" />,
-  //   cell: ({ cell }) => <GravitasScore score={cell.getValue() ?? 0} />,
-  // }),
-  // columnHelper.accessor("created_at", {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Created At" />
-  //   ),
-  //   cell: ({ cell }) => formatDate(cell.getValue()!),
-  // }),
-
-  // {
-  //   accessorKey: "status",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Status" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const status = tasks.status.enumValues.find(
-  //       (status) => status === row.original.status,
-  //     );
-
-  //     if (!status) return null;
-
-  //     const Icon = getStatusIcon(status);
-
-  //     return (
-  //       <div className="flex w-[6.25rem] items-center">
-  //         <Icon
-  //           className="mr-2 size-4 text-muted-foreground"
-  //           aria-hidden="true"
-  //         />
-  //         <span className="capitalize">{status}</span>
-  //       </div>
-  //     );
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return Array.isArray(value) && value.includes(row.getValue(id));
-  //   },
-  // },
-  // {
-  //   accessorKey: "priority",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Priority" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const priority = tasks.priority.enumValues.find(
-  //       (priority) => priority === row.original.priority,
-  //     );
-
-  //     if (!priority) return null;
-
-  //     const Icon = getPriorityIcon(priority);
-
-  //     return (
-  //       <div className="flex items-center">
-  //         <Icon
-  //           className="mr-2 size-4 text-muted-foreground"
-  //           aria-hidden="true"
-  //         />
-  //         <span className="capitalize">{priority}</span>
-  //       </div>
-  //     );
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return Array.isArray(value) && value.includes(row.getValue(id));
-  //   },
-  // },
 ];

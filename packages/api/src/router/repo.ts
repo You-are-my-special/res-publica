@@ -12,10 +12,35 @@ import { octo } from "./octo";
 export const repoRouter = {
   byId: publicProcedure.input(z.string()).query(async ({ input }) => {
     const query = e.select(e.Repo, () => ({
-      ...e.Repo["*"],
+      url: true,
+      name: true,
+      id: true,
+      description: true,
+      openIssuesCount: true,
+      stargazersCount: true,
+      forksCount: true,
+      watchersCount: true,
+      owner: {
+        name: true,
+        avatar_url: true,
+        html_url: true,
+      },
+      topics: {
+        name: true,
+      },
       filter_single: { id: input },
     }));
-    return query.run(client);
+
+    const repoData = await query.run(client);
+
+    let base64Readme: null | string = null;
+
+    if (repoData?.owner?.name && repoData?.name) {
+      base64Readme = (await octo.repos.getReadme({ owner: repoData?.owner?.name, repo: repoData?.name }))?.data
+        ?.content;
+    }
+
+    return { ...repoData, base64Readme };
   }),
   filter: publicProcedure.query(async () => {
     const query = e.select(e.Repo, () => ({
@@ -32,7 +57,25 @@ export const repoRouter = {
       e.shape(e.Repo, (repo) => {
         const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
         return {
+          url: true,
+          name: true,
+          id: true,
+          description: true,
+          openIssuesCount: true,
+          stargazersCount: true,
+          forksCount: true,
+          watchersCount: true,
+          owner: {
+            name: true,
+            avatar_url: true,
+            html_url: true,
+          },
+          topics: {
+            name: true,
+          },
           filter: e.op(e.count(e.op(topicsSet, "intersect", repo.topics.name)), ">", 0),
+          limit: per_page,
+          offset,
         };
       });
 

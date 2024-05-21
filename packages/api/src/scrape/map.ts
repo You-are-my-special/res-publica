@@ -3,12 +3,11 @@ import type { Endpoints } from "@octokit/types";
 type RepoData = Endpoints["GET /repos/{owner}/{repo}"]["response"]["data"];
 type IssueData = Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"];
 
-export const mapData = (repoData: RepoData, issues: IssueData, base64Readme?: string) => {
+export const mapData = (repoData: RepoData, issues: IssueData) => {
   const mappedData = {
     topics: repoData.topics?.map((val) => ({ name: val })) ?? [],
 
     repo: {
-      // base64Readme: base64Readme ?? "",
       githubId: repoData.id,
       url: repoData.html_url,
       name: repoData.name,
