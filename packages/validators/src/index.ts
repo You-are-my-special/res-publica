@@ -3,8 +3,8 @@ import { nullable, z } from "zod";
 export const searchParamsSchema = z.object({
   page: z.coerce.number().default(1),
   per_page: z.coerce.number().default(10),
-  sort_dir: z.enum(["asc", "desc"]).nullable(),
-  sort_col: z.string().nullable(),
+  sort_dir: z.enum(["asc", "desc"]).nullable().optional(),
+  sort_col: z.string().nullable().optional(),
   title: z.string().optional().nullable(),
   topic: z.array(z.string()),
   repo: z.array(z.string()),

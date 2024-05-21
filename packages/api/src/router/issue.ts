@@ -71,7 +71,6 @@ export const issueRouter = {
   all: publicProcedure.input(getIssuesSchema).query(async ({ ctx, input }) => {
     const { page, per_page, title, topic, sort_col: column, sort_dir: order, repo } = input;
 
-    console.log(input);
     const offset = (page - 1) * per_page;
 
     const makeTopicFilter = (topics: string[]) =>

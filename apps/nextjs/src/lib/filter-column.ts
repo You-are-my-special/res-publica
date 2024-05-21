@@ -1,7 +1,7 @@
 import type { Column, ColumnBaseConfig, ColumnDataType } from "drizzle-orm";
 import { eq, ilike, inArray, isNotNull, isNull, not, notLike } from "drizzle-orm";
 
-import { DataTableConfig } from "@acme/ui/config";
+import type { DataTableConfig } from "@acme/ui/config";
 
 export function filterColumn({
   column,

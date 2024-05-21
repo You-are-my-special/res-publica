@@ -15,7 +15,8 @@ const DefaultViews = () => {
         filters={{
           page: 1,
           per_page: 10,
-          topic: "react",
+          topic: ["react"],
+          repo: [],
         }}
       >
         <ReactIcon />
@@ -25,7 +26,8 @@ const DefaultViews = () => {
         filters={{
           page: 1,
           per_page: 10,
-          topic: "prisma",
+          topic: ["prisma"],
+          repo: [],
         }}
       >
         <Prisma />

@@ -57,25 +57,7 @@ export const repoRouter = {
       e.shape(e.Repo, (repo) => {
         const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
         return {
-          url: true,
-          name: true,
-          id: true,
-          description: true,
-          openIssuesCount: true,
-          stargazersCount: true,
-          forksCount: true,
-          watchersCount: true,
-          owner: {
-            name: true,
-            avatar_url: true,
-            html_url: true,
-          },
-          topics: {
-            name: true,
-          },
           filter: e.op(e.count(e.op(topicsSet, "intersect", repo.topics.name)), ">", 0),
-          limit: per_page,
-          offset,
         };
       });
 
@@ -88,10 +70,10 @@ export const repoRouter = {
       }
 
       return {
-        // ...e.Repo["*"],
         url: true,
         name: true,
         id: true,
+        description: true,
         openIssuesCount: true,
         stargazersCount: true,
         forksCount: true,

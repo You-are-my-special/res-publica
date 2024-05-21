@@ -4,6 +4,7 @@ const ReactIcon = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 256 228"
     width="1em"
     height="1em"
+    role="graphics-symbol"
     xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="xMidYMid"
     {...props}

@@ -4,7 +4,7 @@ import type { Reaction } from "@acme/db/interfaces";
 import { cn } from "@acme/ui";
 
 interface TopReactionsProps {
-  reactions: Reaction | null;
+  reactions: Omit<Reaction, "id"> | null;
 }
 
 const emojis = {
@@ -22,7 +22,7 @@ const TopReactions = ({ reactions }: TopReactionsProps) => {
   const topReactions = useMemo(() => {
     if (!reactions) return [];
 
-    const { total_count, url, id, ...rest } = reactions;
+    const { total_count, url, ...rest } = reactions;
 
     return Object.entries(rest)
       .sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0))
