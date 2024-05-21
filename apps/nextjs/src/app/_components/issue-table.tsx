@@ -4,9 +4,13 @@ import * as React from "react";
 
 import { DataTable } from "@acme/ui/data-table/data-table";
 
+import { DataTableViewOptions } from "@acme/ui/data-table/data-table-view-options";
 import { useDataTable } from "~/hooks/use-data-table";
 import type { api as serverType } from "~/trpc/server";
 import { columns } from "./issue-columns";
+import RepoFilter from "./repo-filter";
+import TitleFilter from "./title-filter";
+import TopicFilter from "./topic-filter";
 
 interface IssueTableProps {
   issuesPromise: ReturnType<typeof serverType.issue.all>;
@@ -24,6 +28,16 @@ const IssueTable = ({ issuesPromise }: IssueTableProps) => {
     defaultSort: "created_at.desc",
   });
 
-  return <DataTable table={table} />;
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-2">
+        <TitleFilter />
+        <TopicFilter />
+        <RepoFilter />
+        <DataTableViewOptions table={table} />
+      </div>
+      <DataTable table={table} />
+    </div>
+  );
 };
 export default IssueTable;

@@ -1,14 +1,9 @@
 import { DataTableSkeleton } from "@acme/ui/data-table/data-table-skeleton";
-import { searchParamsSchema } from "@acme/validators";
-
 import { CircleFadingPlus, Ship } from "lucide-react";
 import { Suspense } from "react";
 import { api } from "~/trpc/server";
 import DefaultViews from "./_components/default-views";
 import IssueTable from "./_components/issue-table";
-import RepoFilter from "./_components/repo-filter";
-import TitleFilter from "./_components/title-filter";
-import TopicFilter from "./_components/topic-filter";
 import { issuesParamsCache } from "./params";
 
 export interface IndexPageProps {
@@ -31,26 +26,19 @@ export default function IndexPage({ searchParams }: IndexPageProps) {
         </div>
         <DefaultViews />
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-2">
-          <TitleFilter />
-          <TopicFilter />
-          <RepoFilter />
-        </div>
-        <Suspense
-          fallback={
-            <DataTableSkeleton
-              columnCount={5}
-              searchableColumnCount={1}
-              filterableColumnCount={2}
-              cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
-              shrinkZero
-            />
-          }
-        >
-          <IssueTable issuesPromise={issuesPromise} />
-        </Suspense>
-      </div>
+      <Suspense
+        fallback={
+          <DataTableSkeleton
+            columnCount={5}
+            searchableColumnCount={1}
+            filterableColumnCount={2}
+            cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
+            shrinkZero
+          />
+        }
+      >
+        <IssueTable issuesPromise={issuesPromise} />
+      </Suspense>
     </div>
   );
 }

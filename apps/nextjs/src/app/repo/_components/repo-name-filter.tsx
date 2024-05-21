@@ -1,14 +1,15 @@
 "use client";
 import { Input } from "@acme/ui/input";
+import { repoSearchParamsSchema } from "@acme/validators";
 import { useQueryState } from "nuqs";
 import React from "react";
-import { issuesParsers } from "../params";
+import { reposParsers } from "~/app/params";
 
-const TitleFilter = () => {
-  const [value, setValue] = useQueryState("title", issuesParsers.title);
+const RepoNameFilter = () => {
+  const [value, setValue] = useQueryState("name", reposParsers.name);
   return (
     <Input
-      placeholder={"Filter by title"}
+      placeholder={"Filter by name"}
       value={value ?? ""}
       onChange={(event) => {
         const val = event.target.value;
@@ -19,4 +20,4 @@ const TitleFilter = () => {
   );
 };
 
-export default TitleFilter;
+export default RepoNameFilter;

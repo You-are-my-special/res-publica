@@ -7,8 +7,12 @@ export const issuesParsers = {
   sort_col: parseAsString,
   sort_dir: parseAsStringEnum(["asc", "desc"]).withDefault("asc"),
   title: parseAsString,
-  topic: parseAsArrayOf(parseAsString).withDefault([]),
-  repo: parseAsArrayOf(parseAsString).withDefault([]),
+  topic: parseAsArrayOf(parseAsString).withDefault([]).withOptions({
+    clearOnDefault: true,
+  }),
+  repo: parseAsArrayOf(parseAsString).withDefault([]).withOptions({
+    clearOnDefault: true,
+  }),
   from: parseAsString,
   to: parseAsString,
 };
