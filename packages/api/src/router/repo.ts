@@ -16,6 +16,12 @@ export const repoRouter = {
     }));
     return query.run(client);
   }),
+  filter: publicProcedure.query(async () => {
+    const query = e.select(e.Repo, () => ({
+      name: true,
+    }));
+    return query.run(client);
+  }),
   all: publicProcedure
     .input(
       z.object({
@@ -113,7 +119,7 @@ export const repoRouter = {
     }),
   topics: publicProcedure.query(({ ctx }) => {
     const topics = e.select(e.Topic, (topic: any) => ({
-      name: topic.name,
+      name: true,
     }));
     const data = topics.run(client);
     return data;

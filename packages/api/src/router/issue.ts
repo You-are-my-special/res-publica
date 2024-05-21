@@ -69,16 +69,10 @@ export const issueRouter = {
     return query.run(client);
   }),
   all: publicProcedure.input(getIssuesSchema).query(async ({ ctx, input }) => {
-    const { page, per_page, sort, title, topic, from, to } = input;
+    const { page, per_page, title, topic, sort_col: column, sort_dir: order, repo } = input;
 
-    const [column, order] = (sort?.split(".").filter(Boolean) ?? ["createdAt", "desc"]) as [
-      keyof any | undefined,
-      "asc" | "desc" | undefined,
-    ];
-
+    console.log(input);
     const offset = (page - 1) * per_page;
-
-    const topics = topic?.split(".") ?? [];
 
     const makeTopicFilter = (topics: string[]) =>
       e.shape(e.Issue, (issue) => {
@@ -87,14 +81,25 @@ export const issueRouter = {
           filter: e.op(e.count(e.op(topicsSet, "intersect", issue.repo.topics.name)), ">", 0),
         };
       });
+
+    const makeRepoFilter = (repos: string[]) =>
+      e.shape(e.Issue, (issue) => {
+        const reposSet = e.set(...repos.map((topic) => e.str(topic)));
+        return {
+          filter: e.op(e.count(e.op(reposSet, "intersect", issue.repo.name)), ">", 0),
+        };
+      });
     const issues = e.select(e.Issue, (issue) => {
       const ops = [];
       if (title) ops.push(e.ext.pg_trgm.word_similar(title, issue.title));
-      if (topics.length > 0) {
-        const topicFilter = makeTopicFilter(topics)(issue).filter;
+      if (topic.length > 0) {
+        const topicFilter = makeTopicFilter(topic)(issue).filter;
         ops.push(topicFilter);
       }
-
+      if (repo.length > 0) {
+        const repoFilter = makeRepoFilter(repo)(issue).filter;
+        ops.push(repoFilter);
+      }
       const columns = {
         repo_stargazersCount: issue.repo.stargazersCount,
         reactions_total_count: issue.reactions.total_count,
@@ -153,9 +158,13 @@ export const issueRouter = {
         e.select(e.Issue, (issue) => {
           const ops = [];
           if (title) ops.push(e.ext.pg_trgm.word_similar(title, issue.title));
-          if (topics.length > 0) {
-            const topicFilter = makeTopicFilter(topics)(issue).filter;
+          if (topic.length > 0) {
+            const topicFilter = makeTopicFilter(topic)(issue).filter;
             ops.push(topicFilter);
+          }
+          if (repo.length > 0) {
+            const repoFilter = makeRepoFilter(repo)(issue).filter;
+            ops.push(repoFilter);
           }
 
           return {
@@ -167,7 +176,6 @@ export const issueRouter = {
       ),
     });
 
-    console.log(issues.toEdgeQL());
     const [result, { total }] = await Promise.all([issues.run(client), totalQuery.run(client)]);
     const pageCount = Math.ceil(total / per_page);
 

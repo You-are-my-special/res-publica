@@ -32,6 +32,7 @@ export const columns = [
   }),
 
   columnHelper.accessor("repo.name", {
+    id: "repo.name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Repo" />,
     cell: ({ row }) => {
       const repo = row.original.repo;

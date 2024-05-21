@@ -69,7 +69,7 @@ module default {
   }
 
   type Topic {
-    name: str {
+    required name: str {
       constraint exclusive;
     };
     index on (.name);
@@ -185,7 +185,7 @@ module default {
       constraint exclusive;
     }
     property url : str;
-    property name : str;
+    required name : str;
     # property base64Readme: str;
     property fullName : str;
     required link owner : Owner;
@@ -211,6 +211,7 @@ module default {
     multi issues := (.<repo[is Issue]);
 
     index on(.stargazersCount);
+    index on(.name); 
   }
 
   abstract type OpenAIGPT_4o

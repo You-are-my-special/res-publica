@@ -1,6 +1,6 @@
-import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import type { Metadata, Viewport } from "next";
 import { Tranquiluxe } from "uvcanvas";
 
 import { cn } from "@acme/ui";
@@ -48,7 +48,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           GeistMono.variable,
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TRPCReactProvider>
             <main className="mx-auto max-w-6xl">
               <Navbar />
