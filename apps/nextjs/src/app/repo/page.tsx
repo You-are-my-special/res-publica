@@ -1,26 +1,27 @@
 import * as React from "react";
 
 import { DataTableSkeleton } from "@acme/ui/data-table/data-table-skeleton";
-import { repoSearchParamsSchema } from "@acme/validators";
 
 import { api } from "~/trpc/server";
 
-import { TasksTable } from "./_components/task-table";
+import TopicFilter from "../_components/topic-filter";
+import { reposParamsCache } from "../params";
+import { RepoTable } from "./_components/repo-table";
 
 export interface ReposPageProps {
   searchParams: Record<string, string>;
 }
 
 export default function ReposPage({ searchParams }: ReposPageProps) {
-  const search = repoSearchParamsSchema.parse(searchParams);
-
-  // const test = api.repo.createNewEntry({ owner: "colinhacks", repo: "zod" });
-  // const t = React.use(test);
+  const search = reposParamsCache.parse(searchParams);
 
   const tasksPromise = api.repo.all(search);
 
   return (
-    <div className="gap-2">
+    <div className="flex flex-col gap-2">
+      <div className="flex">
+        <TopicFilter />
+      </div>
       <React.Suspense
         fallback={
           <DataTableSkeleton
@@ -32,7 +33,7 @@ export default function ReposPage({ searchParams }: ReposPageProps) {
           />
         }
       >
-        <TasksTable tasksPromise={tasksPromise} />
+        <RepoTable tasksPromise={tasksPromise} />
       </React.Suspense>
     </div>
   );

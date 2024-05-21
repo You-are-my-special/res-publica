@@ -6,7 +6,7 @@ export const issuesParsers = {
   per_page: parseAsInteger.withDefault(10),
   sort_col: parseAsString,
   sort_dir: parseAsStringEnum(["asc", "desc"]).withDefault("asc"),
-  title: parseAsString.withDefault(""),
+  title: parseAsString,
   topic: parseAsArrayOf(parseAsString).withDefault([]),
   repo: parseAsArrayOf(parseAsString).withDefault([]),
   from: parseAsString,

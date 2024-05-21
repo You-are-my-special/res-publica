@@ -4,16 +4,18 @@ import * as React from "react";
 
 import { DataTable } from "@acme/ui/data-table/data-table";
 
+import type { RouterOutputs } from "@acme/api";
 import { useDataTable } from "~/hooks/use-data-table";
 import type { api as serverType } from "~/trpc/server";
-import { columns } from "./issue-columns";
+import { columns } from "./repo-table-columns";
 
-interface IssueTableProps {
-  issuesPromise: ReturnType<typeof serverType.issue.all>;
+export type Repo = RouterOutputs["repo"]["all"]["data"][0];
+interface RepoTableProps {
+  tasksPromise: ReturnType<typeof serverType.repo.all>;
 }
 
-const IssueTable = ({ issuesPromise }: IssueTableProps) => {
-  const { data, pageCount } = React.use(issuesPromise);
+export function RepoTable({ tasksPromise }: RepoTableProps) {
+  const { data, pageCount } = React.use(tasksPromise);
 
   const { table } = useDataTable({
     data,
@@ -21,9 +23,7 @@ const IssueTable = ({ issuesPromise }: IssueTableProps) => {
     pageCount,
     enableAdvancedFilter: false,
     defaultPerPage: 10,
-    defaultSort: "created_at.desc",
   });
 
   return <DataTable table={table} />;
-};
-export default IssueTable;
+}

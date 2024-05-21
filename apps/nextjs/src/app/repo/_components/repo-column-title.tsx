@@ -4,8 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 import { Button } from "@acme/ui/button";
-
-import type { Repo } from "./task-table-columns";
+import type { Repo } from "./repo-table";
 
 interface RepoColumnTitleProps {
   row: Row<Repo>;

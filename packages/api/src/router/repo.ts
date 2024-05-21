@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { client, e } from "@acme/db";
 
+import { repoSearchParamsSchema } from "@acme/validators";
 import { mapData } from "../scrape/map";
 import { createRepoQuery } from "../scrape/query";
 import { publicProcedure } from "../trpc";
@@ -22,85 +23,76 @@ export const repoRouter = {
     }));
     return query.run(client);
   }),
-  all: publicProcedure
-    .input(
-      z.object({
-        page: z.coerce.number().default(1),
-        per_page: z.coerce.number().default(10),
-        sort: z.string().optional(),
-        name: z.string().optional(),
-        topic: z.string().optional(),
-        from: z.string().optional(),
-        to: z.string().optional(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const { page, per_page, name, topic } = input;
+  all: publicProcedure.input(repoSearchParamsSchema).query(async ({ ctx, input }) => {
+    const { page, per_page, name, topic } = input;
 
-      const offset = (page - 1) * per_page;
+    const offset = (page - 1) * per_page;
 
-      const topics = topic?.split(".") ?? [];
-
-      const makeTopicFilter = (topics: string[]) =>
-        e.shape(e.Repo, (repo) => {
-          const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
-          return {
-            filter: e.op(e.count(e.op(topicsSet, "intersect", repo.topics.name)), ">", 0),
-          };
-        });
-
-      const repos = e.select(e.Repo, (repo) => {
-        const ops = [] as any;
-        if (topics.length > 0) {
-          const topicFilter = makeTopicFilter(topics)(repo).filter;
-          ops.push(topicFilter);
-        }
-
+    const makeTopicFilter = (topics: string[]) =>
+      e.shape(e.Repo, (repo) => {
+        const topicsSet = e.set(...topics.map((topic) => e.str(topic)));
         return {
-          // ...e.Repo["*"],
-          url: true,
-          name: true,
-          id: true,
-          openIssuesCount: true,
-          stargazersCount: true,
-          forksCount: true,
-          watchersCount: true,
-          owner: {
-            name: true,
-            avatar_url: true,
-            html_url: true,
-          },
-          topics: {
-            name: true,
-          },
-          // filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
-          limit: per_page,
-          offset,
+          filter: e.op(e.count(e.op(topicsSet, "intersect", repo.topics.name)), ">", 0),
         };
       });
-      const totalQuery = e.select({
-        total: e.count(
-          e.select(e.Repo, (repo) => {
-            const ops = [];
-            if (name) ops.push(e.op(repo.name, "ilike", `%${name}%`));
-            if (topics.length > 0) {
-              const topicFilter = makeTopicFilter(topics)(repo).filter;
-              ops.push(topicFilter);
-            }
 
-            return {
-              filter: ops.length ? e.all(e.set(...ops)) : e.bool(true),
-            };
-          }),
-        ),
-      });
+    const repos = e.select(e.Repo, (repo) => {
+      const ops = [];
+      if (name) ops.push(e.ext.pg_trgm.word_similar(name, repo.name));
+      if (topic.length > 0) {
+        const topicFilter = makeTopicFilter(topic)(repo).filter;
+        ops.push(topicFilter);
+      }
 
-      const { total } = await totalQuery.run(client);
-      const result = await repos.run(client);
-      const pageCount = Math.ceil(total / per_page);
+      return {
+        // ...e.Repo["*"],
+        url: true,
+        name: true,
+        id: true,
+        openIssuesCount: true,
+        stargazersCount: true,
+        forksCount: true,
+        watchersCount: true,
+        owner: {
+          name: true,
+          avatar_url: true,
+          html_url: true,
+        },
+        topics: {
+          name: true,
+        },
+        filter: ops.length
+          ? ops.reduce((merged, op) => (merged ? e.op(merged, "and", op) : (op as any)))
+          : e.bool(true),
+        limit: per_page,
+        offset,
+      };
+    });
+    const totalQuery = e.select({
+      total: e.count(
+        e.select(e.Repo, (repo) => {
+          const ops = [];
+          if (name) ops.push(e.ext.pg_trgm.word_similar(name, repo.name));
+          if (topic.length > 0) {
+            const topicFilter = makeTopicFilter(topic)(repo).filter;
+            ops.push(topicFilter);
+          }
 
-      return { data: result, pageCount };
-    }),
+          return {
+            filter: ops.length
+              ? ops.reduce((merged, op) => (merged ? e.op(merged, "and", op) : (op as any)))
+              : e.bool(true),
+          };
+        }),
+      ),
+    });
+
+    const { total } = await totalQuery.run(client);
+    const result = await repos.run(client);
+    const pageCount = Math.ceil(total / per_page);
+
+    return { data: result, pageCount };
+  }),
   createNewEntry: publicProcedure.input(z.object({ repo: z.string(), owner: z.string() })).query(async ({ input }) => {
     const issues = await octo.paginate(octo.rest.issues.listForRepo, input);
     const repo = await octo.repos.get(input);
