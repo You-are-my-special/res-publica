@@ -24,7 +24,7 @@
     "lint": "biome lint ./src",
     "push": "pnpm with-env drizzle-kit push:mysql --config src/config.ts",
     "studio": "pnpm with-env drizzle-kit studio --config src/config.ts",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "typecheck": "pnpm run build && tsc --noEmit --emitDeclarationOnly false",
     "build": "npx @edgedb/generate edgeql-js & npx @edgedb/generate interfaces",
     "with-env": "dotenv -e ../../.env --"
   },
