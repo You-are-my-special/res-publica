@@ -137,6 +137,7 @@ export namespace $default {
   export interface Language extends std.$Object {
     "name"?: string | null;
   }
+  export interface OpenAIGPT_4o extends ext.ai.TextGenerationModel {}
   export interface Owner extends std.$Object {
     "avatar_url"?: string | null;
     "githubId"?: number | null;
@@ -169,7 +170,6 @@ export namespace $default {
     "issueCommentUrl"?: string | null;
     "issuesUrl"?: string | null;
     "language"?: string | null;
-    "name"?: string | null;
     "openIssuesCount"?: number | null;
     "pushedAt"?: Date | null;
     "stargazersCount"?: number | null;
@@ -179,6 +179,7 @@ export namespace $default {
     "visibility"?: string | null;
     "watchersCount"?: number | null;
     "issues": Issue[];
+    "name": string;
   }
   export interface Session extends std.$Object {
     "user": User;
@@ -188,7 +189,7 @@ export namespace $default {
     "sessionToken": string;
   }
   export interface Topic extends std.$Object {
-    "name"?: string | null;
+    "name": string;
   }
   export interface User extends std.$Object {
     "createdAt"?: Date | null;
@@ -212,6 +213,7 @@ import Gravitas = $default.Gravitas;
 import Issue = $default.Issue;
 import Label = $default.Label;
 import Language = $default.Language;
+import OpenAIGPT_4o = $default.OpenAIGPT_4o;
 import Owner = $default.Owner;
 import Reaction = $default.Reaction;
 import Repo = $default.Repo;
@@ -226,6 +228,7 @@ export type {
   Issue,
   Label,
   Language,
+  OpenAIGPT_4o,
   Owner,
   Reaction,
   Repo,
@@ -580,6 +583,7 @@ export interface types {
     "Issue": $default.Issue;
     "Label": $default.Label;
     "Language": $default.Language;
+    "OpenAIGPT_4o": $default.OpenAIGPT_4o;
     "Owner": $default.Owner;
     "Reaction": $default.Reaction;
     "Repo": $default.Repo;

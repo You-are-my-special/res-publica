@@ -1,21 +1,19 @@
-import * as React from "react";
-
 import { DataTableSkeleton } from "@acme/ui/data-table/data-table-skeleton";
-import { searchParamsSchema } from "@acme/validators";
-
 import { CircleFadingPlus, Ship } from "lucide-react";
+import { Suspense } from "react";
 import { api } from "~/trpc/server";
 import DefaultViews from "./_components/default-views";
-import { TasksTable } from "./_components/task-table";
+import IssueTable from "./_components/issue-table";
+import { issuesParamsCache } from "./params";
 
 export interface IndexPageProps {
   searchParams: Record<string, string>;
 }
 
 export default function IndexPage({ searchParams }: IndexPageProps) {
-  const search = searchParamsSchema.parse(searchParams);
+  const search = issuesParamsCache.parse(searchParams);
+  const issuesPromise = api.issue.all(search);
 
-  const tasksPromise = api.issue.all(search);
   return (
     <div className="flex flex-col gap-4 py-4">
       <div className="flex flex-col items-center gap-4">
@@ -28,7 +26,7 @@ export default function IndexPage({ searchParams }: IndexPageProps) {
         </div>
         <DefaultViews />
       </div>
-      <React.Suspense
+      <Suspense
         fallback={
           <DataTableSkeleton
             columnCount={5}
@@ -39,8 +37,8 @@ export default function IndexPage({ searchParams }: IndexPageProps) {
           />
         }
       >
-        <TasksTable tasksPromise={tasksPromise} />
-      </React.Suspense>
+        <IssueTable issuesPromise={issuesPromise} />
+      </Suspense>
     </div>
   );
 }

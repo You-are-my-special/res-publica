@@ -1,25 +1,29 @@
-import { z } from "zod";
+import { nullable, z } from "zod";
 
 export const searchParamsSchema = z.object({
   page: z.coerce.number().default(1),
   per_page: z.coerce.number().default(10),
-  sort: z.string().optional(),
-  title: z.string().optional(),
-  topic: z.string().optional(),
-  from: z.string().optional(),
-  to: z.string().optional(),
+  sort_dir: z.enum(["asc", "desc"]).nullable().optional(),
+  sort_col: z.string().nullable().optional(),
+  title: z.string().optional().nullable(),
+  topic: z.array(z.string()),
+  repo: z.array(z.string()),
+  from: z.string().optional().nullable(),
+  to: z.string().optional().nullable(),
 });
 
 export const getIssuesSchema = searchParamsSchema;
 export type GetIssuesSchema = z.infer<typeof getIssuesSchema>;
+
 export const repoSearchParamsSchema = z.object({
   page: z.coerce.number().default(1),
   per_page: z.coerce.number().default(10),
-  sort: z.string().optional(),
-  name: z.string().optional(),
-  topic: z.string().optional(),
-  from: z.string().optional(),
-  to: z.string().optional(),
+  sort_dir: z.enum(["asc", "desc"]).nullable(),
+  sort_col: z.string().nullable(),
+  name: z.string().optional().nullable(),
+  topic: z.array(z.string()),
+  from: z.string().optional().nullable(),
+  to: z.string().optional().nullable(),
 });
 
 export const getTasksSchema = searchParamsSchema;

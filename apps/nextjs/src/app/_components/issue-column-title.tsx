@@ -6,8 +6,7 @@ import React from "react";
 
 import { Badge } from "@acme/ui/badge";
 import { Button } from "@acme/ui/button";
-
-import type { Issue } from "./task-table-columns";
+import type { Issue } from "./issue-columns";
 
 interface IssueColumnTitleProps {
   row: Row<Issue>;
