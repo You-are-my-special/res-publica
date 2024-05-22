@@ -11,7 +11,7 @@ const Navbar = () => {
       <div className="flex items-center gap-2">
         {/* <Github className="h-4" /> */}
 
-        <p className="text-xl font-semibold tracking-tight">Atlantis</p>
+        <p className="text-xl font-semibold tracking-tight">Res Publica</p>
         <div className="flex items-center">
           <Link href="/">
             <Button variant="ghost" className="gap-1">

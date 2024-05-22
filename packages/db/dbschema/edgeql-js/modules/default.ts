@@ -211,6 +211,34 @@ const $Repo = $.makeType<$Repo>(_.spec, "dd31b37c-1490-11ef-baf3-f7da8c4434b5", 
 
 const Repo: $.$expr_PathNode<$.TypeSet<$Repo, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Repo, $.Cardinality.Many), null);
 
+export type $RepoRequestλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+  "createdAt": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "user": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "owner": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "votes": $.LinkDesc<$Vote, $.Cardinality.Many, {}, false, true,  false, false>;
+  "<repo_request[is Vote]": $.LinkDesc<$Vote, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<repo_request": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $RepoRequest = $.ObjectType<"default::RepoRequest", $RepoRequestλShape, null, [
+  ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
+]>;
+const $RepoRequest = $.makeType<$RepoRequest>(_.spec, "452c34ea-17b4-11ef-893e-9bccc7dc0fc4", _.syntax.literal);
+
+const RepoRequest: $.$expr_PathNode<$.TypeSet<$RepoRequest, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($RepoRequest, $.Cardinality.Many), null);
+
+export type $SenatePresenceλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+  "updatedAt": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "user": $.LinkDesc<$User, $.Cardinality.One, {}, true, false,  false, false>;
+}>;
+type $SenatePresence = $.ObjectType<"default::SenatePresence", $SenatePresenceλShape, null, [
+  ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
+  {user: {__element__: $User, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+]>;
+const $SenatePresence = $.makeType<$SenatePresence>(_.spec, "8f385120-1802-11ef-8bb5-8fe0c79cebcd", _.syntax.literal);
+
+const SenatePresence: $.$expr_PathNode<$.TypeSet<$SenatePresence, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($SenatePresence, $.Cardinality.Many), null);
+
 export type $SessionλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "user": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
   "userId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
@@ -249,8 +277,12 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "accounts": $.LinkDesc<$Account, $.Cardinality.Many, {}, false, true,  false, false>;
   "sessions": $.LinkDesc<$Session, $.Cardinality.Many, {}, false, true,  false, false>;
+  "votes": $.LinkDesc<$Vote, $.Cardinality.Many, {}, false, true,  false, false>;
   "<user[is Account]": $.LinkDesc<$Account, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Session]": $.LinkDesc<$Session, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<user[is RepoRequest]": $.LinkDesc<$RepoRequest, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<user[is Vote]": $.LinkDesc<$Vote, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<user[is SenatePresence]": $.LinkDesc<$SenatePresence, $.Cardinality.AtMostOne, {}, true, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $User = $.ObjectType<"default::User", $UserλShape, null, [
@@ -276,9 +308,24 @@ const $VerificationToken = $.makeType<$VerificationToken>(_.spec, "dd3cde09-1490
 
 const VerificationToken: $.$expr_PathNode<$.TypeSet<$VerificationToken, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($VerificationToken, $.Cardinality.Many), null);
 
+export type $VoteλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+  "repo_request": $.LinkDesc<$RepoRequest, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "user": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "createdAt": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "<votes[is RepoRequest]": $.LinkDesc<$RepoRequest, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<votes[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<votes": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $Vote = $.ObjectType<"default::Vote", $VoteλShape, null, [
+  ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
+]>;
+const $Vote = $.makeType<$Vote>(_.spec, "b58266ff-17b4-11ef-aac4-6f7af97632bb", _.syntax.literal);
+
+const Vote: $.$expr_PathNode<$.TypeSet<$Vote, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Vote, $.Cardinality.Many), null);
 
 
-export { $Account, Account, $GitHubUser, GitHubUser, $Gravitas, Gravitas, $Issue, Issue, $Label, Label, $Language, Language, $OpenAIGPT_4o, OpenAIGPT_4o, $Owner, Owner, $Reaction, Reaction, $Repo, Repo, $Session, Session, $Topic, Topic, $User, User, $VerificationToken, VerificationToken };
+
+export { $Account, Account, $GitHubUser, GitHubUser, $Gravitas, Gravitas, $Issue, Issue, $Label, Label, $Language, Language, $OpenAIGPT_4o, OpenAIGPT_4o, $Owner, Owner, $Reaction, Reaction, $Repo, Repo, $RepoRequest, RepoRequest, $SenatePresence, SenatePresence, $Session, Session, $Topic, Topic, $User, User, $VerificationToken, VerificationToken, $Vote, Vote };
 
 type __defaultExports = {
   "Account": typeof Account;
@@ -291,10 +338,13 @@ type __defaultExports = {
   "Owner": typeof Owner;
   "Reaction": typeof Reaction;
   "Repo": typeof Repo;
+  "RepoRequest": typeof RepoRequest;
+  "SenatePresence": typeof SenatePresence;
   "Session": typeof Session;
   "Topic": typeof Topic;
   "User": typeof User;
-  "VerificationToken": typeof VerificationToken
+  "VerificationToken": typeof VerificationToken;
+  "Vote": typeof Vote
 };
 const __defaultExports: __defaultExports = {
   "Account": Account,
@@ -307,9 +357,12 @@ const __defaultExports: __defaultExports = {
   "Owner": Owner,
   "Reaction": Reaction,
   "Repo": Repo,
+  "RepoRequest": RepoRequest,
+  "SenatePresence": SenatePresence,
   "Session": Session,
   "Topic": Topic,
   "User": User,
-  "VerificationToken": VerificationToken
+  "VerificationToken": VerificationToken,
+  "Vote": Vote
 };
 export default __defaultExports;

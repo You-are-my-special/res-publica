@@ -181,6 +181,17 @@ export namespace $default {
     "issues": Issue[];
     "name": string;
   }
+  export interface RepoRequest extends std.$Object {
+    "createdAt"?: Date | null;
+    "user"?: User | null;
+    "name"?: string | null;
+    "owner"?: string | null;
+    "votes": Vote[];
+  }
+  export interface SenatePresence extends std.$Object {
+    "updatedAt"?: Date | null;
+    "user": User;
+  }
   export interface Session extends std.$Object {
     "user": User;
     "userId": string;
@@ -199,12 +210,18 @@ export namespace $default {
     "name"?: string | null;
     "accounts": Account[];
     "sessions": Session[];
+    "votes": Vote[];
   }
   export interface VerificationToken extends std.$Object {
     "identifier": string;
     "token": string;
     "createdAt"?: Date | null;
     "expires": Date;
+  }
+  export interface Vote extends std.$Object {
+    "repo_request"?: RepoRequest | null;
+    "user"?: User | null;
+    "createdAt"?: Date | null;
   }
 }
 import Account = $default.Account;
@@ -217,10 +234,13 @@ import OpenAIGPT_4o = $default.OpenAIGPT_4o;
 import Owner = $default.Owner;
 import Reaction = $default.Reaction;
 import Repo = $default.Repo;
+import RepoRequest = $default.RepoRequest;
+import SenatePresence = $default.SenatePresence;
 import Session = $default.Session;
 import Topic = $default.Topic;
 import User = $default.User;
 import VerificationToken = $default.VerificationToken;
+import Vote = $default.Vote;
 export type {
   Account,
   GitHubUser,
@@ -232,10 +252,13 @@ export type {
   Owner,
   Reaction,
   Repo,
+  RepoRequest,
+  SenatePresence,
   Session,
   Topic,
   User,
-  VerificationToken
+  VerificationToken,
+  Vote
 };
 export namespace ext {
   export namespace ai {
@@ -587,10 +610,13 @@ export interface types {
     "Owner": $default.Owner;
     "Reaction": $default.Reaction;
     "Repo": $default.Repo;
+    "RepoRequest": $default.RepoRequest;
+    "SenatePresence": $default.SenatePresence;
     "Session": $default.Session;
     "Topic": $default.Topic;
     "User": $default.User;
     "VerificationToken": $default.VerificationToken;
+    "Vote": $default.Vote;
   };
   "ext": {
     "ai": {
