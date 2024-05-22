@@ -126,7 +126,7 @@ module default {
     property state_reason : str;
 
     deferred index ext::ai::index(embedding_model := 'text-embedding-3-small')
-      on ((.title ++ ' ' ++ .body)[0:8191]);
+      on (.title[0:8191]);
 
     index ext::pg_trgm::gin on (.title);
   }  

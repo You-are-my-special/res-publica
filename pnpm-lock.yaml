@@ -170,8 +170,8 @@ importers:
         specifier: workspace:*
         version: link:../validators
       '@edgedb/ai':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(edgedb@1.5.5)
+        specifier: 0.1.0-canary.20240521T175942
+        version: 0.1.0-canary.20240521T175942(edgedb@1.5.5)
       '@octokit/rest':
         specifier: ^20.1.1
         version: 20.1.1
@@ -514,8 +514,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@edgedb/ai@0.1.0-alpha.1':
-    resolution: {integrity: sha512-KXP28R+Nj6WnQ2yZmpQZaLOuGx5iQABwd6WHqAzREtfZl+Ysr2NTOyOM6CvGGDdTDgUu1ZbPFKlaFyvt7RI0eQ==}
+  '@edgedb/ai@0.1.0-canary.20240521T175942':
+    resolution: {integrity: sha512-ZunTr+ZAL2sQX0/JCAYqulVEP7cjho98CwL3HqhJwXkQKWDVvGlY2mVj7AuM0fRwPJ+f2sHN1KrtdJbUbS3MOw==}
     peerDependencies:
       edgedb: ^1.5.0
 
@@ -4879,7 +4879,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@edgedb/ai@0.1.0-alpha.1(edgedb@1.5.5)':
+  '@edgedb/ai@0.1.0-canary.20240521T175942(edgedb@1.5.5)':
     dependencies:
       edgedb: 1.5.5
 
