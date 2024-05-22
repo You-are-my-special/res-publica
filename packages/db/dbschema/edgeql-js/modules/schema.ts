@@ -733,6 +733,9 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is ext::ai::ChatPromptMessage]": $.LinkDesc<_extai.$ChatPromptMessage, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is ext::ai::ChatPrompt]": $.LinkDesc<_extai.$ChatPrompt, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is OpenAIGPT_4o]": $.LinkDesc<_default.$OpenAIGPT_4o, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is RepoRequest]": $.LinkDesc<_default.$RepoRequest, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is Vote]": $.LinkDesc<_default.$Vote, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is SenatePresence]": $.LinkDesc<_default.$SenatePresence, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<intersection_of": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<subject": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

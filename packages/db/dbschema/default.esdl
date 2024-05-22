@@ -12,6 +12,9 @@ module default {
     property image : str;
     multi link accounts := .<user[is Account];
     multi link sessions := .<user[is Session];
+
+    multi votes := .<user[is Vote];
+
     property createdAt : datetime {
       default := datetime_current();
     };
@@ -211,6 +214,39 @@ module default {
 
     index on(.stargazersCount);
     index on(.name); 
+  }
+
+  type RepoRequest {
+    user: User;
+    name: str;
+    owner: str;
+    property createdAt : datetime {
+      default := datetime_current();
+    };
+
+    multi votes := (.<repo_request[is Vote]);
+
+    index on (.createdAt);
+  }
+
+  type SenatePresence {
+    required  user: User {
+      constraint exclusive;
+    };
+    required updatedAt : datetime {
+      default := datetime_current();
+    };
+    
+    index on (.updatedAt);
+  }
+
+  type Vote {
+    user: User;
+    repo_request: RepoRequest;
+
+    property createdAt : datetime {
+      default := datetime_current();
+    };
   }
 
   abstract type OpenAIGPT_4o

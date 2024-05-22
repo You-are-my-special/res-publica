@@ -39,12 +39,12 @@ const UserNavbar = async () => {
 
   return (
     <div className="flex items-center gap-2">
-      {/* <Link href="/chat" className="hidden md:flex">
-            <Button className="gap-2 rounded-full" variant="outline">
-            <Icon as={Sparkles} />
-            AI GF
-            </Button>
-        </Link> */}
+      <Link href="/senate" className="hidden md:flex">
+        <Button className="gap-2 rounded-full" variant="outline">
+          <Icon as={Sparkles} />
+          Senate
+        </Button>
+      </Link>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="h-8 w-8 cursor-pointer rounded-full">
