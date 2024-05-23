@@ -58,7 +58,7 @@ export const columns = [
     },
   }),
   columnHelper.accessor("description", {
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Repo" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
     cell: ({ row }) => {
       return (
         <Link href={`/repo/${row.original.id}`}>
