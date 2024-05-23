@@ -16,8 +16,14 @@ export const aiRouter = {
       },
     }).then((res) => res.json());
 
-    const arrayEmbedding = new Float32Array(res.data[0].embedding as number[]);
-
+    const result = await client.query(
+      `
+      with searchTerm := <array<float32>><json>$searchTerm
+       select ext::ai::search(Issue, searchTerm) limit 5;
+    `,
+      { searchTerm: res.data[0].embedding as number[] },
+    );
+    console.log(result);
     // const query = e.select(e.ext.ai.search(e.Issue, e.set(...arrayEmbedding)));
     // console.log(await query.run(client));
     // const gpt4AI = createAI(client, {

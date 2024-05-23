@@ -144,6 +144,7 @@ export type $OwnerλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c
   "githubId": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, true, false, false, false>;
   "html_url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "<owner[is RepoRequest]": $.LinkDesc<$RepoRequest, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is Repo]": $.LinkDesc<$Repo, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -215,8 +216,8 @@ export type $RepoRequestλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f
   "createdAt": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
   "user": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "owner": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "votes": $.LinkDesc<$Vote, $.Cardinality.Many, {}, false, true,  false, false>;
+  "owner": $.LinkDesc<$Owner, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "<repo_request[is Vote]": $.LinkDesc<$Vote, $.Cardinality.Many, {}, false, false,  false, false>;
   "<repo_request": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -228,8 +229,8 @@ const $RepoRequest = $.makeType<$RepoRequest>(_.spec, "452c34ea-17b4-11ef-893e-9
 const RepoRequest: $.$expr_PathNode<$.TypeSet<$RepoRequest, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($RepoRequest, $.Cardinality.Many), null);
 
 export type $SenatePresenceλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
-  "updatedAt": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
   "user": $.LinkDesc<$User, $.Cardinality.One, {}, true, false,  false, false>;
+  "updatedAt": $.PropertyDesc<_std.$datetime, $.Cardinality.One, false, false, false, true>;
 }>;
 type $SenatePresence = $.ObjectType<"default::SenatePresence", $SenatePresenceλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],

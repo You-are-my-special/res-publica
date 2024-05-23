@@ -1,7 +1,9 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 
 import { client, e } from "@acme/db";
+import { z } from "zod";
 import { protectedProcedure, publicProcedure } from "../trpc";
+import { octo } from "./octo";
 
 export const senateRouter = {
   updatePresence: protectedProcedure.mutation(async ({ ctx }) => {
@@ -41,4 +43,38 @@ export const senateRouter = {
     }));
     return query.run(client);
   }),
+  requests: publicProcedure.query(async () => {
+    const query = e.select(e.RepoRequest, (senateRequest) => ({
+      votes: e.count(senateRequest.votes),
+      name: senateRequest.name,
+      owner: senateRequest.owner,
+    }));
+    return query.run(client);
+  }),
+  createRequest: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        owner: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const repo = await octo.repos.get({
+        owner: input.owner,
+        repo: input.name,
+      });
+      if (!repo) {
+        throw new Error("Repo not found");
+      }
+      const query = e.insert(e.RepoRequest, {
+        name: input.name,
+
+        user: e.select(e.User, (user) => ({
+          filter_single: {
+            id: ctx.session.user.id,
+          },
+        })),
+      });
+      return query.run(client);
+    }),
 } satisfies TRPCRouterRecord;

@@ -185,12 +185,12 @@ export namespace $default {
     "createdAt"?: Date | null;
     "user"?: User | null;
     "name"?: string | null;
-    "owner"?: string | null;
     "votes": Vote[];
+    "owner"?: Owner | null;
   }
   export interface SenatePresence extends std.$Object {
-    "updatedAt"?: Date | null;
     "user": User;
+    "updatedAt": Date;
   }
   export interface Session extends std.$Object {
     "user": User;
