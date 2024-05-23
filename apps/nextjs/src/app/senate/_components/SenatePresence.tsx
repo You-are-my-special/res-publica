@@ -2,6 +2,7 @@
 import type { RouterOutputs } from "@acme/api";
 import type { Session } from "@acme/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@acme/ui/avatar";
+import { differenceInMinutes } from "date-fns";
 import React, { use } from "react";
 import { api } from "~/trpc/react";
 import UserPresence from "./UserPresence";
@@ -16,11 +17,13 @@ const SenatePresence = (props: SenatePresenceProps) => {
   const { data: presence } = api.senate.presence.useQuery(undefined, {
     initialData,
   });
+
+  const filtered = presence.filter(({ updatedAt }) => updatedAt && differenceInMinutes(new Date(), updatedAt) < 6);
   return (
     <div>
       <h1>Senate Presence</h1>
       <UserPresence presence={presence} session={session} />
-      {presence.map(({ user }) => (
+      {filtered.map(({ user }) => (
         <div key={user.name} className="flex flex-col gap-2">
           <Avatar>
             <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>

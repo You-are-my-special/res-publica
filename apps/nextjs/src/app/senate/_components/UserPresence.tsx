@@ -27,7 +27,6 @@ const UserPresence = ({ presence, session }: UserPresenceProps) => {
     if (!updatedAt) return updatePresence();
 
     const expired = differenceInMinutes(new Date(), updatedAt) > 5;
-
     if (expired) updatePresence();
   }, [session, presence]);
   return null;
