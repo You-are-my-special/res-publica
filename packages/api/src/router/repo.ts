@@ -17,9 +17,12 @@ export const repoRouter = {
       id: true,
       description: true,
       openIssuesCount: true,
+      subscribersCount: true,
+      updatedAt: true,
       stargazersCount: true,
       forksCount: true,
       watchersCount: true,
+      language: true,
       owner: {
         name: true,
         avatar_url: true,
