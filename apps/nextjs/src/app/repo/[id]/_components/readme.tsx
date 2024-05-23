@@ -12,6 +12,7 @@ import {
 } from "@acme/ui/dialog";
 import React from "react";
 import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 const Readme = ({ readme }: { readme: string }) => {
   return (
     <div className="px-4 py-6 md:px-6 md:py-12 lg:py-16 dark:bg-gray-950 dark:text-gray-50 max-w-xl">
@@ -30,7 +31,9 @@ const Readme = ({ readme }: { readme: string }) => {
                   <DialogTitle>README</DialogTitle>
                 </DialogHeader>
                 <div className="overflow-scroll py-10">
-                  <Markdown className="prose dark:prose-invert max-w-none">{atob(readme)}</Markdown>
+                  <Markdown rehypePlugins={[rehypeRaw]} className="prose dark:prose-invert max-w-none">
+                    {atob(readme)}
+                  </Markdown>
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
