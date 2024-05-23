@@ -131,6 +131,7 @@ export const issueRouter = {
           id: true,
           name: true,
           stargazersCount: true,
+          url: true,
           topics: {
             name: true,
           },

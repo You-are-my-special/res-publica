@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "@acme/ui/input";
-import { repoSearchParamsSchema } from "@acme/validators";
 import { useQueryState } from "nuqs";
 import React from "react";
 import { reposParsers } from "~/app/params";

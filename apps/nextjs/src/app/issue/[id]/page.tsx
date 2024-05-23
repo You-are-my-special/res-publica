@@ -1,5 +1,6 @@
 import React from "react";
 import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 import { api } from "~/trpc/server";
 
@@ -15,7 +16,9 @@ const IssuePage = async ({ params: { id } }: IssuePageProps) => {
     <div>
       <p>{issue.title}</p>
 
-      <Markdown className="prose dark:prose-invert max-w-none">{issue.body}</Markdown>
+      <Markdown rehypePlugins={[rehypeRaw]} className="prose dark:prose-invert max-w-none">
+        {issue.body}
+      </Markdown>
     </div>
   );
 };

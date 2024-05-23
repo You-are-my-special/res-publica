@@ -16,6 +16,7 @@ export const issuesParsers = {
   from: parseAsString,
   to: parseAsString,
 };
+
 export const reposParsers = {
   page: parseAsInteger.withDefault(1),
   per_page: parseAsInteger.withDefault(10),
