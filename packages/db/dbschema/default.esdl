@@ -125,8 +125,8 @@ module default {
     property performed_via_github_app : str;
     property state_reason : str;
 
-    deferred index ext::ai::index(embedding_model := 'text-embedding-3-small')
-      on (.title[0:8191]);
+   deferred index ext::ai::index(embedding_model := 'text-embedding-3-small')
+      on (.title);
 
     index ext::pg_trgm::gin on (.title);
   }  
@@ -220,12 +220,13 @@ module default {
     user: User;
     name: str;
     owner: str;
+    image: str;
+   
+    multi votes := (.<repo_request[is Vote]);
+
     property createdAt : datetime {
       default := datetime_current();
     };
-
-    multi votes := (.<repo_request[is Vote]);
-
     index on (.createdAt);
   }
 

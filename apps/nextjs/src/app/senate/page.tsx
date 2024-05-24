@@ -2,7 +2,7 @@ import { auth } from "@acme/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@acme/ui/avatar";
 import React, { Suspense } from "react";
 import { api } from "~/trpc/server";
-import SenatePresence from "./_components/SenatePresence";
+import SenateFloor from "./_components/SenateFloor";
 
 const SenatePage = async () => {
   const presence = api.senate.presence();
@@ -10,7 +10,7 @@ const SenatePage = async () => {
   return (
     <div className="flex flex-col">
       <Suspense>
-        <SenatePresence auth={session} presence={presence} />
+        <SenateFloor auth={session} presence={presence} />
       </Suspense>
       {/* <div className="flex flex-wrap"></div> */}
     </div>
