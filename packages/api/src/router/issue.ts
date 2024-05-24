@@ -64,6 +64,38 @@ export const issueRouter = {
     const query = e.select(e.Issue, (issue) => ({
       title: true,
       body: true,
+      labels: {
+        name: true,
+      },
+      html_url: true,
+      reactions: {
+        total_count: true,
+        heart: true,
+        rocket: true,
+        eyes: true,
+        laugh: true,
+        minusOne: true,
+        plusOne: true,
+      },
+      created_at: true,
+      gravitas_scores: true,
+      gravitas: {
+        score: true,
+      },
+      repo: {
+        id: true,
+        name: true,
+        stargazersCount: true,
+        url: true,
+        topics: {
+          name: true,
+        },
+        owner: {
+          name: true,
+          avatar_url: true,
+          html_url: true,
+        },
+      },
       filter_single: { id: input },
     }));
     return query.run(client);
