@@ -58,7 +58,7 @@ const RepoInfo = ({ data }: { data: Repo }) => {
                   <CodeIcon className="h-5 w-5 text-gray-400" />
                   <span className="text-sm font-medium">{data.language}</span>
                 </div>
-                <Badge className="bg-gray-800 px-2 py-1 text-xs" variant="secondary">
+                <Badge className="dark:bg-gray-800 px-2 py-1 text-xs" variant="secondary">
                   Language
                 </Badge>
               </div>
@@ -67,7 +67,7 @@ const RepoInfo = ({ data }: { data: Repo }) => {
                   <CalendarIcon className="h-5 w-5 text-gray-400" />
                   <span className="text-sm font-medium">{updatedAt}</span>
                 </div>
-                <Badge className="bg-gray-800 px-2 py-1 text-xs" variant="secondary">
+                <Badge className="dark:bg-gray-800 px-2 py-1 text-xs" variant="secondary">
                   Last updated
                 </Badge>
               </div>

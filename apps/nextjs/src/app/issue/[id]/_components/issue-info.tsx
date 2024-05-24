@@ -20,9 +20,9 @@ const IssueInfo = ({ issue }: { issue: Issue }) => {
   const createdAt = issue.created_at ? new Date(issue.created_at).toLocaleDateString() : null;
 
   return (
-    <div className="bg-gray-950 py-8 px-6">
+    <div className="dark:bg-gray-950 py-8 px-6">
       <div className="container mx-auto">
-        <div className="rounded-lg bg-gray-900 p-6 shadow">
+        <div className="rounded-lg dark:bg-gray-900 p-6 shadow">
           <div className="flex items-center space-x-4 pb-6">
             <Link className="font-medium" href={issue.repo.url || "#"}>
               <div className="flex flex-row space-x-2 gap-2">
@@ -40,10 +40,10 @@ const IssueInfo = ({ issue }: { issue: Issue }) => {
             </div>
           </div>
           <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-white">{issue.title}</h1>
+            <h1 className="text-2xl font-bold dark:text-white">{issue.title}</h1>
             <div className="flex items-center space-x-2">
               {issue.labels?.map((label) => (
-                <Badge key={label.name} className="bg-gray-800 text-gray-400" variant="secondary">
+                <Badge key={label.name} className="dark:bg-gray-800 text-gray-400" variant="secondary">
                   {label.name}
                 </Badge>
               ))}
@@ -64,11 +64,11 @@ const IssueInfo = ({ issue }: { issue: Issue }) => {
               <EyeOpenIcon className="h-5 w-5" />
               <span>{issue.reactions?.eyes}</span>
             </div>
-            <div className="text-sm text-gray-400">Opened on {createdAt}</div>
+            <div className="text-sm dark:text-gray-400">Opened on {createdAt}</div>
           </div>
         </div>
         {issue?.body && (
-          <div className="mt-6 rounded-lg bg-gray-900 p-6 shadow">
+          <div className="mt-6 rounded-lg dark:bg-gray-900 p-6 shadow">
             <Markdown rehypePlugins={[rehypeRaw]} className="prose dark:prose-invert max-w-none">
               {issue.body}
             </Markdown>
