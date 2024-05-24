@@ -1,9 +1,7 @@
 import React from "react";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 
 import { api } from "~/trpc/server";
-import IssueInfo from "./_components/IssueInfo";
+import IssueInfo from "./_components/issue-info";
 
 interface IssuePageProps {
   params: {
