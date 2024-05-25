@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Res Publica - Dev",
     images: [
       {
-        url: `${getBaseUrl()}/images/og.webp`, // Must be an absolute URL
+        url: `${env.VERCEL_ENV === "production" ? "https://res-publica.dev" : "http://localhost:3000"}/images/app.png`, // Must be an absolute URL
         width: 800,
         height: 600,
       },

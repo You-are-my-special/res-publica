@@ -17,7 +17,7 @@ const Posts = () => {
 
               <CardHeader>
                 <CardTitle>{post.title}</CardTitle>
-                <CardDescription>somethign</CardDescription>
+                <CardDescription>{post.description}</CardDescription>
               </CardHeader>
             </Card>
           </Link>
