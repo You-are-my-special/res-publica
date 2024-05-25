@@ -12,22 +12,30 @@ import { TRPCReactProvider } from "~/trpc/react";
 import "~/app/globals.css";
 
 import { env } from "~/env";
+import { getBaseUrl } from "~/lib/utils";
 import Navbar from "./_components/navbar";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.VERCEL_ENV === "production" ? "https://turbo.t3.gg" : "http://localhost:3000"),
-  title: "Create T3 Turbo",
-  description: "Simple monorepo with shared backend for web & mobile apps",
+  metadataBase: new URL(env.VERCEL_ENV === "production" ? "https://res-publica.dev" : "http://localhost:3000"),
+  title: "Res Publica - Dev",
+  description: "A space where you see Github issues and repositories in a different light",
   openGraph: {
-    title: "Create T3 Turbo",
-    description: "Simple monorepo with shared backend for web & mobile apps",
-    url: "https://create-t3-turbo.vercel.app",
-    siteName: "Create T3 Turbo",
+    title: "Res Publica - Dev",
+    description: "A space where you see Github issues and repositories in a different light",
+    url: "https://res-publica.dev",
+    siteName: "Res Publica - Dev",
+    images: [
+      {
+        url: `${getBaseUrl()}/images/og.webp`, // Must be an absolute URL
+        width: 800,
+        height: 600,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@jullerino",
-    creator: "@jullerino",
+    site: "@andrewdorobantu",
+    creator: "@andrewdorobantu",
   },
 };
 

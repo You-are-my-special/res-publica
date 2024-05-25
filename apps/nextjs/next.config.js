@@ -3,6 +3,7 @@ import createJiti from "jiti";
 
 // Import env files to validate at build time. Use jiti so we can load .ts files in here.
 createJiti(fileURLToPath(import.meta.url))("./src/env");
+import { withContentCollections } from "@content-collections/next"
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -31,4 +32,4 @@ const config = {
   },
 };
 
-export default config;
+export default withContentCollections(config);

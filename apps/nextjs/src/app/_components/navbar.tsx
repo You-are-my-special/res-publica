@@ -1,8 +1,9 @@
-import { BookMarked, CircleDot, Github } from "lucide-react";
+import { BookMarked, CircleDot, EarthIcon, Github } from "lucide-react";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
 import { Button } from "@acme/ui/button";
+import { Icon } from "@acme/ui/icon";
 import UserNavbar from "./user-navbar";
 
 const Navbar = () => {
@@ -11,7 +12,9 @@ const Navbar = () => {
       <div className="flex items-center gap-2">
         {/* <Github className="h-4" /> */}
 
-        <p className="text-xl font-semibold tracking-tight">Res Publica</p>
+        <Link href="/">
+          <p className="text-xl font-semibold tracking-tight">Res Publica</p>
+        </Link>
         <div className="flex items-center">
           <Link href="/">
             <Button variant="ghost" className="gap-1">
@@ -27,9 +30,17 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-      <Suspense>
-        <UserNavbar />
-      </Suspense>
+      <div className="flex items-center gap-2">
+        <Link href="/blog">
+          <Button variant="outline" className="gap-1 rounded-full">
+            <Icon as={EarthIcon} />
+            Blog
+          </Button>
+        </Link>
+        <Suspense>
+          <UserNavbar />
+        </Suspense>
+      </div>
     </div>
   );
 };
