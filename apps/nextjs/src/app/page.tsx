@@ -15,7 +15,7 @@ export default function IndexPage({ searchParams }: IndexPageProps) {
   const issuesPromise = api.issue.all(search);
 
   return (
-    <div className="flex flex-col gap-4 py-4">
+    <div className="flex flex-col gap-4 pt-4">
       <div className="flex flex-col items-center gap-4">
         <div className="mx-auto text-center">
           <h1 className="text-5xl font-bold">Github Issues</h1>

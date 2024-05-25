@@ -24,7 +24,14 @@ const IssueColumnTitle = ({ row }: IssueColumnTitleProps) => {
           <div className="flex items-center gap-1">
             <p className="text-xs text-muted-foreground">opened {relativeTime}</p>
             {labels.slice(0, 3).map((label) => (
-              <Badge key={label.name} variant="outline" className="text-muted-foreground">
+              <Badge
+                key={label.name}
+                style={{
+                  outline: `1px solid #${label.color}`,
+                }}
+                variant="outline"
+                className="text-muted-foreground  max-w-[120px] line-clamp-1"
+              >
                 {label.name}
               </Badge>
             ))}

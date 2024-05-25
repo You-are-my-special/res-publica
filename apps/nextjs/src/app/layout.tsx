@@ -13,6 +13,7 @@ import "~/app/globals.css";
 
 import { env } from "~/env";
 import { getBaseUrl } from "~/lib/utils";
+import Footer from "./_components/footer";
 import Navbar from "./_components/navbar";
 
 export const metadata: Metadata = {
@@ -50,24 +51,18 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={cn(
-          "min-h-screen bg-background font-sans text-foreground antialiased",
-          GeistSans.variable,
-          GeistMono.variable,
-        )}
+        className={cn(" bg-background font-sans text-foreground antialiased", GeistSans.variable, GeistMono.variable)}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TRPCReactProvider>
-            <main className="mx-auto max-w-6xl">
+            <main className="mx-auto max-w-6xl px-4">
               <Navbar />
               {props.children}
+              <Footer />
             </main>
           </TRPCReactProvider>
 
           <Toaster />
-          <div className="fixed left-0 top-0 z-[-1] h-full w-full brightness-150 grayscale dark:brightness-50">
-            {/* <Tranquiluxe /> */}
-          </div>
         </ThemeProvider>
       </body>
     </html>
