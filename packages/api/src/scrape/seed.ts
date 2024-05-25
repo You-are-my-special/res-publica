@@ -35,6 +35,16 @@ const repos: { owner: string; repo: string }[] = [
   { owner: "prisma", repo: "prisma" },
   { owner: "drizzle-team", repo: "drizzle-orm" },
   { owner: "TanStack", repo: "query" },
+  { owner: "godotengine", repo: "godot" },
+  { owner: "sst", repo: "ion" },
+  { owner: "pingdotgg", repo: "uploadthing" },
+  { owner: "solidjs", repo: "solid" },
+  { owner: "PostHog", repo: "posthog" },
+  { owner: "zed-industries", repo: "zed" },
+  { owner: "mrdoob", repo: "three.js" },
+  { owner: "ziglang", repo: "zig" },
+  { owner: "sveltejs", repo: "kit" },
+  { owner: "nuxt", repo: "nuxt" },
 ];
 
 const seed = async () => {
