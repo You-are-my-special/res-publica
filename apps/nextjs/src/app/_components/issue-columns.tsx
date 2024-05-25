@@ -38,11 +38,13 @@ export const columns = [
     cell: ({ row }) => {
       return <IssueColumnRepo row={row} />;
     },
+    enableSorting: false,
   }),
 
   columnHelper.accessor("title", {
     header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
     cell: ({ row }) => <IssueColumnTitle row={row} />,
+    enableSorting: false,
   }),
   columnHelper.accessor("repo.topics", {
     id: "topic",
@@ -52,13 +54,14 @@ export const columns = [
       return (
         <div className="flex flex-wrap">
           {topics.slice(0, 1).map((topic) => (
-            <Badge key={topic.name} variant="outline" className="text-muted-foreground">
+            <Badge key={topic.name} variant="outline">
               {topic.name}
             </Badge>
           ))}
         </div>
       );
     },
+    enableSorting: false,
   }),
   columnHelper.accessor("reactions.total_count", {
     header: ({ column }) => <DataTableColumnHeader column={column} title="Reactions" />,
@@ -71,67 +74,4 @@ export const columns = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Gravitas" />,
     cell: ({ cell }) => <GravitasScore score={cell.getValue() ?? 0} />,
   }),
-  // columnHelper.accessor("created_at", {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Created At" />
-  //   ),
-  //   cell: ({ cell }) => formatDate(cell.getValue()!),
-  // }),
-
-  // {
-  //   accessorKey: "status",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Status" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const status = tasks.status.enumValues.find(
-  //       (status) => status === row.original.status,
-  //     );
-
-  //     if (!status) return null;
-
-  //     const Icon = getStatusIcon(status);
-
-  //     return (
-  //       <div className="flex w-[6.25rem] items-center">
-  //         <Icon
-  //           className="mr-2 size-4 text-muted-foreground"
-  //           aria-hidden="true"
-  //         />
-  //         <span className="capitalize">{status}</span>
-  //       </div>
-  //     );
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return Array.isArray(value) && value.includes(row.getValue(id));
-  //   },
-  // },
-  // {
-  //   accessorKey: "priority",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Priority" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const priority = tasks.priority.enumValues.find(
-  //       (priority) => priority === row.original.priority,
-  //     );
-
-  //     if (!priority) return null;
-
-  //     const Icon = getPriorityIcon(priority);
-
-  //     return (
-  //       <div className="flex items-center">
-  //         <Icon
-  //           className="mr-2 size-4 text-muted-foreground"
-  //           aria-hidden="true"
-  //         />
-  //         <span className="capitalize">{priority}</span>
-  //       </div>
-  //     );
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return Array.isArray(value) && value.includes(row.getValue(id));
-  //   },
-  // },
 ];

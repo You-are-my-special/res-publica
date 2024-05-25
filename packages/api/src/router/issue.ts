@@ -138,11 +138,13 @@ export const issueRouter = {
       };
       const expression = columns[column as keyof typeof columns] ?? issue.created_at;
 
+      console.log(order, column);
       return {
         id: true,
         title: true,
         labels: {
           name: true,
+          color: true,
         },
         html_url: true,
         reactions: {
