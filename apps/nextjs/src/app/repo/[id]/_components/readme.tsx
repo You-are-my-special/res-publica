@@ -3,11 +3,12 @@
 import { Card } from "@acme/ui/card";
 import React, { useEffect } from "react";
 import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import remarkHtml from "remark-html";
 
 import { cn } from "@acme/ui";
 import { Button } from "@acme/ui/button";
-import { ScrollArea } from "@acme/ui/scroll-area";
+import rehypeRaw from "rehype-raw";
 const Readme = ({ readme }: { readme: string }) => {
   const content = atob(readme);
   const isLargeReadme = content.length > 500;
@@ -16,7 +17,11 @@ const Readme = ({ readme }: { readme: string }) => {
   useEffect(() => {}, []);
   return (
     <Card className={cn("relative p-6 pb-12", collapsed && isLargeReadme && "h-[50vh] overflow-hidden")}>
-      <Markdown rehypePlugins={[rehypeRaw]} className="prose dark:prose-invert max-w-none">
+      <Markdown
+        rehypePlugins={[rehypeRaw]}
+        remarkPlugins={[remarkGfm, remarkHtml]}
+        className="prose dark:prose-invert max-w-none"
+      >
         {atob(readme)}
       </Markdown>
       {isLargeReadme && collapsed && (

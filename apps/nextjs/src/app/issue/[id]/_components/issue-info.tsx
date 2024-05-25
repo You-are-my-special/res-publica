@@ -12,8 +12,10 @@ import {
 } from "@radix-ui/react-icons";
 import Link from "next/link";
 import type { SVGProps } from "react";
+import React from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 export type Issue = RouterOutputs["issue"]["byId"];
 const IssueInfo = ({ issue }: { issue: Issue }) => {
@@ -69,7 +71,11 @@ const IssueInfo = ({ issue }: { issue: Issue }) => {
       </Card>
       {issue?.body && (
         <Card className="mt-6 rounded-lg p-6">
-          <Markdown rehypePlugins={[rehypeRaw]} className="prose dark:prose-invert max-w-none">
+          <Markdown
+            rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm]}
+            className="prose dark:prose-invert max-w-none"
+          >
             {issue.body}
           </Markdown>
         </Card>

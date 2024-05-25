@@ -10,7 +10,7 @@ const Posts = () => {
         <p className="text-muted-foreground">See what we do</p>
       </div>
       <div className="grid grid-cols-4">
-        {allPosts.map((post) => (
+        {/* {allPosts.map((post) => (
           <Link key={post._meta.path} href={`/blog/${post._meta.path}`}>
             <Card className="overflow-hidden hover:bg-accent">
               <Image src={post.image} alt={post.title} className="w-full h-[72]" width={300} height={200} />
@@ -21,7 +21,7 @@ const Posts = () => {
               </CardHeader>
             </Card>
           </Link>
-        ))}
+        ))} */}
       </div>
     </div>
   );

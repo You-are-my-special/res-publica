@@ -5,18 +5,62 @@ image: /images/app.png
 date: "2022-11-19"
 ---
 
+Github has a lot of issues. Issues related to bugs, features, and more. You can issues as a table view. This is actually great, you have a lot of information already.
 
-Why do you need this? You already have Github issues, Jira, Trello, and a bunch of other tools. Why do you need another one?
-This is true. You don't need another one. But you might want one. And that's where Res Publica comes in.
-
-
+But what if you wanted to see Issues from all sorts of repositories? 
 ## What is Res Publica?
 
-Res Publica is an open source issue tracker. It's built with Next.js, Tailwind CSS, and MDX. It's designed to be simple, fast, and easy to use. It's also designed to be customizable, so you can make it your own.
+Res Publica is an open source issue tracker. We've basically scraped Github Issues and created a unified view for them.
+
+Hosted on Vercel and using Edgedb Cloud.
+
+We've added an advanced filtering system. I've optimized it to be fast. You can filter by repository, labels, and more.
+
+
+## What we implemented
+
+We had a pretty ambitious goal for this project. From personal and also bussines constraint we were only been able to deliver this. 
+We are happy with the result. This is a list of things that I envisioned for this project:
+- [x] Github Issues
+- [x] Advanced filtering
+- [x] Fast
+- [x] Open Source
+- [ ] AI recommendations + (maybe RAG)
+- [ ] Senate feature - allow the community to vote on new repos being added
+- [ ] Community intiatives - delegate a repo for a few weeks as a star, increased visibility
+
+
+## Cool Vercel Stuff
+We wanted to show the readme of a github repo. We didn't want to save in our db, as this might actually be quite large.
+We also didn't want to fetch github every time for it, this would be slow and would be an abuse in our eyes
+
+So we are using vercel data cache with a custom octokit fetch to cache the readme on vercel network.
 
 ## Tech Stack
 
 - Next.js
-- Tailwind CSS
-- MDX
 - Edgedb
+- TRPC
+- TailwindCSS
+- Octokit
+
+
+## How we build it?
+
+## Future
+This project was done for the [Edgedb Hackathon](https://edgedb.com/hackathon). We plan to continue working on it. There were some features that we wanted to implement, but no time.
+
+
+### AI issue recommendation
+
+We wanted to use AI to recommend issues to users. This would be based on a number of factors:
+- user's libray knowledge
+- user's programming language
+- skill level - really subjective
+
+### Adding a senate
+
+Having a community is really important for open source. And we want the community to decide for it's future:
+
+Following this we envision two systems:
+- A senate that votes on new repos being added and tracked

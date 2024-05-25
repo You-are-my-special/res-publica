@@ -12,7 +12,7 @@ export const cachedOcto = new Octokit({
     fetch: (url: string) =>
       fetch(url, {
         next: {
-          revalidate: 24 * 60 * 60,
+          revalidate: 3600,
         },
       }),
   },
