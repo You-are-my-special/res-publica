@@ -74,13 +74,7 @@ const UserNavbar = async () => {
               <DropdownMenuItem className="focus:bg-transparent">Theme</DropdownMenuItem>
               <ThemeToggle />
             </div>
-            <DropdownMenuSeparator />
-            <Link href="/ticket">
-              <DropdownMenuItem>My tickets</DropdownMenuItem>
-            </Link>
-            <Link href="/reservation">
-              <DropdownMenuItem>My reservations</DropdownMenuItem>
-            </Link>
+
             <DropdownMenuSeparator />
             <Link className="w-full" href={session ? "/api/auth/signout" : "/signin"}>
               <DropdownMenuItem>Log out</DropdownMenuItem>

@@ -11,8 +11,6 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-4">
       <div className="flex items-center gap-2">
-        {/* <Github className="h-4" /> */}
-
         <Link href="/" className="relative">
           <Badge className="absolute -top-2 -left-4 w-12 h-4">Beta</Badge>
           <p className="text-xl font-semibold tracking-tight">Res Publica</p>

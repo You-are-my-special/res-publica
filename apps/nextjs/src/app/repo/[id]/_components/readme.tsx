@@ -1,46 +1,39 @@
 "use client";
 
-import { Button } from "@acme/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@acme/ui/dialog";
-import React from "react";
+import { Card } from "@acme/ui/card";
+import React, { useEffect } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+
+import { cn } from "@acme/ui";
+import { Button } from "@acme/ui/button";
+import { ScrollArea } from "@acme/ui/scroll-area";
 const Readme = ({ readme }: { readme: string }) => {
+  const content = atob(readme);
+  const isLargeReadme = content.length > 500;
+  const [collapsed, setCollapsed] = React.useState(isLargeReadme);
+
+  useEffect(() => {}, []);
   return (
-    <div className="space-y-4">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button size="md" variant="outline">
-            Click here to see the README
+    <Card className={cn("relative p-6 pb-12", collapsed && isLargeReadme && "h-[50vh] overflow-hidden")}>
+      <Markdown rehypePlugins={[rehypeRaw]} className="prose dark:prose-invert max-w-none">
+        {atob(readme)}
+      </Markdown>
+      {isLargeReadme && collapsed && (
+        <div className="absolute bottom-0 w-full left-0 bg-gradient-to-t from-background to-transparent py-12 flex justify-center">
+          <Button variant="secondary" onClick={() => setCollapsed(false)}>
+            Reveal full readme
           </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[600px] w-[800px] h-[70%]">
-          <DialogHeader>
-            <DialogTitle>README</DialogTitle>
-          </DialogHeader>
-          <div className="overflow-scroll py-10">
-            <Markdown rehypePlugins={[rehypeRaw]} className="prose dark:prose-invert max-w-none">
-              {atob(readme)}
-            </Markdown>
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" onClick={() => {}}>
-                Close
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+        </div>
+      )}
+      {isLargeReadme && !collapsed && (
+        <div className="absolute bottom-0 w-full left-0 bg-gradient-to-t from-background to-transparent py-12 flex justify-center">
+          <Button variant="secondary" onClick={() => setCollapsed(true)}>
+            Collapse readme
+          </Button>
+        </div>
+      )}
+    </Card>
   );
 };
 

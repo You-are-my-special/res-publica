@@ -1,11 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@acme/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@acme/ui/card";
 import { allPosts } from "content-collections";
 import Image from "next/image";
 import Link from "next/link";
 const Posts = () => {
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-5xl font-semibold">Blog</h1>
+      <div className="flex flex-col py-4">
+        <h1 className="text-4xl font-semibold">Blogs</h1>
+        <p className="text-muted-foreground">See what we do</p>
+      </div>
       <div className="grid grid-cols-4">
         {allPosts.map((post) => (
           <Link key={post._meta.path} href={`/blog/${post._meta.path}`}>

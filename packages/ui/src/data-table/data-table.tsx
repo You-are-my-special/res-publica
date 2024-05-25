@@ -1,6 +1,6 @@
 import type { Table as TanstackTable } from "@tanstack/react-table";
-import type * as React from "react";
 import { flexRender } from "@tanstack/react-table";
+import type * as React from "react";
 
 import { cn } from "..";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";

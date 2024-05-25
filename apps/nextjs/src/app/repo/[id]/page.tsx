@@ -1,8 +1,6 @@
 import React from "react";
-import Markdown from "react-markdown";
 import { issuesParamsCache } from "~/app/params";
 
-import type { RouterOutputs } from "@acme/api";
 import { api } from "~/trpc/server";
 import IssueTable from "./_components/issue-table";
 import RepoInfo from "./_components/repo-info";

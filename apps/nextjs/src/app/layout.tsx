@@ -1,7 +1,6 @@
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
-import { Tranquiluxe } from "uvcanvas";
 
 import { cn } from "@acme/ui";
 import { ThemeProvider } from "@acme/ui/theme";
@@ -53,13 +52,15 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn(" bg-background font-sans text-foreground antialiased", GeistSans.variable, GeistMono.variable)}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
           <TRPCReactProvider>
-            <main className="mx-auto max-w-6xl px-4">
-              <Navbar />
-              {props.children}
+            <div>
+              <main className="mx-auto min-h-screen max-w-6xl px-4">
+                <Navbar />
+                {props.children}
+              </main>
               <Footer />
-            </main>
+            </div>
           </TRPCReactProvider>
 
           <Toaster />
