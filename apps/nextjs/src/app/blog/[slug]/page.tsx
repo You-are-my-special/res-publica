@@ -23,8 +23,8 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
   const blog = allPosts.find((post) => post._meta.path === params.slug);
   if (!blog) return null;
   return (
-    <div className="flex flex-col gap-4 max-w-4xl mx-auto">
-      <div className="relative w-full h-72 border rounded-lg overflow-hidden">
+    <div className="flex flex-col gap-6 max-w-4xl mx-auto">
+      <div className="relative w-full h-96 border rounded-lg overflow-hidden">
         <Image src={blog.image} alt={blog.title} className="object-cover" layout="fill" />
       </div>
       <div className="flex flex-col">
