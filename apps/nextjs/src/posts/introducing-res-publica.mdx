@@ -2,68 +2,61 @@
 title: Introducing Res Publica - an open source issue tracker
 description: How we built Res Publica, what it is, and how you can use it.
 image: /images/app.png
-date: "2022-11-19"
+date: "2024-05-26"
 ---
-
-## Work in progress, it actually takes much longer, I am at this hackathon for 2 days now, and I am still working on it. I am not sure if I will be able to finish it in time. I will try to submit it anyway.
-https://www.clujhackathon.ro/
-
-Github has a lot of issues. Issues related to bugs, features, and more. You can see issues as a table view. This is actually great, you have a lot of information already.
+***
+GitHub is a great platform, but managing issues across multiple repositories can be tough. Whether you’re tracking bugs, planning features, or monitoring project progress, the default issue tracker can feel limited, especially if you have many repositories.
 
 But what if you wanted to see Issues from all sorts of repositories? 
 ## What is Res Publica?
 
 
-Res Publica is an open source issue tracker. We've basically scraped Github Issues and created a unified view for them.
+Res Publica is an open-source issue tracker that simplifies this process. We’ve unified GitHub Issues into one comprehensive view, making it easy to manage issues across different repositories.
 
-Hosted on Vercel and using Edgedb Cloud.
-
-We've added an advanced filtering system. I've optimized it to be fast. You can filter by repository, labels, and more.
+Hosted on Vercel and using EdgeDB Cloud, Res Publica offers advanced filtering. You can sort issues by repository, labels, and more. Optimized for speed, our platform ensures a smooth experience, so you can focus on resolving issues efficiently.
 
 
 ## What we implemented
-We had a pretty ambitious goal for this project. From personal and also bussines constraint we were only been able to deliver this. 
-We are happy with the result. This is a list of things that I envisioned for this project:
-- [x] Github Issues
-- [x] Advanced filtering
-- [x] Fast
-- [x] Open Source
-- [ ] AI recommendations + (maybe RAG)
-- [ ] Senate feature - allow the community to vote on new repos being added
-- [ ] Community intiatives - delegate a repo for a few weeks as a star, increased visibility
+Our goal with Res Publica was ambitious. Despite some constraints, we’re thrilled with what we’ve achieved. Here are the key features:
+
+- [x] **GitHub Issues Integration**: Manage issues from multiple repositories easily.
+- [x] **Advanced Filtering**: Filter issues by repository, labels, and more.
+- [x] **Performance Optimization**: Fast access to issue data.
+- [x] **Open Source**: Fully open source, inviting contributions and transparency.
+- [ ] **AI Recommendations**: Use AI to suggest issues based on user preferences and skills.
+- [ ] **Senate Feature**: Let the community vote on new repositories to add.
+- [ ] **Community Initiatives**: Highlight repositories for increased visibility.
 
 
-## Cool Vercel Stuff
-We wanted to show the readme of a github repo. We didn't want to save in our db, as this might actually be quite large.
-We also didn't want to fetch github every time for it, this would be slow and would be an abuse in our eyes
-
-So we are using vercel data cache with a custom octokit fetch to cache the readme on vercel network.
+## Leveraging Vercel's Capabilities
+One challenge was displaying GitHub README files without overloading our database. We use Vercel’s data cache with a custom Octokit fetch. This caches README files efficiently on Vercel’s network, balancing performance and resource use.
 
 ## Tech Stack
+Res Publica is built with a modern tech stack for reliability and scalability:
 
-- Next.js
-- Edgedb
-- TRPC
-- TailwindCSS
-- Octokit
+- **Next.js**
+- **Edgedb**
+- **TRPC**
+- **TailwindCSS**
+- **Octokit**
 
 
-## How we build it?
+## The Dev Journey
 
-## Future
-This project was done for the [Edgedb Hackathon](https://edgedb.com/hackathon). We plan to continue working on it. There were some features that we wanted to implement, but no time.
+Building Res Publica was challenging but rewarding. The [Edgedb Hackathon](https://edgedb.com/hackathon) sparked our innovation. Though we faced time constraints, we laid a solid, promising foundation.
 
+
+## Future Plans
+Our journey with Res Publica is just beginning. We plan to integrate advanced features to enhance our platform:
 
 ### AI issue recommendation
 
-We wanted to use AI to recommend issues to users. This would be based on a number of factors:
-- user's libray knowledge
-- user's programming language
-- skill level - really subjective
+We aim to use AI for personalized issue recommendations. Factors include user library knowledge, preferred languages, and skill level. This will help users find suitable issues, boosting productivity.
 
-### Adding a senate
 
-Having a community is really important for open source. And we want the community to decide for it's future:
+### Community-Driven Enhancements
 
-Following this we envision two systems:
-- A senate that votes on new repos being added and tracked
+A thriving community is key for open-source success. We plan to introduce a senate system. The community will vote on new repositories and significant decisions. This ensures Res Publica evolves to meet user needs and preferences.
+***
+
+We invite you to explore Res Publica. Contribute to its development and join us on this exciting journey. Together, we can simplify issue tracking and build a vibrant, collaborative open-source community.
